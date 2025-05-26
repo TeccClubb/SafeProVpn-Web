@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { Star } from "lucide-react";
+import Button from "../Button/button";
 
 export default function VPNPromo() {
     return (
@@ -18,12 +19,8 @@ export default function VPNPromo() {
                     priority.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <button className="bg-cyan-500 hover:bg-cyan-500 text-white px-6 py-3 text-lg rounded-full">
-                        Start Free Trial
-                    </button>
-                    <button className="border border-cyan-500 text-cyan-500 px-6 py-3 text-lg rounded-full">
-                        Learn More
-                    </button>
+                    <Button size="sm" variant="solid">Start Free Trial</Button>
+                    <Button variant="outline">Learn More</Button>
                 </div>
                 <div className="flex items-center gap-3 pt-4 justify-center lg:justify-start">
                     <div className="flex -space-x-2">
