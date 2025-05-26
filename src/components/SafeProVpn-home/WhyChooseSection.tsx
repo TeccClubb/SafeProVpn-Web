@@ -16,7 +16,8 @@ export default function WhyChooseSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
         <FeatureCard
-          icon={<Lock className="w-10 h-10" />}
+        className="bg-sky-100"
+          icon={<Lock className="w-10 h-10 " />}
           title="Top-Grade Security"
           description="AES-256 encryption, kill-switch, and no-logs policy keep your data totally safe."
         />
@@ -26,6 +27,7 @@ export default function WhyChooseSection() {
           description="Stream, game & browse with zero lag. Unlimited bandwidth on all servers."
         />
         <FeatureCard
+         className="bg-sky-100"
           icon={<Globe className="w-10 h-10" />}
           title="Global Access"
           description="Connect to 100+ locations. Bypass geo-blocks and access any content, anywhere."
