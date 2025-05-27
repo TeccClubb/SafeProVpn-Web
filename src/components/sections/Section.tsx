@@ -1,0 +1,285 @@
+"use client";
+
+import React, { ComponentProps, FC, HTMLAttributes, ReactNode } from "react";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+export type SectionProps = HTMLAttributes<HTMLElement> & {
+  isHeroSection?: boolean;
+  title?: ReactNode;
+  heading?: ReactNode;
+  subtitle?: ReactNode;
+  description?: ReactNode;
+  classNames?: {
+    section?: string;
+    container?: string;
+    title: string;
+    heading: string;
+    subtitle: string;
+    description: string;
+  };
+};
+
+const SectionTitle: FC<ComponentProps<typeof motion.span>> = ({
+  children,
+  className,
+  ...props
+}) =>
+  children ? (
+    <motion.span
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+      className={cn(
+        "text-primary bg-[#E2FFE0] w-fit px-6 py-2 rounded-full text-base font-medium text-center mb-10 inline-block",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </motion.span>
+  ) : null;
+
+const SectionHeading: FC<ComponentProps<typeof motion.h2>> = ({
+  children,
+  className,
+  ...props
+}) =>
+  children ? (
+    <motion.h2
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+      className={cn(
+        "sm:text-5xl text-4xl font-bold !leading-[3.5rem] text-center mb-6 text-black",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </motion.h2>
+  ) : null;
+
+const SectionSubTitle: FC<ComponentProps<typeof motion.span>> = ({
+  children,
+  className,
+  ...props
+}) =>
+  children ? (
+    <motion.span
+      initial={{ opacity: 0, y: 25 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+      className={cn(
+        "px-4 sm:text-xl text-base sm:leading-10 leading-9 font-medium text-center mt-4 mb-6 inline-block text-gray-800",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </motion.span>
+  ) : null;
+
+const SectionDescription: FC<ComponentProps<typeof motion.p>> = ({
+  children,
+  className,
+  ...props
+}) =>
+  children ? (
+    <motion.p
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+      className={cn(
+        "text-gray-600 lg:w-2/3 px-8 text-xl leading-8 capitalize text-center mb-14",
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </motion.p>
+  ) : null;
+
+const Section: FC<SectionProps> = ({
+  isHeroSection,
+  title,
+  heading,
+  subtitle,
+  description,
+  classNames,
+  className,
+  children,
+  ...props
+}) => {
+  return (
+    <section
+      className={cn(
+        "w-full flex flex-col items-center justify-center relative",
+        classNames?.section
+      )}
+      {...props}
+    >
+      <div
+        className={cn(
+          "container w-full max-w-7xl flex flex-col items-center justify-center text-center",
+          isHeroSection
+            ? "p-4 min-h-[calc(100vh-5rem)]"
+            : "px-4 py-12 lg:py-14",
+          classNames?.container,
+          className
+        )}
+      >
+        {title && (
+          <SectionTitle className={classNames?.title}>{title}</SectionTitle>
+        )}
+        {heading && (
+          <SectionHeading className={classNames?.heading}>
+            {heading}
+          </SectionHeading>
+        )}
+        {subtitle && (
+          <SectionSubTitle className={classNames?.subtitle}>
+            {subtitle}
+          </SectionSubTitle>
+        )}
+        {description && (
+          <SectionDescription className={classNames?.description}>
+            {description}
+          </SectionDescription>
+        )}
+        {children}
+      </div>
+    </section>
+  );
+};
+
+export { SectionTitle, SectionHeading, SectionSubTitle, SectionDescription };
+
+export default Section;
+
+// "use client";
+// import React, { FC, HTMLAttributes } from "react";
+// import { cn } from "@/lib/utils";
+
+// export type SectionProps = HTMLAttributes<HTMLElement> & {
+//   isHeroSection?: boolean;
+//   title?: string;
+//   heading?: string;
+//   subtitle?: string;
+//   description?: string;
+//   parentClassName?: string;
+// };
+
+// const SectionTitle: FC<HTMLAttributes<HTMLSpanElement>> = ({
+//   children,
+//   className,
+//   ...props
+// }) => (
+//   <span
+//     className={cn(
+//       "text-primary bg-[#E2FFE0] w-fit px-6 py-2 rounded-full text-base font-medium text-center mb-10 inline-block",
+//       className
+//     )}
+//     {...props}
+//   >
+//     {children}
+//   </span>
+// );
+
+// const SectionHeading: FC<HTMLAttributes<HTMLHeadingElement>> = ({
+//   children,
+//   className,
+//   ...props
+// }) => (
+//   <h2
+//     className={cn(
+//       "lg:w-1/2 sm:text-5xl text-4xl font-bold !leading-[3.5rem] text-center mb-6",
+//       className
+//     )}
+//     {...props}
+//   >
+//     {children}
+//   </h2>
+// );
+
+// const SectionSubTitle: FC<HTMLAttributes<HTMLSpanElement>> = ({
+//   children,
+//   className,
+//   ...props
+// }) => (
+//   <span
+//     className={cn(
+//       "px-4 sm:text-xl text-base sm:leading-10 leading-9 font-medium md:w-2/3 text-center mt-4 mb-6 inline-block",
+//       className
+//     )}
+//     {...props}
+//   >
+//     {children}
+//   </span>
+// );
+
+// const SectionDescription: FC<HTMLAttributes<HTMLParagraphElement>> = ({
+//   children,
+//   className,
+//   ...props
+// }) => (
+//   <p
+//     className={cn(
+//       "text-default-500 px-8 text-xl leading-8 capitalize lg:w-2/3 text-center mb-14",
+//       className
+//     )}
+//     {...props}
+//   >
+//     {children}
+//   </p>
+// );
+
+// const Section: FC<SectionProps> = ({
+//   isHeroSection,
+//   title,
+//   heading,
+//   subtitle,
+//   description,
+//   parentClassName,
+//   className,
+//   children,
+//   ...props
+// }) => (
+//   <section
+//     id={isHeroSection ? "main-section" : undefined}
+//     className={cn(
+//       "w-full flex flex-col items-center justify-center relative",
+//       isHeroSection ? "pt-4" : "",
+//       parentClassName
+//     )}
+//     {...props}
+//   >
+//     <div
+//       className={cn(
+//         "container w-full max-w-7xl flex flex-col flex-wrap items-center justify-center",
+//         isHeroSection
+//           ? "p-4 min-h-[calc(100vh-5rem)]"
+//           : "px-4 py-12 lg:py-14 h-auto",
+//         className
+//       )}
+//     >
+//       {title && <SectionTitle>{title}</SectionTitle>}
+
+//       {heading && <SectionHeading>{heading}</SectionHeading>}
+
+//       {subtitle && <SectionSubTitle>{subtitle}</SectionSubTitle>}
+
+//       {description && <SectionDescription>{description}</SectionDescription>}
+
+//       {children}
+//     </div>
+//   </section>
+// );
+
+// export { SectionTitle, SectionHeading, SectionSubTitle, SectionDescription };
+
+// export default Section;

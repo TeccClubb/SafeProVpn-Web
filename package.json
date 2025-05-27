@@ -9,16 +9,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroui/react": "^2.7.8",
+    "@reduxjs/toolkit": "^2.8.2",
+    "@tailwindcss/typography": "^0.5.16",
+    "axios": "^1.9.0",
+    "framer-motion": "^12.14.0",
     "lucide-react": "^0.511.0",
     "next": "15.1.8",
+    "next-themes": "^0.4.6",
     "react": "^19.1.0",
-    "react-dom": "^19.0.0"
+    "react-cookie": "^8.0.1",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8",
+    "autoprefixer": "^10.4.21",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
