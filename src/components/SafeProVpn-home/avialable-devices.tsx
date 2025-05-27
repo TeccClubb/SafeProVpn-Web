@@ -49,7 +49,7 @@ const platforms = [
 
 const AvailableDevices = () => {
   return (
-    <Section className="bg-[#f6fbfe]">
+    <Section classNames={{section: "bg-[#f6fbfe]"}}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
         {/* Left Section */}
         <div className="space-y-4 ">
