@@ -22,13 +22,13 @@ const steps = [
 
 const SafeProWork = () => {
   return (
-    <Section heading={<>How Does <span className='text-primary'>SafePro VPN</span> Work?</>}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <Section className='bg-white' heading={<>How Does <span className='text-primary'>SafePro VPN</span> Work?</>}>
+      <div className="w-full grid grid-cols-1 md:grid-cols-2  items-center">
         {/* Left Section - Text */}
-        <div className="space-y-8">
-          <div className="space-y-6">
+        <div className="w-full space-y-8">
+          <div className="w-full space-y-6">
             {steps.map((step) => (
-              <div key={step.number} className="flex items-start space-x-4">
+              <div key={step.number} className="w-full flex items-start space-x-4">
                 <div className="bg-cyan-100 text-cyan-600 rounded-md w-10 h-10 flex items-center justify-center font-bold text-lg">
                   {step.number}
                 </div>
@@ -42,7 +42,7 @@ const SafeProWork = () => {
         </div>
 
         {/* Right Section - Image */}
-        <div className="flex justify-center">
+        <div className=" w-full flex items-center justify-center">
           <Image
             src="/safe-work.png"
             alt="VPN Illustration"
