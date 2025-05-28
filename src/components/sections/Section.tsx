@@ -13,10 +13,10 @@ export type SectionProps = HTMLAttributes<HTMLElement> & {
   classNames?: {
     section?: string;
     container?: string;
-    title: string;
-    heading: string;
-    subtitle: string;
-    description: string;
+    title?: string;
+    heading?: string;
+    subtitle?: string;
+    description?: string;
   };
 };
 
