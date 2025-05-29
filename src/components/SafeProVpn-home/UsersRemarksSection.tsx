@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import Section from "./Section";
+import Section from "../sections/Section";
 import { User } from "@heroui/react";
 
 const UsersRemarksSection: FC = () => (

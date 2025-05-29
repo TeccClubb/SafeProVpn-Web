@@ -41,25 +41,25 @@ const SectionTitle: FC<ComponentProps<typeof motion.span>> = ({
     </motion.span>
   ) : null;
 
-const SectionHeading: FC<ComponentProps<typeof motion.h2>> = ({
+const SectionHeading: FC<ComponentProps<typeof motion.h3>> = ({
   children,
   className,
   ...props
 }) =>
   children ? (
-    <motion.h2
+    <motion.h3
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
       className={cn(
-        "sm:text-5xl text-4xl font-bold !leading-[3.5rem] text-center mb-6 text-black",
+        "sm:text-4xl text-3xl font-bold !leading-[3.5rem] text-center mb-6 text-black",
         className
       )}
       {...props}
     >
       {children}
-    </motion.h2>
+    </motion.h3>
   ) : null;
 
 const SectionSubTitle: FC<ComponentProps<typeof motion.span>> = ({
@@ -95,7 +95,7 @@ const SectionDescription: FC<ComponentProps<typeof motion.p>> = ({
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
       className={cn(
-        "text-gray-600 lg:w-2/3 px-8 text-xl leading-8 capitalize text-center mb-14",
+        "text-default-500 lg:w-2/3 px-8 text-lg leading-8 capitalize text-center mb-14",
         className
       )}
       {...props}

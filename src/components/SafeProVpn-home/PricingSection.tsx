@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FC } from "react";
-import Section from "./Section";
+import Section from "../sections/Section";
 import {
   Button,
   Card,
