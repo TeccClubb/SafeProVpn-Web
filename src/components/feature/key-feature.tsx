@@ -1,10 +1,10 @@
 import React from "react";
+import Section from "../sections/Section";
 import { ShieldCheck, Globe2, Ban } from "lucide-react";
 import FeatureCard from "../cardUI/FeatureCard";
-import Button from "../Button/button";
 
-// Step 1: Create card data
-const featureCards = [
+// Card data
+const keyFeatures = [
   {
     icon: <ShieldCheck className="w-10 h-10" />,
     title: "Military-Grade Encryption",
@@ -22,30 +22,28 @@ const featureCards = [
   },
 ];
 
-export default function SecureEveryClickSection() {
+const KeyFeature = () => {
   return (
-    <div className="text-center px-6 lg:px-20 py-12 bg-blue-50">
-      <h2 className="text-3xl font-bold text-gray-800">Secure Every Click</h2>
-      <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-        Use apps, websites, and watch videos without worry—your connection stays protected every day.
-      </p>
-
+    <Section
+      className="bg-white"
+      heading="Key Features"
+      description="SafePro VPN combines cutting-edge technology with user-friendly design to deliver a seamless, secure browsing experience."
+    >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 text-left">
-        {featureCards.map((card, index) => (
+        {keyFeatures.map((feature, index) => (
           <FeatureCard
             key={index}
-            icon={card.icon}
-            title={card.title}
-            description={card.description}
+            icon={feature.icon}
+            title={feature.title}
+            description={feature.description}
             className="border-t-4 border-cyan-500 bg-white"
             align="start"
           />
         ))}
       </div>
-
-      <div className="mt-10">
-        <Button variant="outline">See all Features</Button>
-      </div>
-    </div>
+    </Section>
   );
-}
+};
+
+export default KeyFeature;
+
