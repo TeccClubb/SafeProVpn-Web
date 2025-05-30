@@ -28,7 +28,7 @@ const Button: React.FC<ButtonProps> = ({
 
   const variantStyles =
     variant === "solid"
-      ? "bg-cyan-500 hover:bg-cyan-600 active:bg-cyan-700 text-white"
+      ? "bg-cyan-500 hover:bg-cyan-600 active:bg-cyan-700  "
       : "border border-cyan-500 text-cyan-500 hover:bg-cyan-50 active:bg-cyan-100";
 
   const sizes = {

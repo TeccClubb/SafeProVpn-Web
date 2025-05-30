@@ -73,6 +73,7 @@ const ChooseSafeProVpn = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
         {topFeatures.map((feature, index) => (
           <FeatureCard
+          className="bg-white"
             key={index}
             icon={feature.icon}
             title={feature.title}
@@ -86,6 +87,7 @@ const ChooseSafeProVpn = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
         {bottomFeatures.map((feature, index) => (
           <FeatureCard
+           className="bg-white"
             key={index}
             icon={feature.icon}
             title={feature.title}
