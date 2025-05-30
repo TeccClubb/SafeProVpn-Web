@@ -34,7 +34,7 @@ const features = [
 const AdvancedFeatureSecurity = () => {
     return (
         <Section
-            className="bg-gray-50"
+            classNames={{ section: 'bg-gray-50' }}
             heading="Advanced Security Features"
             description="Stay protected with our comprehensive suite of advanced security features designed to keep you safe online."
         >
@@ -44,6 +44,7 @@ const AdvancedFeatureSecurity = () => {
       key={index}
       className="rounded-xl shadow-sm bg-white p-6 flex items-start gap-2"
     >
+
       <div className="flex items-start gap-3">
         <div className="bg-cyan-100 p-2 rounded-full flex-shrink-0">
           {feature.icon}

@@ -25,7 +25,8 @@ const keyFeatures = [
 const KeyFeature = () => {
   return (
     <Section
-      className="bg-white"
+     classNames={{ section: "bg-white" }}
+     
       heading="Key Features"
       description="SafePro VPN combines cutting-edge technology with user-friendly design to deliver a seamless, secure browsing experience."
     >
