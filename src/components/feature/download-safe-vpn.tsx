@@ -4,10 +4,10 @@ import Section from "../sections/Section";
 import { SectionHeading } from "../sections/Section";
 import { SectionDescription } from "../sections/Section";
 import Button from "../Button/button";
-import ISOIcon from "@/icons/ISOIcon";
+import IOSIcon from "@/icons/IOSIcon";
 import AndroidIcon from "@/icons/AndroidIcon";
 import WindowIcon from "@/icons/WindowIcon";
-import MacosIcon from "@/icons/MacosIcon";
+import MacOSIcon from "@/icons/MacOSIcon";
 
 const DownloadSafeVpn = () => {
     return (
@@ -24,9 +24,9 @@ const DownloadSafeVpn = () => {
                     <div className="grid text-black grid-cols-2 gap-4 pt-2">
                         {[
                             { name: "Windows", Icon: WindowIcon },
-                            { name: "MacOS", Icon: MacosIcon },
+                            { name: "MacOS", Icon: MacOSIcon },
                             { name: "Android", Icon: AndroidIcon },
-                            { name: "iOS", Icon: ISOIcon },
+                            { name: "iOS", Icon: IOSIcon },
                         ].map(({ name, Icon }) => (
                             <Button key={name} className="bg-white duration-300 text-cyan-500 hover:bg-cyan-500 hover:text-white rounded-lg flex items-center justify-start gap-2 w-full">
                                  <Icon />
