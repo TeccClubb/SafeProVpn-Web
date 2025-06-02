@@ -53,7 +53,7 @@ const SectionHeading: FC<ComponentProps<typeof motion.h3>> = ({
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
       className={cn(
-        "sm:text-4xl text-3xl font-bold !leading-[3.5rem] text-center mb-6 text-black",
+        "sm:text-3xl text-2xl font-bold !leading-[3.5rem] text-center mb-6 text-black",
         className
       )}
       {...props}
