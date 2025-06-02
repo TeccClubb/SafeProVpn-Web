@@ -1,19 +1,9 @@
 
 import React from "react";
-
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
     variant?: "solid" | "outline";
     size?: "sm" | "md" | "lg" | "icon";
 };
-
-// interface CustomButtonProps {
-//   variant?: "solid" | "outline";
-//   children: React.ReactNode;
-//   className?: string;
-//   onClick?: () => void;
-//   type?: "button" | "submit" | "reset";
-// }
-
 const Button: React.FC<ButtonProps> = ({
   variant = "solid",
   children,
@@ -37,8 +27,7 @@ const Button: React.FC<ButtonProps> = ({
     lg: "text-xl px-8 py-4",
     icon: "p-2 rounded-full",
   }
-    
-
+  
   return (
     <button
       type={type}
@@ -50,5 +39,4 @@ const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
-
 export default Button;

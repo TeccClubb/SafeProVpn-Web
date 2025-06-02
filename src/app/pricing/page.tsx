@@ -1,4 +1,5 @@
 import PricingTable from "@/components/pricingSections/PricingTable";
+import ProtectDevice from "@/components/pricingSections/protect-device";
 import TransparentPricing from "@/components/pricingSections/transparent-pricing";
 
 
@@ -7,6 +8,7 @@ export default function PricingPage() {
       <div>
         <TransparentPricing></TransparentPricing>
         <PricingTable></PricingTable>
+        <ProtectDevice></ProtectDevice>
         </div>
     );
     }
