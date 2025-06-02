@@ -1,3 +1,5 @@
+"use client";
+
 import FrequentQuestionPtwo from "@/components/pricingSections/frequentQuestionPtwo";
 import OnlinePrivicy from "@/components/pricingSections/onlinePrivicy";
 import PricingTable from "@/components/pricingSections/PricingTable";
