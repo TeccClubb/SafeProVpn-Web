@@ -1,4 +1,5 @@
 import Button from "../Button/button";
+import Section from "../sections/Section";
 
 export default function PricingTable() {
     const plans = [
@@ -70,12 +71,12 @@ export default function PricingTable() {
     ];
 
     return (
-        <div className="bg-gray-50 py-10 px-4 sm:px-6 lg:px-16">
+        <Section heading={"Compare All Plans"} description={"See which SafePro VPN plan is right for you"}   classNames={{section: "bg-slate-50"}} >
+
+        <div className=" w-full  py-10      ">
             <div className="max-w-7xl mx-auto text-center">
-                <h2 className="text-4xl font-bold text-gray-800 mb-2">Compare All Plans</h2>
-                <p className="text-gray-600 mb-10">
-                    See which SafePro VPN plan is right for you
-                </p>
+                
+                 
 
                 <div className="overflow-x-auto rounded-lg shadow-lg">
                     <table className="min-w-full border-collapse border-t border-gray-200">
@@ -144,5 +145,6 @@ export default function PricingTable() {
                 </div>
             </div>
         </div>
+        </Section>
     );
 }
