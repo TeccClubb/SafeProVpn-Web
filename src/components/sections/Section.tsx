@@ -118,7 +118,7 @@ const Section: FC<SectionProps> = ({
   return (
     <section
       className={cn(
-        "w-full flex flex-col items-center justify-center relative",
+        "w-full flex flex-col  items-center justify-center relative",
         classNames?.section
       )}
       {...props}
