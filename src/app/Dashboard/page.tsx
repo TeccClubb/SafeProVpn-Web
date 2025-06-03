@@ -1,10 +1,17 @@
 
+import DataUsageChart from "@/components/dashboard/overView/DataUsageChart";
+import OverviewCards from "@/components/dashboard/overView/page";
+
 export default function DashboardPage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p className="text-gray-600">Welcome to your dashboard!</p>
-      {/* Add more dashboard content here */}
+    <div className="p-6 space-y-6">
+      {/* <div className="bg-cyan-50 border border-cyan-200 text-cyan-800 px-4 py-4 rounded-md flex items-center justify-between">
+        <p>Your Premium trial ends in 14 days. <br className="md:hidden" /> Upgrade now to keep all premium features.</p>
+        <button className="bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-medium py-2 px-4 rounded-md">Upgrade Now</button>
+      </div> */}
+
+      <OverviewCards />
+      <DataUsageChart />
     </div>
   );
 }
