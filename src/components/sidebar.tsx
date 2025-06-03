@@ -44,7 +44,7 @@ const Sidebar = () => {
   };
 
   return (
-   <div className="w-full md:w-[280px] p-8 mt-4 md:mt-12 flex flex-col items-center md:items-start gap-2 border-r border-gray-300 justify-between h-full">
+   <div className="w-full md:w-[280px] p-4 mt-4 md:mt-12 flex flex-col items-center md:items-start gap-2 border-r border-gray-300 justify-between h-full">
   <div className="w-full flex flex-col gap-2">
     {links
       .filter((link) => link.name !== 'Log Out')
