@@ -1,4 +1,5 @@
 
+import ConnectedDevices from "@/components/dashboard/overView/ConnectedDevices";
 import DataUsageChart from "@/components/dashboard/overView/DataUsageChart";
 import OverviewCards from "@/components/dashboard/overView/page";
 
@@ -12,6 +13,7 @@ export default function DashboardPage() {
 
       <OverviewCards />
       <DataUsageChart />
+      <ConnectedDevices />
     </div>
   );
 }
