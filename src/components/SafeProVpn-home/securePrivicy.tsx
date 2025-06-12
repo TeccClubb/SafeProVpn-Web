@@ -18,9 +18,12 @@ export default function VPNPromo() {
                     content with our lightning-fast VPN service. Your digital safety is our
                     priority.
                 </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                    <Button size="sm" variant="solid">Start Free Trial</Button>
-                    <Button variant="outline">Learn More</Button>
+                <div className="flex flex-col  sm:flex-row gap-4 justify-center lg:justify-start">
+                    <Button className="text-lg text-white font-semibold" variant="solid">
+                        Start Free Trial
+                    </Button>
+
+                    <Button className="text-lg x font-semibold" variant="outline" >Learn More</Button>
                 </div>
                 <div className="flex items-center gap-3 pt-4 justify-center lg:justify-start">
                     <div className="flex -space-x-2">
