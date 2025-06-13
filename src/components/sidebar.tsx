@@ -44,15 +44,16 @@ const Sidebar = () => {
   };
 
   return (
-   <div className="w-full md:w-[280px] p-4 mt-4 md:mt-12 flex flex-col items-center md:items-start gap-2 border-r border-gray-300 justify-between h-full">
+   <div className="w-full md:w-[280px]  md:mt-12 flex flex-col items-center md:items-start gap-2 pt-4 border-gray-300 justify-between h-full">
   <div className="w-full flex flex-col gap-2">
     {links
       .filter((link) => link.name !== 'Log Out')
       .map((link) => (
-        <div key={link.name} className="w-full flex justify-center md:justify-start">
+        <div key={link.name} className="w-full p-1 flex justify-center md:justify-start">
           <Link
             href={link.href}
-            className={`w-full flex items-center px-4 py-2 text-base md:text-lg transition-all duration-200 ${
+            className={`w-full max-w-[230px] rounded flex items-center px-3 py-2 text-base md:text-lg transition-all duration-200 ...
+ ${
               pathname === link.href
                 ? 'bg-gray-200 text-slate-600 font-bold'
                 : 'text-gray-600 hover:bg-gray-200 hover:text-cyan-500 hover:font-bold'
