@@ -2,6 +2,7 @@
 import ConnectedDevices from "@/components/dashboard/overView/ConnectedDevices";
 import DataUsageChart from "@/components/dashboard/overView/DataUsageChart";
 import OverviewCards from "@/components/dashboard/overView/overViewCards";
+import QuickActionsAndNotifications from "@/components/dashboard/overView/quickAction";
 
 export default function DashboardPage() {
   return (
@@ -14,6 +15,7 @@ export default function DashboardPage() {
       <OverviewCards />
       <DataUsageChart />
       <ConnectedDevices />
+      <QuickActionsAndNotifications/>
     </div>
   );
 }
