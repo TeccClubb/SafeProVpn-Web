@@ -5,7 +5,9 @@ import FAQAccordion from '../FAQAccordion';
 
 const FrequentlyQuestion: React.FC = () => {
   return (
-    <Section heading="Frequently Asked Questions"
+    <Section
+    className='bg-white'
+     heading="Frequently Asked Questions"
     description="We’ve got answers. If you need more help, reach out to our support team 24/7.">
   <FAQAccordion />
 

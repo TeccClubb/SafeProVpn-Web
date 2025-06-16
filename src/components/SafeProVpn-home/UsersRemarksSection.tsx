@@ -4,6 +4,7 @@ import { User } from "@heroui/react";
 
 const UsersRemarksSection: FC = () => (
   <Section
+  className="bg-white"
     heading="What Our Users Say"
     description="Join thousands of satisfied customers who trust SafePro VPN"
   >

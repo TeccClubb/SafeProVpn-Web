@@ -18,18 +18,18 @@ export default function BillingHistory() {
         </button>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full text-sm">
+      <div className="overflow-x-auto ">
+        <table className="w-full text-sm ">
           <thead>
-            <tr className="text-left text-gray-500">
-              <th className="py-2">DATE</th>
+            <tr className="text-left   text-gray-500">
+              <th className="py-2 ">DATE</th>
               <th className="py-2">INVOICE</th>
               <th className="py-2">AMOUNT</th>
               <th className="py-2">STATUS</th>
-              <th className="py-2">ACTIONS</th>
+              <th className="py-2 text-center ">ACTIONS</th>
             </tr>
           </thead>
-          <tbody className="text-gray-700">
+          <tbody className="text-gray-700 ">
             {invoices.map((invoice, index) => (
               <tr key={index} className="border-t">
                 <td className="py-2">{invoice.date}</td>
@@ -38,7 +38,7 @@ export default function BillingHistory() {
                 <td className="py-2">
                   <span className="text-green-800 bg-green-100 text-xs px-2 py-1 rounded-full">Paid</span>
                 </td>
-                <td className="py-2 flex items-center space-x-3">
+                <td className="py-2 flex  text-center justify-center space-x-3">
                   <button className="text-cyan-600 hover:text-cyan-800">
                     <Download className="w-4 h-4" />
                   </button>

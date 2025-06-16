@@ -2,17 +2,21 @@
 import React from "react";
 import { Lock, Zap, Globe, Smartphone, MousePointerClick, Headset } from "lucide-react";
 import FeatureCard from "@/components/cardUI/FeatureCard";
+import Section from "../sections/Section";
 
 export default function WhyChooseSection() {
   return (
-    <div className="text-center px-6 lg:px-20 py-12 bg-gradient-to-r from-white to-blue-50">
+    <Section heading={<>Why Choose <span className="text-sky-500">SafePro VPN?</span></>} className="bg-white"
+    description="Experience true internet freedom — with uncompromising security, lightning speed, and powerful privacy features. SafePro VPN gives you peace of mind, everywhere.">
+
+    {/* <div className="text-center px-6 lg:px-20 py-12 bg-gradient-to-r from-white to-blue-50">
       <h2 className="text-3xl font-bold text-gray-800">
         Why Choose <span className="text-sky-500">SafePro VPN?</span>
       </h2>
       <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
         Experience true internet freedom — with uncompromising security, lightning speed,
         and powerful privacy features. SafePro VPN gives you peace of mind, everywhere.
-      </p>
+      </p> */}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
         <FeatureCard
@@ -45,6 +49,7 @@ export default function WhyChooseSection() {
           <Headset className="w-4 h-4 text-sky-500" /> 24/7 Support
         </div>
       </div>
-    </div>
+    
+    </Section>
   );
 }
