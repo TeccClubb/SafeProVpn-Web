@@ -6,7 +6,7 @@ export default function BillingSection() {
     <div className="w-full  space-y-12 bg-white">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Billing Information</h2>
+        <h2 className=" font-bold text-black text-3xl">Billing Information</h2>
         <p className="text-gray-500 text-sm">
           Manage your subscription, payment methods, and billing history
         </p>
@@ -45,9 +45,9 @@ export default function BillingSection() {
         </div>
 
         {/* Alert box */}
-        <div className="bg-blue-50 text-blue-700 text-sm p-4 rounded-md flex justify-between items-center">
+        <div className="bg-blue-50 text-gray-700 text-sm p-4 rounded-md flex justify-between items-center">
           <span>
-            Save 40% by <a href="#" className="font-semibold underline">switching to an Annual Plan</a>!
+            Save 40% by <a href="#" className="font-semibold  text-cyan-500">switching to an Annual Plan</a>!
           </span>
           <button className="text-blue-500 hover:text-blue-700 text-xl font-bold">&times;</button>
         </div>
