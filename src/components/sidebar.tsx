@@ -30,7 +30,7 @@ const Sidebar = () => {
   const links: NavLink[] = [
     { name: 'Dashboard', href: '/Dashboard', icon: <LayoutDashboard className="w-5 h-5 mr-2" /> },
     { name: 'Billing', href: '/Dashboard/billing', icon: <CreditCard className="w-5 h-5 mr-2" /> },
-    { name: 'My Devices', href: '/Dashboard/Account-biling-history', icon: <Monitor className="w-5 h-5 mr-2" /> },
+    { name: 'My Devices', href: '/Dashboard/my-devices', icon: <Monitor className="w-5 h-5 mr-2" /> },
     { name: 'Data Usage', href: '/#', icon: <BarChart className="w-5 h-5 mr-2" /> },
     { name: 'Setting', href: '/#', icon: <Settings className="w-5 h-5 mr-2" /> },
     { name: 'Support', href: '/#', icon: <LifeBuoy className="w-5 h-5 mr-2" /> },
