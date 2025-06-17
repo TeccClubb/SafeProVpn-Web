@@ -4,7 +4,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { cn } from "@/lib/utils";
 import MainLayout from "@/components/MainLayout";
-import { SessionProvider } from "next-auth/react";
+
 import SessionWrapper from "@/components/SessionWrapper";
 
 const fontSans = Poppins({
