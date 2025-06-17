@@ -4,6 +4,8 @@ import "./globals.css";
 import { Providers } from "./providers";
 import { cn } from "@/lib/utils";
 import MainLayout from "@/components/MainLayout";
+import { SessionProvider } from "next-auth/react";
+import SessionWrapper from "@/components/SessionWrapper";
 
 const fontSans = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -39,6 +41,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
+        {/* <SessionProvider> */}
+        <SessionWrapper>
+
         <Providers
           themeProps={{
             attribute: "class",
@@ -49,6 +54,9 @@ export default function RootLayout({
         >
           <MainLayout>{children}</MainLayout>
         </Providers>
+        </SessionWrapper>
+
+        {/* </SessionProvider> */}
       </body>
     </html>
   );
