@@ -18,6 +18,7 @@ export const STRIPE_PUBLISHABLE_KEY =
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY!;
 
 export const REST_API_BASE_URL = process.env.NEXT_PUBLIC_REST_API_BASE_URL!;
+export const AUTH_SECRET=process.env.AUTH_SECRET;
 
 export const GET_SERVERS_ROUTE = (page: number) =>
   `${REST_API_BASE_URL}/web/servers?page=${page}`;

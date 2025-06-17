@@ -1,14 +1,19 @@
-
-
+"use client";
 
 import HomePage from "@/components/Home/home";
-import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useEffect } from "react";
 
 export default function Home() {
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    console.log("Session:", session);
+  }, [session]);
+
   return (
-  
-    <div >
-   <HomePage></HomePage>
+    <div>
+      <HomePage />
     </div>
   );
 }
