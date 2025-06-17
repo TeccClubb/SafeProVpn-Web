@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { INVOICE_PAGE_PATH } from "@/lib/pathnames";
 import Navbar from "./Navbar";
 import Footer from "./footer/footer";
-import { ToastContainer } from "react-toastify";
 
 const MainLayout: FC<{ children: ReactNode }> = ({
   children,
@@ -22,9 +21,7 @@ const MainLayout: FC<{ children: ReactNode }> = ({
   return (
     <div className="flex flex-col min-h-screen overflow-hidden">
         <Navbar />
-      <main className="flex-grow">{children}
-        <ToastContainer />
-      </main>
+      <main className="flex-grow">{children}</main>
       {pathname !== INVOICE_PAGE_PATH && <Footer />}
     </div>
   );
