@@ -10,6 +10,8 @@ import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Button, Input } from "@heroui/react";
 import { Loader2 } from "lucide-react";
+import { SIGNIN_PAGE_PATH } from "@/lib/pathnames";
+import { toast } from "react-toastify";
 
 type LoginFormData = {
   email: string;
@@ -39,7 +41,9 @@ export default function LoginForm() {
     setLoading(false);
 
     if (res?.ok) {
+      toast.success("Login Successfull")
       router.push("/");
+
     } else {
       setError(res?.error || "Login failed. Please try again.");
     }
@@ -106,7 +110,7 @@ export default function LoginForm() {
               <input type="checkbox" className="mr-2" />
               Remember me for 30 days
             </label>
-            <a href="#" className="text-cyan-600 hover:underline">Forgot password?</a>
+            <a href="#" className="text-cyan-600 hover:underline" onClick={()=>router.push(SIGNIN_PAGE_PATH)}>Forgot password?</a>
           </div>
 
           {/* Error Message */}

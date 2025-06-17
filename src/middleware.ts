@@ -35,6 +35,7 @@ export const config: NextConfig = {
     "/signup",
     "/forgot-password",
     "/reset-password",
+    "/Dashboard/:path*",
     "/email-verify",
     "/createTicket",
     "/devices",
