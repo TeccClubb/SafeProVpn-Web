@@ -30,6 +30,7 @@ import AppLogo from "./AppLogo";
 import { useAppState } from "@/hooks/use-app-state";
 import { useUserCookie } from "@/hooks/use-cookies";
 import { useLogout } from "@/hooks/useLogout";
+import { signOut } from "next-auth/react";
 
 const Navbar: FC = () => {
   const pathname = usePathname();
@@ -206,6 +207,15 @@ const Navbar: FC = () => {
           ))}
         </div>
       </NavbarMenu>
+      <Button
+        variant="bordered"
+        color="danger"
+        radius="full"
+        className="hidden sm:inline-flex"
+        onClick={() => signOut({ callbackUrl: '/' })}
+      >
+        Logout
+      </Button>
     </HeroUINavbar>
   );
 };
