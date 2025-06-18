@@ -22,7 +22,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }, reset
   } = useForm<LoginFormData>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -41,6 +41,7 @@ export default function LoginForm() {
     setLoading(false);
 
     if (res?.ok) {
+      reset();
       toast.success("Login Successfull")
       router.push("/");
 
