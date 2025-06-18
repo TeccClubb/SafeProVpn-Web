@@ -7,6 +7,7 @@ import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Button, Input } from "@heroui/react";
 import { useSignup } from "@/hooks/useSignup";
+import { useRouter } from "next/navigation";
 type FormValues = {
 
     username: string;
@@ -15,6 +16,7 @@ type FormValues = {
 };
 
 export default function SignUpForm() {
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -32,6 +34,7 @@ export default function SignUpForm() {
                 password: data.password,
             };
             const response = await signup(payload);
+            router.push('/login'); // Redirect to login after successful signup
             console.log('Signup success:', response);
             // Optionally: Redirect or show a toast
         } catch (err) {
@@ -193,7 +196,7 @@ export default function SignUpForm() {
                 {/* Footer */}
                 <p className="text-center text-sm text-gray-600">
                     Don’t have an account?{" "}
-                    <a href="#" className="text-cyan-600 hover:underline">
+                    <a href="/login" className="text-cyan-600 hover:underline">
                         Sign up for free
                     </a>
                 </p>
