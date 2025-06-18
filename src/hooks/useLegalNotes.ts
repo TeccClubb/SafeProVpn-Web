@@ -7,7 +7,7 @@ import axios, { AxiosError } from "axios";
 import { GET_LEGAL_NOTES_ROUTE } from "@/lib/constants";
 import { setLegalNotes } from "@/store/app.slice";
 import { addToast } from "@heroui/react";
-
+  
 export const useLegalNotes = () => {
   const dispatch = useDispatch();
   const { isLegalNoticeLoadedOnce, termsAndConditions, privacyPolicy } =

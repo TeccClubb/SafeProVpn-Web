@@ -1,4 +1,6 @@
 "use client";
+import { useDevices } from "@/hooks/useDevices";
+import { useSession } from "next-auth/react";
 import { FaLaptop, FaMobileAlt, FaTabletAlt, FaTv } from "react-icons/fa";
 const devices = [
   { name: "MacBook Pro", ip: "192.168.1.101", status: "Online", dataUsed: 84.2, lastActive: "Now", icon: <FaLaptop /> },
@@ -8,6 +10,10 @@ const devices = [
 ];
 
 export default function DeviceTable() {
+  const{data:session}=useSession();
+      const token = (session?.user as any)?.access_token;
+
+//  const { devices, loading, error } = useDevices(token);
   return (
     <div className="w-full">
       

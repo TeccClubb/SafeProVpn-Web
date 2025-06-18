@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 type LoginFormData = {
   email: string;
   password: string;
+ 
 };
 
 export default function LoginForm() {
@@ -29,7 +30,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
 
   const onSubmit = async (data: LoginFormData) => {
-    setLoading(true);
+    setLoading  (true);
     setError("");
 
     const res = await signIn("credentials", {
@@ -42,7 +43,7 @@ export default function LoginForm() {
 
     if (res?.ok) {
       reset();
-      toast.success("Login Successfull")
+      toast.success("Login Successful")
       router.push("/");
 
     } else {
