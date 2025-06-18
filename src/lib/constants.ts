@@ -29,8 +29,8 @@ export const LOGOUT_ROUTE = REST_API_BASE_URL + "/logout";
 export const FORGOT_PASSWORD_ROUTE = REST_API_BASE_URL + "/forgot-password";
 export const RESET_PASSWORD_ROUTE = REST_API_BASE_URL + "/reset-password";
 
-export const EMAIL_VERIFICATION_ROUTE = (id: number | string, hash: string) =>
-  REST_API_BASE_URL + "/email/verify/" + id + "/" + hash;
+export const getEmailVerificationRoute = (id: string, hash: string, expires: string, signature: string): string =>
+  `${REST_API_BASE_URL}/email/verify/${id}/${hash}?expires=${expires}&signature=${signature}`;
 
 export const RESENT_EMAIL_VERIFICATION_ROUTE =
   REST_API_BASE_URL + "/email/resend-verification";
