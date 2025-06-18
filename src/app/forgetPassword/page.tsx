@@ -3,6 +3,11 @@
 import { useForm } from "react-hook-form";
 import { MailIcon } from "@/icons/mailIcon";
 import { Button, Input } from "@heroui/react";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { FORGOT_PASSWORD_ROUTE } from "@/lib/constants";
 
 type FormValues = {
   email: string;
@@ -13,11 +18,35 @@ export default function ForgetPassword() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
+    reset,
   } = useForm<FormValues>();
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Forgot password data:", data);
-    // TODO: API call here
+  const router = useRouter();
+//   const [error, setError] = useState("");
+
+  const onSubmit = async (data: FormValues) => {
+    try {
+    //   setError("");
+      const res = await axios.post(
+        FORGOT_PASSWORD_ROUTE,
+        { email: data.email },
+        { headers: { Accept: "application/json" } }
+      );
+
+      if (res.status === 200 || res.status === 201) {
+        toast.success(res.data.message);
+        console.log(res.data)
+        reset();
+      } else {
+        toast.error(res.data.message);
+        // setError(res.data.message);
+      }
+    } catch (error: any) {
+      const message = error?.response?.data?.message || "Something went wrong.";
+      
+      toast.error(message);
+      toast.error("Failed to send reset link.");
+    }
   };
 
   return (
@@ -31,7 +60,6 @@ export default function ForgetPassword() {
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
-          {/* Email Field */}
           <div className="relative mb-6">
             <label>Email</label>
             <Input
@@ -56,7 +84,6 @@ export default function ForgetPassword() {
             )}
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={isSubmitting}
@@ -66,7 +93,6 @@ export default function ForgetPassword() {
           </button>
         </form>
 
-        {/* Back to Login */}
         <button
           type="button"
           className="w-full text-black py-2 rounded-md hover:bg-cyan-100 transition"

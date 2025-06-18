@@ -1,39 +1,63 @@
 "use client";
-import React from 'react';
-import Section from '../sections/Section';
+import React from "react";
+import Section from "../sections/Section";
 import { Tabs, Tab, Card } from "@heroui/react";
-import { usePlans } from '@/hooks/usePlans';
+import { usePlans } from "@/hooks/usePlans";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-import { Button,CardBody,CardFooter, CardHeader, Chip, Divider,} from "@heroui/react";
+import {
+  Button,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Chip,
+  Divider,
+} from "@heroui/react";
 
 import TickIcon from "@/icons/TickIcon";
 import { cn } from "@/lib/utils";
 
 const TransparentPricing = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
   const { isPlansLoading, plans } = usePlans();
+
+  const handleClick = (planId: string) => {
+    if (!session) {
+      router.push("/login");
+    } else {
+      router.push(`/account/checkout?planId=${planId}`);
+    }
+  };
+
   return (
     <Section
-   classNames={{section: "bg-slate-50"}}
-      heading={<>Simple, Transparent <span className="text-primary">Pricing</span></>}
+      classNames={{ section: "bg-slate-50" }}
+      heading={
+        <>
+          Simple, Transparent <span className="text-primary">Pricing</span>
+        </>
+      }
       description="Choose the plan that works best for you. All plans include full access to our premium features, no-logs policy, and military-grade encryption."
     >
-     <div className="flex justify-center px-4">
-  <div className="w-full border border-white shadow-[0px_4px_6px_rgba(0,0,0,0.1)] bg-white rounded-full overflow-hidden max-w-xs sm:max-w-md md:max-w-xl py-1.5">
-    <Tabs
-      aria-label="Pricing Plans"
-      color="primary"
-      radius="full"
-      variant="light"
-      className="w-full"
-    >
-      <Tab key="week" title="Weekly" />
-      <Tab key="month" title="Monthly" />
-      <Tab key="year" title="Yearly" />
-    </Tabs>
-  </div>
-</div>
+      <div className="flex justify-center px-4">
+        <div className="w-full border border-white shadow-[0px_4px_6px_rgba(0,0,0,0.1)] bg-white rounded-full overflow-hidden max-w-xs sm:max-w-md md:max-w-xl py-1.5">
+          <Tabs
+            aria-label="Pricing Plans"
+            color="primary"
+            radius="full"
+            variant="light"
+            className="w-full"
+          >
+            <Tab key="week" title="Weekly" />
+            <Tab key="month" title="Monthly" />
+            <Tab key="year" title="Yearly" />
+          </Tabs>
+        </div>
+      </div>
 
-<div className="w-full grid sm:grid-cols-2 lg:grid-cols-3 items-start mt-12 gap-4">
+      <div className="w-full grid sm:grid-cols-2 lg:grid-cols-3 items-start mt-12 gap-4">
         {!isPlansLoading &&
           plans.map((plan) => (
             <Card
@@ -94,6 +118,7 @@ const TransparentPricing = () => {
                   color="primary"
                   fullWidth
                   size="lg"
+                  onClick={() => handleClick(String(plan.id))}
                 >
                   Select Plan
                 </Button>
@@ -101,7 +126,6 @@ const TransparentPricing = () => {
             </Card>
           ))}
       </div>
-
     </Section>
   );
 };
