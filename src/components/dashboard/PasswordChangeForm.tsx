@@ -4,6 +4,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input } from "@heroui/react";
 import { CheckCircle, Circle } from "lucide-react";
+import axios from "axios";
+import { REST_API_BASE_URL } from "@/lib/constants";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
 
 export default function PasswordChangeForm() {
   const {
@@ -15,34 +19,52 @@ export default function PasswordChangeForm() {
     mode: "onChange",
   });
 
-  const newPassword = watch("newPassword") || "";
+  const new_password = watch("new_password") || "";
+
+  const { data: session } = useSession();
 
   // Password validation rules
   const rules = [
     {
       label: "At least 8 characters long",
-      valid: newPassword.length >= 8,
+      valid: new_password.length >= 8,
     },
     {
       label: "Contains at least one uppercase letter",
-      valid: /[A-Z]/.test(newPassword),
+      valid: /[A-Z]/.test(new_password),
     },
     {
       label: "Contains at least one number",
-      valid: /\d/.test(newPassword),
+      valid: /\d/.test(new_password),
     },
     {
       label: "Contains at least one special character",
-      valid: /[!@#$%^&*(),.?":{}|<>]/.test(newPassword),
+      valid: /[!@#$%^&*(),.?":{}|<>]/.test(new_password),
     },
   ];
 
   const allRulesPassed = rules.every(rule => rule.valid);
   const confirmPassword = watch("confirmPassword");
 
-  const onSubmit = (data: any) => {
-    alert("Password changed successfully!");
-    console.log(data);
+  const onSubmit = async (data: any) => {
+    // alert("Password changed successfully!");
+    const token = (session?.user as any)?.access_token;
+    console.log(data)
+    const response = await axios.post(`${REST_API_BASE_URL}/user/update-password`, data, {
+      headers: {
+        'Accept': 'application/json',
+        Authorization: `Bearer ${token}`,
+      }
+    })
+
+    console.log(response.data)
+    if(response.status){
+      toast.success("Password Update Successfully")
+    }else{
+      toast.error("Update Failed Some Error Occer")
+    }
+
+
   };
 
   return (
@@ -51,16 +73,17 @@ export default function PasswordChangeForm() {
         <h2 className="text-xl font-semibold pb-4">Change Password</h2>
 
         <div className="space-y-10 text-gray-600">
+          
           <Input
             label="Current Password"
             placeholder="Enter your current password"
             labelPlacement="outside"
             type="password"
             variant="bordered"
-            {...register("currentPassword", { required: "Current password is required" })}
+            {...register("old_password", { required: "Current password is required" })}
           />
-          {errors.currentPassword?.message && (
-            <p className="text-sm text-red-500">{String(errors.currentPassword.message)}</p>
+          {errors.old_password?.message && (
+            <p className="text-sm text-red-500">{String(errors.old_password.message)}</p>
           )}
 
           <Input
@@ -69,7 +92,7 @@ export default function PasswordChangeForm() {
             labelPlacement="outside"
             type="password"
             variant="bordered"
-            {...register("newPassword", {
+            {...register("new_password", {
               required: "New password is required",
               validate: {
                 minLength: value => value.length >= 8 || "Must be at least 8 characters",
@@ -80,8 +103,8 @@ export default function PasswordChangeForm() {
               }
             })}
           />
-          {errors.newPassword && (
-            <span className="text-sm text-red-500">{String(errors.newPassword.message)}</span>
+          {errors.new_password && (
+            <span className="text-sm text-red-500">{String(errors.new_password.message)}</span>
           )}
 
           <Input
@@ -93,7 +116,7 @@ export default function PasswordChangeForm() {
             {...register("confirmPassword", {
               required: "Please confirm your password",
               validate: value =>
-                value === newPassword || "Passwords do not match",
+                value === new_password || "Passwords do not match",
             })}
           />
           {errors.confirmPassword && (
