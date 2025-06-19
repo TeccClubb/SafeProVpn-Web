@@ -12,6 +12,8 @@ import { Button, Input } from "@heroui/react";
 import { Loader2 } from "lucide-react";
 import { SIGNIN_PAGE_PATH } from "@/lib/pathnames";
 import { toast } from "react-toastify";
+import { getOrCreateDeviceId } from "@/components/deviceId";
+import getDeviceName from "@/components/getDeviceName";
 
 type LoginFormData = {
   email: string;
@@ -32,11 +34,14 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormData) => {
     setLoading  (true);
     setError("");
-
+ const deviceId = getOrCreateDeviceId();
+    const deviceName = getDeviceName(); 
     const res = await signIn("credentials", {
       redirect: false,
       email: data.email,
       password: data.password,
+      device_id: deviceId, // Pass the device ID to the signIn function
+          device_name: deviceName, // Pass the device name to the signIn function
     });
 
     setLoading(false);
