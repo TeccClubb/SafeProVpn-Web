@@ -4,7 +4,6 @@ import { User } from "@heroui/react";
 
 const UsersRemarksSection: FC = () => (
   <Section
-  className="bg-white"
     heading="What Our Users Say"
     description="Join thousands of satisfied customers who trust SafePro VPN"
   >
@@ -30,7 +29,7 @@ const UsersRemarksSection: FC = () => (
           description: "Family User",
           remarks:
             "I use SafePro VPN on all my family devices. Setup was incredibly easy, and their customer support is always helpful whenever I have questions.",
-        }
+        },
       ].map(({ name, avatar, description, remarks }, index) => (
         <div
           key={avatar + index}

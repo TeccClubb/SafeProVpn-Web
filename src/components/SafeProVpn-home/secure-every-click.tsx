@@ -9,28 +9,31 @@ const featureCards = [
   {
     icon: <ShieldCheck className="w-10 h-10" />,
     title: "Military-Grade Encryption",
-    description: "Secure your data with AES-256 encryption, the same standard used by security experts worldwide.",
+    description:
+      "Secure your data with AES-256 encryption, the same standard used by security experts worldwide.",
   },
   {
     icon: <Globe2 className="w-10 h-10" />,
     title: "Global Server Network",
-    description: "Access 1,000+ servers in 90+ countries for unrestricted browsing and streaming.",
+    description:
+      "Access 1,000+ servers in 90+ countries for unrestricted browsing and streaming.",
   },
   {
     icon: <Ban className="w-10 h-10" />,
     title: "No-Logs Policy",
-    description: "We never track, collect, or share your browsing data. Your privacy is our priority.",
+    description:
+      "We never track, collect, or share your browsing data. Your privacy is our priority.",
   },
 ];
 
 export default function SecureEveryClickSection() {
   return (
-    <Section heading="Secure Every Click" className="bg-white"
-      description="Use apps, websites, and watch videos without worry—your connection stays protected every day.">
-
-  
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 text-left">
+    <Section
+      heading="Secure Every Click"
+      description="Use apps, websites, and watch videos without worry—your connection stays protected every day."
+      classNames={{ section: "bg-gray-100" }}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
         {featureCards.map((card, index) => (
           <FeatureCard
             key={index}
@@ -43,10 +46,9 @@ export default function SecureEveryClickSection() {
         ))}
       </div>
 
-      <div className="mt-10">
-        <Button variant="outline">See all Features</Button>
-      </div>
-    
+      <Button variant="outline" className="mt-10">
+        See all Features
+      </Button>
     </Section>
   );
 }
