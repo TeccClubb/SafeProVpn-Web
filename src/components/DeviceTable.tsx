@@ -13,6 +13,8 @@ export default function DeviceTable() {
   const{data:session}=useSession();
       const token = (session?.user as any)?.access_token;
 
+      // const {devices,loading,error}=useDevices(token);
+
 //  const { devices, loading, error } = useDevices(token);
   return (
     <div className="w-full">

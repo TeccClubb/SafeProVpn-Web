@@ -27,7 +27,7 @@ const TransparentPricing = () => {
     if (!session) {
       router.push("/login");
     } else {
-      router.push(`/account/checkout?planId=${planId}`);
+      router.push(`/checkout?planId=${planId}`);
     }
   };
 
