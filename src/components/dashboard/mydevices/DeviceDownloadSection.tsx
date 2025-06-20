@@ -14,12 +14,15 @@ const devices = [
     title: "Windows",
     subtitle: "Windows 8, 10, 11 and Server",
     version: "Version 3.4.2 (64-bit)",
+    path:"/downloads/Android",
+
     buttonText: "Download Now",
   },
   {
     icon: <FaApple size={24} />,
     title: "macOS",
     subtitle: "macOS 10.15 and newer",
+    path:"/downloads/MacOS",
     version: "Version 3.4.0 (Intel/Apple Silicon)",
     buttonText: "Download Now",
   },
@@ -28,6 +31,7 @@ const devices = [
     title: "Android",
     subtitle: "Android 6.0 and newer",
     version: "",
+    path:"/downloads/Android",
     buttonText: "Download Now",
     storeIcon: (
       <div className="flex items-center gap-1 text-xs text-gray-600">
@@ -41,6 +45,8 @@ const devices = [
     subtitle: "iOS 13.0 and newer",
     version: "",
     buttonText: "Download Now",
+    path:"/downloads/iOS",
+
     storeIcon: (
       <div className="flex items-center gap-1 text-xs text-gray-600">
         <FaAppStoreIos size={14} /> App Store

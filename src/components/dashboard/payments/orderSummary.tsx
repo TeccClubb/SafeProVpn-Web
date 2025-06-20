@@ -1,15 +1,24 @@
 'use client';
+import { Plan } from '@/types';
 import { CheckCircle, Shield, Globe, Zap } from 'lucide-react';
-
-export default function OrderSummary() {
+interface CheckoutFormProps {
+  plan: Plan;
+  className?: string;
+}
+export default function OrderSummary({ plan, className }: CheckoutFormProps) {
   return (
     <div className="max-w-sm mx-auto border rounded-xl shadow-md p-6 bg-white">
       <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
 
       <div className="bg-gray-50 p-4 rounded-lg border mb-4">
         <div className="flex justify-between items-center mb-2">
-          <p className="font-medium">SafePro VPN <br></br> Premium</p>
-          <span className="text-sm font-semibold text-cyan-600">1-Year <br></br> Plan</span>
+          <p className="font-medium">SafePro VPN <br></br> {plan.name
+}</p>
+        <span className="text-sm font-semibold text-cyan-600">
+  {plan.duration} {plan.duration_unit}
+  <br />
+  Plan
+</span>
         </div>
         <div className="space-y-2 text-sm text-gray-700">
           <div className="flex items-center gap-2">
@@ -30,7 +39,7 @@ export default function OrderSummary() {
       <div className="text-sm space-y-1 mb-4">
         <div className="flex justify-between">
           <span>Subtotal</span>
-          <span className="text-gray-800 font-medium">$119.88</span>
+          <span className="text-gray-800 font-medium">{plan.price}$</span>
         </div>
         <div className="flex justify-between ">
           <span>Discount (50%)</span>

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { REST_API_BASE_URL } from "@/lib/constants";
-
-interface Device {
-  id: number;
-  device_name: string;
-  last_active_at: string | null;
-}
+// import { Device, DeviceResponse } from "@/types/device";
+import { Device,DeviceResponse } from "@/components/DeviceTable";
+// interface Device {
+//   id: number;
+//   device_name: string;
+//   last_active_at: string | null;
+// }
 
 export const useDevices = (token: string) => {
   const [devices, setDevices] = useState<Device[]>([]);

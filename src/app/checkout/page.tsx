@@ -38,7 +38,7 @@ export   function ProductConfigurationCheckOut() {
         className="w-full"
       />
 </div>
-<OrderSummary></OrderSummary>
+<OrderSummary plan={selectedPlan}></OrderSummary>
      </div>
     
     </Section>
