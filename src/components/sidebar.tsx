@@ -14,6 +14,8 @@ import {
   LifeBuoy,
   LogOut,
 } from 'lucide-react';
+import LogoutModal from './dashboard/LogoutModal';
+import { signOut } from 'next-auth/react';
 
 interface NavLink {
   name: string;
@@ -38,10 +40,10 @@ const Sidebar = () => {
   ];
 
   const handleLogout = () => {
-    // removeUserCookie();
-    router.refresh();
-    setIsLogoutModalOpen(false);
-  };
+  // removeUserCookie(); // Uncomment if you're clearing cookies manually
+  signOut({ callbackUrl: '/login' }); // Make sure you import this from next-auth
+  setIsLogoutModalOpen(false);
+};
 
   return (
    <div className="w-full md:w-[280px]  md:mt-12 flex flex-col items-center md:items-start gap-2 pt-4 border-gray-300 justify-between h-full">
@@ -84,6 +86,11 @@ const Sidebar = () => {
       Log Out
     </button>
   </div>
+   <LogoutModal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        onConfirm={handleLogout}
+      />
 </div>
 
 

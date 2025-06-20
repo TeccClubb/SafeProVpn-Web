@@ -20,7 +20,7 @@ const authOptions = {
       async authorize(credentials) {
         const res = await fetch(`${REST_API_BASE_URL}/login`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json" ,"Accept":"application/json" },
           body: JSON.stringify({
             email: credentials?.email,
             password: credentials?.password,

@@ -13,6 +13,7 @@ import axios from "axios";
 // import { STRIPE_PUBLISHABLE_KEY } from "@/lib/utils/apiRoutes";
 import { STRIPE_PUBLISHABLE_KEY } from "@/lib/constants";
 import { Plan } from "@/types"; // adjust if needed
+import { Input } from "@heroui/react";
 
 type FormData = {
   name: string;
@@ -104,27 +105,43 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
   };
 
   return (
-    
+
     <form onSubmit={handleSubmit(onSubmit)} className={className}>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="text-sm">Name</label>
-          <input
-            {...register("name", { required: "Name is required" })}
-            className="w-full p-2 border rounded mb-2"
+          
+          <Input
+            label="Name"
             placeholder="Full Name"
+            labelPlacement="outside"
+            variant="bordered"
+            {...register("name", { required: "Name is required" })}
+            isInvalid={!!errors.name}
+            errorMessage={errors.name?.message}
+            className="mb-3  "
           />
           {errors.name && (
             <p className="text-red-600 text-sm">{errors.name.message}</p>
           )}
         </div>
 
+
         <div>
-          <label className="text-sm">Address</label>
+          {/* <label className="text-sm">Address</label>
           <input
-            {...register("address", { required: "Address is required" })}
             className="w-full p-2 border rounded mb-2"
             placeholder="123 Main St"
+          /> */}
+          <Input
+            label="Address"
+            placeholder="123 Main St"
+            labelPlacement="outside"
+            variant="bordered"
+            {...register("address", { required: "Address is required" })}
+
+            isInvalid={!!errors.address}
+            errorMessage={errors.name?.message}
+            className="mb-3  "
           />
           {errors.address && (
             <p className="text-red-600 text-sm">{errors.address.message}</p>
@@ -133,29 +150,65 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <input
-          {...register("city", { required: "City is required" })}
+
+        <Input
+          label="Address"
           placeholder="City"
-          className="w-full p-2 border rounded mb-2"
+
+          labelPlacement="outside"
+          variant="bordered"
+          {...register("city", { required: "City is required" })}
+
+
+          isInvalid={!!errors.city}
+          errorMessage={errors.city?.message}
+          className="mb-3  "
         />
-        <input
-          {...register("state", { required: "State is required" })}
+        {errors.city && (
+          <p className="text-red-600 text-sm">{errors.city.message}</p>
+        )}
+
+        <Input
+          label="State"
           placeholder="State"
-          className="w-full p-2 border rounded mb-2"
+
+          labelPlacement="outside"
+          variant="bordered"
+          {...register("state", { required: "State is required" })}
+
+
+
+          isInvalid={!!errors.state}
+          errorMessage={errors.state?.message}
+          className="mb-3  "
         />
+        {errors.city && (
+          <p className="text-red-600 text-sm">{errors.city.message}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <input
-          {...register("postal_code", { required: "Postal Code is required" })}
+
+        <Input
+          label="Postal Code"
           placeholder="Postal Code"
-          className="w-full p-2 border rounded mb-2"
+
+
+          labelPlacement="outside"
+          variant="bordered"
+          {...register("postal_code", { required: "Postal Code is required" })}
+
+
+
+
+          isInvalid={!!errors.postal_code}
+          errorMessage={errors.postal_code?.message}
+          className="mb-3"
         />
-        <input
-          {...register("country", { required: "Country is required" })}
-          placeholder="Country"
-          className="w-full p-2 border rounded mb-4"
-        />
+        {errors.postal_code && (
+          <p className="text-red-600 text-sm">{errors.postal_code.message}</p>
+        )}
+
       </div>
 
       <PaymentElement className="mb-4" />
