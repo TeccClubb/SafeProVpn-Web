@@ -13,7 +13,7 @@ console.log(token)
     req.nextUrl.pathname === "/login" ||
     req.nextUrl.pathname === "/signup" ||
     req.nextUrl.pathname === "/forgot-password" ||
-    req.nextUrl.pathname === "/reset-password" ||
+    // req.nextUrl.pathname === "/reset-password" ||
     req.nextUrl.pathname === "/email-verify"
   ) {
     if (token) {
