@@ -10,7 +10,7 @@ export interface BillingAddress {
   address: string;
   city: string;
   state: string;
-  zip: string;
+ postal_code: string;
   country: string;
   phone: string;
 }
