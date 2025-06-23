@@ -44,8 +44,10 @@ export default function BillingAddress() {
       <BillingAddressModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onAddressAdded={() => window.location.reload()} // or update local state
+        onAddressAdded={() => window.location.reload()}
+        defaultValues={billingAddress ?? undefined} // 👈 Safely convert null to undefined
       />
+
     </div>
   );
 }
