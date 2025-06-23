@@ -48,18 +48,18 @@ export default function BillingAddressModal({
   });
 
   // Reset form with default values when modal opens or defaultValues change
- useEffect(() => {
-  if (isOpen) {
-    reset(defaultValues || {
-      name: "",
-      address: "",
-      city: "",
-      country: "",
-      state: "",
-      postal_code: "",
-    });
-  }
-}, [isOpen, defaultValues, reset]);
+  useEffect(() => {
+    if (isOpen) {
+      reset(defaultValues || {
+        name: "",
+        address: "",
+        city: "",
+        country: "",
+        state: "",
+        postal_code: "",
+      });
+    }
+  }, [isOpen, defaultValues, reset]);
 
 
   const onSubmit = async (data: BillingAddressForm) => {
@@ -89,19 +89,54 @@ export default function BillingAddressModal({
       <div className="bg-white text-black p-6 rounded-lg w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Add Billing Address</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-          {["name", "address", "city", "country", "state", "postal_code"].map((field) => (
-            <div key={field}>
-              <input
-                type="text"
-                placeholder={field.replace("_", " ").toUpperCase()}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                {...register(field as keyof BillingAddressForm, { required: true })}
-              />
-              {errors[field as keyof BillingAddressForm] && (
-                <p className="text-red-600 text-sm">This field is required</p>
-              )}
-            </div>
-          ))}
+          {["name", "address", "city", "country", "state", "postal_code"].map((field) => {
+            const rules: any = {
+              required: `${field.replace("_", " ").toUpperCase()} is required`,
+            };
+
+            if (["name", "city", "state", "country"].includes(field)) {
+              rules.pattern = {
+                value: /^[A-Za-z\s]+$/,
+                message: `${field.replace("_", " ")} must contain only letters`,
+              };
+            }
+
+            if (field === "address") {
+              rules.pattern = {
+                value: /^[A-Za-z0-9\s,.-]+$/,
+                message: "Address can only contain letters, numbers, commas, dots, and spaces",
+              };
+              rules.minLength = {
+                value: 6,
+                message: "Address must be at least 6 characters long",
+              };
+            }
+
+
+            if (field === "postal_code") {
+              rules.pattern = {
+                value: /^[0-9]{4,10}$/,
+                message: "Postal code must be 4–10 digits",
+              };
+            }
+
+            return (
+              <div key={field}>
+                <input
+                  type="text"
+                  placeholder={field.replace("_", " ").toUpperCase()}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                  {...register(field as keyof BillingAddressForm, rules)}
+                />
+                {errors[field as keyof BillingAddressForm] && (
+                  <p className="text-red-600 text-sm">
+                    {errors[field as keyof BillingAddressForm]?.message}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+
 
           <div className="mt-4 flex justify-end gap-3">
             <button
