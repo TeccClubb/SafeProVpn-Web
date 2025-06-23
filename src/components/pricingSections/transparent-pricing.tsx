@@ -92,7 +92,7 @@ const TransparentPricing = () => {
                   )}
                 </div>
                 <div className="flex items-end">
-                  <h2 className="text-4xl font-bold">${plan.price}</h2>
+                  <h2 className="text-4xl font-bold">${(parseFloat(plan.original_price ?? "0") - parseFloat(plan.discount_price ?? "0")).toFixed(2)}</h2>
                   <p className="text-base text-default-500">
                     /{plan.duration > 1 ? plan.duration : ""}{" "}
                     {plan.duration_unit}

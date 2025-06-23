@@ -24,23 +24,49 @@ type FormData = {
   country: string;
 };
 
+
 interface PaymentFormProps {
   plan: Plan;
   className?: string;
+  billingAddress?: any;
 }
 
-const PaymentForm = ({ plan, className }: PaymentFormProps) => {
+const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
+ const {
+  register,
+  handleSubmit,
+  reset,
+  formState: { errors },
+} = useForm<FormData>({
+  defaultValues: {
+    name: "",
+    address: "",
+    city: "",
+    state: "",
+    postal_code: "",
+    country: "",
+  },
+});
+
+useEffect(() => {
+  console.log("Resetting form with billing address:", billingAddress);
+  if (billingAddress) {
+    reset({
+      name: billingAddress.name || "",
+      address: billingAddress.address || "",
+      city: billingAddress.city || "",
+      state: billingAddress.state || "",
+      postal_code: billingAddress.postal_code || "",
+      country: billingAddress.country || "",
+    });
+  }
+}, [billingAddress, reset]);
 
   const onSubmit = async (values: FormData) => {
     console.log(values)
@@ -59,9 +85,11 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
       }
 
       setLoading(true);
-
+      const original = parseFloat(plan.original_price ?? "0");
+      const discount = parseFloat(plan.discount_price ?? "0");
+      const finalAmount = (original - discount) * 100;
       const res = await axios.post("/api/create-payment-intent", {
-        amount: +(plan.price ?? 0) * 100,
+        amount: finalAmount,
       });
       const data = res.data;
 
@@ -109,20 +137,27 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)} className={className}>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          
+
           <Input
             label="Name"
             placeholder="Full Name"
             labelPlacement="outside"
             variant="bordered"
-            {...register("name", { required: "Name is required" })}
+            {...register("name", {
+              required: "Name is required",
+              pattern: {
+                value: /^[a-zA-Z\s]+$/,
+                message: "Enter a valid name (letters and spaces only)",
+              }
+            })}
             isInvalid={!!errors.name}
             errorMessage={errors.name?.message}
             className="mb-3  "
+
           />
-          {errors.name && (
+          {/* {errors.name && (
             <p className="text-red-600 text-sm">{errors.name.message}</p>
-          )}
+          )} */}
         </div>
 
 
@@ -137,36 +172,47 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
             placeholder="123 Main St"
             labelPlacement="outside"
             variant="bordered"
-            {...register("address", { required: "Address is required" })}
+            {...register("address", {
+              required: "Address is required",
+              minLength: {
+                value: 5,
+                message: "Address must be at least 5 characters",
+              }
+            })}
 
             isInvalid={!!errors.address}
             errorMessage={errors.name?.message}
             className="mb-3  "
           />
-          {errors.address && (
+          {/* {errors.address && (
             <p className="text-red-600 text-sm">{errors.address.message}</p>
-          )}
+          )} */}
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
 
         <Input
-          label="Address"
+          label="City"
           placeholder="City"
 
           labelPlacement="outside"
           variant="bordered"
-          {...register("city", { required: "City is required" })}
+          {...register("city", {
+            required: "City is required", pattern: {
+              value: /^[a-zA-Z\s]+$/,
+              message: "Enter a valid city name",
+            }
+          })}
 
 
           isInvalid={!!errors.city}
           errorMessage={errors.city?.message}
           className="mb-3  "
         />
-        {errors.city && (
+        {/* {errors.city && (
           <p className="text-red-600 text-sm">{errors.city.message}</p>
-        )}
+        )} */}
 
         <Input
           label="State"
@@ -174,7 +220,10 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
 
           labelPlacement="outside"
           variant="bordered"
-          {...register("state", { required: "State is required" })}
+          {...register("state", { required: "State is required",pattern: {
+              value: /^[a-zA-Z\s]+$/,
+              message: "Enter a valid State name",
+            } })}
 
 
 
@@ -182,9 +231,9 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
           errorMessage={errors.state?.message}
           className="mb-3  "
         />
-        {errors.city && (
+        {/* {errors.city && (
           <p className="text-red-600 text-sm">{errors.city.message}</p>
-        )}
+        )} */}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -196,7 +245,13 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
 
           labelPlacement="outside"
           variant="bordered"
-          {...register("postal_code", { required: "Postal Code is required" })}
+          {...register("postal_code", {
+            required: "Postal Code is required"
+            , pattern: {
+              value: /^\d{5}(-\d{4})?$/,
+              message: "Enter a valid postal code (e.g. 12345 or 12345-6789)",
+            }
+          })}
 
 
 
@@ -205,9 +260,9 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
           errorMessage={errors.postal_code?.message}
           className="mb-3"
         />
-        {errors.postal_code && (
+        {/* {errors.postal_code && (
           <p className="text-red-600 text-sm">{errors.postal_code.message}</p>
-        )}
+        )} */}
 
       </div>
 
@@ -220,20 +275,33 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
       <button
         type="submit"
         disabled={!stripe || !elements || loading}
-        className="w-full bg-[#4DB8AC] text-white py-3 rounded-full disabled:opacity-50"
-      >
-        {loading ? "Processing..." : `Pay $${(+(plan.price ?? 0)).toFixed(2)}`}
+        className="w-full bg-[#4DB8AC] text-white py-3 rounded-full disabled:opacity-50">
+        {loading
+          ? "Processing..."
+          : `Pay $${(
+            (parseFloat(plan.original_price ?? "0") || 0) -
+            (parseFloat(plan.discount_price ?? "0") || 0)
+          ).toFixed(2)}`}
+
       </button>
     </form>
   );
 };
-
+export interface BillingAddress {
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+}
 interface CheckoutFormProps {
   plan: Plan;
   className?: string;
+  billingAddress?: BillingAddress;
 }
 
-const CheckoutForm = ({ plan, className }: CheckoutFormProps) => {
+const CheckoutForm = ({ plan, className, billingAddress }: CheckoutFormProps) => {
   if (!STRIPE_PUBLISHABLE_KEY) {
     throw new Error("STRIPE_PUBLISHABLE_KEY is not defined");
   }
@@ -241,13 +309,13 @@ const CheckoutForm = ({ plan, className }: CheckoutFormProps) => {
   const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
   const options: StripeElementsOptions = {
     mode: "payment",
-    amount: +(plan.price ?? 0) * 100,
+    amount: +(plan.original_price ?? 0) * 100,
     currency: "usd",
   };
 
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentForm plan={plan} className={className} />
+      <PaymentForm plan={plan}  billingAddress={billingAddress?billingAddress: undefined} className={className} />
     </Elements>
   );
 };
