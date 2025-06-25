@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
-import { Input } from "@heroui/react";
 
 interface BillingAddressForm {
   name: string;
@@ -20,7 +19,7 @@ interface BillingAddressModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddressAdded: (address: BillingAddressForm) => void;
-  defaultValues?: BillingAddressForm;
+  defaultValues?: BillingAddressForm; // for editing
 }
 
 export default function BillingAddressModal({
@@ -48,20 +47,20 @@ export default function BillingAddressModal({
     },
   });
 
+  // Reset form with default values when modal opens or defaultValues change
   useEffect(() => {
     if (isOpen) {
-      reset(
-        defaultValues || {
-          name: "",
-          address: "",
-          city: "",
-          country: "",
-          state: "",
-          postal_code: "",
-        }
-      );
+      reset(defaultValues || {
+        name: "",
+        address: "",
+        city: "",
+        country: "",
+        state: "",
+        postal_code: "",
+      });
     }
   }, [isOpen, defaultValues, reset]);
+
 
   const onSubmit = async (data: BillingAddressForm) => {
     try {
@@ -113,6 +112,7 @@ export default function BillingAddressModal({
               };
             }
 
+
             if (field === "postal_code") {
               rules.pattern = {
                 value: /^[0-9]{4,10}$/,
@@ -122,19 +122,21 @@ export default function BillingAddressModal({
 
             return (
               <div key={field}>
-                <Input
-                  {...register(field as keyof BillingAddressForm, rules)}
-                  isRequired
+                <input
                   type="text"
-                  label={field.replace("_", " ").toUpperCase()}
-                  labelPlacement="outside"
-                  placeholder={`Enter ${field.replace("_", " ")}`}
-                  isInvalid={!!errors[field as keyof BillingAddressForm]}
-                  errorMessage={errors[field as keyof BillingAddressForm]?.message}
+                  placeholder={field.replace("_", " ").toUpperCase()}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                  {...register(field as keyof BillingAddressForm, rules)}
                 />
+                {errors[field as keyof BillingAddressForm] && (
+                  <p className="text-red-600 text-sm">
+                    {errors[field as keyof BillingAddressForm]?.message}
+                  </p>
+                )}
               </div>
             );
           })}
+
 
           <div className="mt-4 flex justify-end gap-3">
             <button
