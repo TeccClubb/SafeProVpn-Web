@@ -28,7 +28,7 @@ export function useBillingAddress(token?: string | null) {
         const res = await axios.get(GET_BILLING_ADDRESS_ROUTE, {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${token? token : session?.user?.access_token}`,
+            Authorization: `Bearer ${token? token : session?.user.access_token}`,
           },
         });
 

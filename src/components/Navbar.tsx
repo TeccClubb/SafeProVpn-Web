@@ -27,15 +27,12 @@ import {
 } from "@/lib/pathnames";
 import { usePathname } from "next/navigation";
 import AppLogo from "./AppLogo";
-import { useAppState } from "@/hooks/use-app-state";
-import { useUserCookie } from "@/hooks/use-cookies";
 import { useLogout } from "@/hooks/useLogout";
-import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 const Navbar: FC = () => {
+  const { status: sessionStatus } = useSession();
   const pathname = usePathname();
-  const { isAppMounted } = useAppState();
-  const { user } = useUserCookie();
   const { handleLogout } = useLogout();
 
   const navItems = [
@@ -56,6 +53,12 @@ const Navbar: FC = () => {
       label: "Downloads",
       href: DOWNLOADS_PAGE_PATH,
     },
+  ];
+
+  const items = [
+    { value: "apple", label: "Apple" },
+    { value: "banana", label: "Banana" },
+    { value: "cherry", label: "Cherry" },
   ];
 
   return (
@@ -91,7 +94,7 @@ const Navbar: FC = () => {
         <NavbarItem className="flex lg:gap-4 gap-3">
           {/* <ThemeSwitch /> */}
 
-          {isAppMounted && !user && (
+          {sessionStatus === "unauthenticated" && (
             <Button
               as={Link}
               href={
@@ -108,7 +111,7 @@ const Navbar: FC = () => {
             </Button>
           )}
 
-          {isAppMounted && user && (
+          {sessionStatus === "authenticated" && (
             <Button
               variant="bordered"
               color="danger"
@@ -150,7 +153,7 @@ const Navbar: FC = () => {
             <NavbarMenuItem key={`${item}-${index}`}>
               {item.href === "/auth-button" ? (
                 <>
-                  {isAppMounted && !user && (
+                  {sessionStatus === "unauthenticated" && (
                     <Button
                       as={Link}
                       href={
@@ -167,7 +170,7 @@ const Navbar: FC = () => {
                     </Button>
                   )}
 
-                  {isAppMounted && user && (
+                  {sessionStatus === "authenticated" && (
                     <Button
                       variant="bordered"
                       color="danger"
@@ -207,15 +210,6 @@ const Navbar: FC = () => {
           ))}
         </div>
       </NavbarMenu>
-      <Button
-        variant="bordered"
-        color="danger"
-        radius="full"
-        className="hidden sm:inline-flex"
-        onClick={() => signOut({ callbackUrl: '/' })}
-      >
-        Logout
-      </Button>
     </HeroUINavbar>
   );
 };
