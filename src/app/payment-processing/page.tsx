@@ -2,7 +2,6 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { notFound, useSearchParams } from "next/navigation";
-// import { useUserCookie } from "@/hooks/use-cookies";
 // import { ADD_PURCHASE_PLAN_ROUTE } from "@/lib/constants";
 import axios, { AxiosError } from "axios";
 // import { HOME_PAGE_PATH } from "@/lib/pathnames";
@@ -19,47 +18,26 @@ import ErrorIcon from "@/icons/ErrorIcon";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { REST_API_BASE_URL } from "@/lib/constants";
-import { getSession, useSession } from "next-auth/react";
- 
-
-// Extend the session user type to include access_token
- 
-
-declare module "next-auth" {
-  interface Session {
-    user?: {
-      name?: string | null;
-      email?: string | null;
-      image?: string | null;
-      access_token?: string | null;
-    };
-  }
-}
+import { useSession } from "next-auth/react";
 
 const PaymentProcessingPage = () => {
   //   const dispatch = useDispatch();
   //   const notify = useNotifications();
   const searchParams = useSearchParams();
-  //   const { user } = useUserCookie();
-  const [user, setUser] = useState();
   const [isPaymentSuccessful, setPaymentStatus] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState("");
 
  const { data: session, status } = useSession();
- 
-// const token =session?.user?.access_token;
 
  useEffect(() => {
   if (status === "loading") return; // Wait until session is ready
- console.log(session)
   const paymentIntent = searchParams.get("payment_intent");
   const planId = searchParams.get("planId");
-  const token = session?.user?.access_token;
+  const token = session?.user.access_token;
 
   if (!paymentIntent || !planId || !token) {
     notFound(); // or handle missing token with an error message
-    return;
   }
 
   const verifyPayment = async (planId: number, paymentIntent: string) => {

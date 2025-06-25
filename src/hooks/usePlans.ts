@@ -10,7 +10,7 @@ import {
 import { Plan, PurchasedPlan } from "@/types";
 import { setActivePlan, setPlans } from "@/store/plans.slice";
 import { addToast } from "@heroui/react";
-import { useUserCookie } from "./use-cookies";
+import { useSession } from "next-auth/react";
 
 export const usePlansState = () =>
   useSelector((state: RootState) => state.plans);
@@ -55,7 +55,7 @@ export const usePlans = () => {
 
 export const useActivePlan = () => {
   const dispatch = useDispatch();
-  const { user } = useUserCookie();
+  const { data: session } = useSession();
   const { activePlan, isActivePlanLoadedOnce } = useSelector(
     (state: RootState) => state.plans
   );
@@ -71,7 +71,7 @@ export const useActivePlan = () => {
           {
             headers: {
               Accept: "application/json",
-              Authorization: `Bearer ${user.access_token}`,
+              Authorization: `Bearer ${session?.user.access_token}`,
             },
           }
         )
@@ -104,7 +104,7 @@ export const usePurchasedPlan = (
   purchaseId: number | string,
   token?: string
 ) => {
-  const { user } = useUserCookie();
+  const { data: session } = useSession();
   const [purchasedPlan, setPurchasedPlan] = useState<PurchasedPlan>();
   const [isPurchasedPlanLoading, setLoading] = useState<boolean>(true);
 
@@ -116,7 +116,9 @@ export const usePurchasedPlan = (
           {
             headers: {
               Accept: "application/json",
-              Authorization: `Bearer ${token ? token : user.access_token}`,
+              Authorization: `Bearer ${
+                token ? token : session?.user.access_token
+              }`,
             },
           }
         )

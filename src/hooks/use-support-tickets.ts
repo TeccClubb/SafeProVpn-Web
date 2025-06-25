@@ -6,11 +6,11 @@ import { addToast } from "@heroui/react";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useUserCookie } from "./use-cookies";
+import { useSession } from "next-auth/react";
 
 export const useSupportTickets = () => {
   const dispatch = useDispatch();
-  const { user } = useUserCookie();
+  const {data: session} = useSession();
   const { supportTickets, isSupportTicketsLoadedOnce } = useSelector(
     (state: RootState) => state.app
   );
@@ -27,7 +27,7 @@ export const useSupportTickets = () => {
             {
               headers: {
                 Accept: "application/json",
-                Authorization: `Bearer ${user.access_token}`,
+                Authorization: `Bearer ${session?.user.access_token}`,
               },
             }
           );

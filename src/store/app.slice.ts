@@ -2,7 +2,6 @@ import { AppState, BillingAddress, SupportTicket } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: AppState = {
-  isAppMounted: false,
   isLegalNoticeLoadedOnce: false,
   termsAndConditions: "",
   privacyPolicy: "",
@@ -18,10 +17,6 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
-    setAppMounted: (state) => {
-      state.isAppMounted = true;
-    },
-
     setLegalNotes: (
       state,
       action: PayloadAction<{
@@ -78,7 +73,6 @@ const appSlice = createSlice({
 });
 
 export const {
-  setAppMounted,
   setLegalNotes,
   setBillingAddress,
   setSupportTickets,

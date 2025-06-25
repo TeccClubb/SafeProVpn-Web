@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 // import LogOutModal from './logoutModal';
-// import { useUserCookie } from './use-cookies';
 import {
   LayoutDashboard,
   CreditCard,
@@ -15,7 +14,7 @@ import {
   LogOut,
 } from 'lucide-react';
 import LogoutModal from './dashboard/LogoutModal';
-import { signOut } from 'next-auth/react';
+import { useLogout } from '@/hooks/useLogout';
 
 interface NavLink {
   name: string;
@@ -24,8 +23,7 @@ interface NavLink {
 }
 
 const Sidebar = () => {
-  const router = useRouter();
-  // const { removeUserCookie } = useUserCookie();
+  const { handleLogout: logout } = useLogout();
   const pathname = usePathname();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
@@ -40,10 +38,9 @@ const Sidebar = () => {
   ];
 
   const handleLogout = () => {
-  // removeUserCookie(); // Uncomment if you're clearing cookies manually
-  signOut({ callbackUrl: '/login' }); // Make sure you import this from next-auth
-  setIsLogoutModalOpen(false);
-};
+    logout();
+    setIsLogoutModalOpen(false);
+  };
 
   return (
    <div className="w-full md:w-[280px]  md:mt-12 flex flex-col items-center md:items-start gap-2 pt-4 border-gray-300 justify-between h-full">

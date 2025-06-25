@@ -17,6 +17,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "axios": "^1.9.0",
     "framer-motion": "^12.14.0",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.511.0",
     "next": "^15.3.3",
     "next-auth": "^4.24.11",
@@ -33,6 +34,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

@@ -19,6 +19,7 @@
 
 # production
 /build
+/keys
 
 # package-lock.json
 package-lock.json
