@@ -6,6 +6,18 @@ interface CheckoutFormProps {
   className?: string;
 }
 export default function OrderSummary({ plan, className }: CheckoutFormProps) {
+
+
+
+  const handleDiscount = (plan: Plan) => {
+    const originalPrice = parseFloat(plan.original_price??"0");
+    const discountPrice=parseFloat(plan.discount_price??"0" );
+     if(originalPrice<0 || discountPrice<0){
+      return "Invalid Price";
+    }
+    const discountPercentage = (discountPrice  / originalPrice) * 100;
+    return discountPercentage.toFixed(2) + '%';
+     };
   return (
     <div className="max-w-sm mx-auto border rounded-xl shadow-md p-6 bg-white">
       <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
@@ -39,19 +51,21 @@ export default function OrderSummary({ plan, className }: CheckoutFormProps) {
       <div className="text-sm space-y-1 mb-4">
         <div className="flex justify-between">
           <span>Subtotal</span>
-          <span className="text-gray-800 font-medium">{plan.price}$</span>
+          <span className="text-gray-800 font-medium">{plan.original_price}$</span>
         </div>
         <div className="flex justify-between ">
-          <span>Discount (50%)</span>
-          <span className='text-green-600'>-$59.94</span>
+          <span>Discount ({handleDiscount(plan)})</span>
+          <span className='text-green-600'>-{plan.discount_price}</span>
         </div>
       </div>
 
       <div className="flex justify-between items-center text-lg font-semibold mb-1">
         <span>Total</span>
-        <span>$59.94</span>
+        <span>
+          {parseFloat(plan.original_price ?? "0") - parseFloat(plan.discount_price ?? "0")}$
+        </span>
       </div>
-      <p className="text-xs text-gray-500 mb-4">$4.99/month</p>
+      <p className="text-xs text-gray-500 mb-4">${(parseFloat(plan.original_price ?? "0") - parseFloat(plan.discount_price ?? "0")).toFixed(2)}/month</p>
 
       <div className="flex items-center justify-center gap-2 text-green-600 bg-green-50 py-2 px-3 rounded-lg text-sm font-medium">
         <CheckCircle className="w-4 h-4" />

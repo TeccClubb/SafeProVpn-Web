@@ -4,6 +4,7 @@ export type Plan = {
   slug: string;
   description: string;
   original_price:string,
+  discount_price: string ,
   price: number | string;
   duration: number;
   duration_unit: string;

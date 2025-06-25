@@ -5,11 +5,18 @@ import { usePlans } from "@/hooks/usePlans"; // update path based on your struct
 import { Suspense, useMemo } from "react";
 import Section from "@/components/sections/Section";
 import OrderSummary from "@/components/dashboard/payments/orderSummary";
+import { useBillingAddress } from "@/hooks/useBillingAddress";
+import { useSession } from "next-auth/react";
 
-export   function ProductConfigurationCheckOut() {
+
+export function ProductConfigurationCheckOut() {
   const searchParams = useSearchParams();
   const planId = searchParams.get("planId");
+  const { data: session } = useSession();
+  const token = (session?.user as any)?.access_token;
 
+  const { billingAddress, loading, error } = useBillingAddress(token);
+console.log(billingAddress);
   const { isPlansLoading, plans } = usePlans();
 
   // Find the selected plan
@@ -28,27 +35,28 @@ export   function ProductConfigurationCheckOut() {
   }
 
   return (
-   <Section heading="Complete Your Purchase">
-     <div className=" w-full grid md:grid-cols-3 gap-6">
-<div className="md:col-span-2 space-y-6">
+    <Section heading="Complete Your Purchase">
+      <div className=" w-full grid md:grid-cols-3 gap-6">
+        <div className="md:col-span-2 space-y-6">
 
-  <CheckoutForm
-        plan={selectedPlan}
-        // Stripe expects cents
-        className="w-full"
-      />
-</div>
-<OrderSummary plan={selectedPlan}></OrderSummary>
-     </div>
-    
+          <CheckoutForm
+            plan={selectedPlan}
+            billingAddress={billingAddress ?? undefined}
+            // Stripe expects cents
+            className="w-full"
+          />
+        </div>
+        <OrderSummary plan={selectedPlan}></OrderSummary>
+      </div>
+
     </Section>
   );
 }
 
 
-export  default function CheckOutFormPage(){
+export default function CheckOutFormPage() {
 
   return <Suspense>
     <ProductConfigurationCheckOut></ProductConfigurationCheckOut>
-</Suspense>
+  </Suspense>
 }

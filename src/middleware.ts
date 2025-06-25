@@ -7,8 +7,7 @@ import { AUTH_SECRET } from "@/lib/constants";
 
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: AUTH_SECRET });
-  console.log("............................................")
-console.log(token)
+ 
   if (
     req.nextUrl.pathname === "/login" ||
     req.nextUrl.pathname === "/signup" ||

@@ -7,13 +7,14 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 // import { STRIPE_PUBLISHABLE_KEY } from "@/lib/utils/apiRoutes";
 import { STRIPE_PUBLISHABLE_KEY } from "@/lib/constants";
 import { Plan } from "@/types"; // adjust if needed
 import { Input } from "@heroui/react";
+import PaymentStep from "./PaymentStep";
 
 type FormData = {
   name: string;
@@ -24,12 +25,14 @@ type FormData = {
   country: string;
 };
 
+
 interface PaymentFormProps {
   plan: Plan;
   className?: string;
+  billingAddress?: any;
 }
 
-const PaymentForm = ({ plan, className }: PaymentFormProps) => {
+const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -39,8 +42,33 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
   const {
     register,
     handleSubmit,
+    reset,
+    control,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: {
+      name: "",
+      address: "",
+      city: "",
+      state: "",
+      postal_code: "",
+      country: "",
+    },
+  });
+
+  useEffect(() => {
+    console.log("Resetting form with billing address:", billingAddress);
+    if (billingAddress) {
+      reset({
+        name: billingAddress.name || "",
+        address: billingAddress.address || "",
+        city: billingAddress.city || "",
+        state: billingAddress.state || "",
+        postal_code: billingAddress.postal_code || "",
+        country: billingAddress.country || "",
+      });
+    }
+  }, [billingAddress, reset]);
 
   const onSubmit = async (values: FormData) => {
     console.log(values)
@@ -59,9 +87,11 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
       }
 
       setLoading(true);
-
+      const original = parseFloat(plan.original_price ?? "0");
+      const discount = parseFloat(plan.discount_price ?? "0");
+      const finalAmount = (original - discount) * 100;
       const res = await axios.post("/api/create-payment-intent", {
-        amount: +(plan.price ?? 0) * 100,
+        amount: finalAmount,
       });
       const data = res.data;
 
@@ -105,135 +135,200 @@ const PaymentForm = ({ plan, className }: PaymentFormProps) => {
   };
 
   return (
+    <div>
+      <PaymentStep></PaymentStep>
+      <form onSubmit={handleSubmit(onSubmit)} className={className}>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
 
-    <form onSubmit={handleSubmit(onSubmit)} className={className}>
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          
-          <Input
-            label="Name"
-            placeholder="Full Name"
-            labelPlacement="outside"
-            variant="bordered"
-            {...register("name", { required: "Name is required" })}
-            isInvalid={!!errors.name}
-            errorMessage={errors.name?.message}
-            className="mb-3  "
-          />
-          {errors.name && (
+            <Controller
+              name="name"
+              control={control}
+              rules={{
+                required: "Name is required",
+                pattern: {
+                  value: /^[a-zA-Z\s]+$/,
+                  message: "Enter a valid name (letters and spaces only)",
+                },
+              }}
+              render={({ field, fieldState }) => (
+                <Input
+                  {...field}
+                  label="Name"
+                  placeholder="Full Name"
+                  labelPlacement="outside"
+                  variant="bordered"
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  className="mb-3"
+                />
+              )}
+            />
+
+            {/* {errors.name && (
             <p className="text-red-600 text-sm">{errors.name.message}</p>
-          )}
-        </div>
+          )} */}
+          </div>
 
 
-        <div>
-          {/* <label className="text-sm">Address</label>
+          <div>
+            {/* <label className="text-sm">Address</label>
           <input
             className="w-full p-2 border rounded mb-2"
             placeholder="123 Main St"
           /> */}
-          <Input
-            label="Address"
-            placeholder="123 Main St"
-            labelPlacement="outside"
-            variant="bordered"
-            {...register("address", { required: "Address is required" })}
+          <Controller
+  name="address"
+  control={control}
+  rules={{
+    required: "Address is required",
+    minLength: {
+      value: 5,
+      message: "Address must be at least 5 characters",
+    },
+  }}
+  render={({ field, fieldState }) => (
+    <Input
+      {...field}
+      label="Address"
+      placeholder="123 Main St"
+      labelPlacement="outside"
+      variant="bordered"
+      isInvalid={!!fieldState.error}
+      errorMessage={fieldState.error?.message}
+      className="mb-3"
+    />
+  )}
+/>
 
-            isInvalid={!!errors.address}
-            errorMessage={errors.name?.message}
-            className="mb-3  "
-          />
-          {errors.address && (
+            {/* {errors.address && (
             <p className="text-red-600 text-sm">{errors.address.message}</p>
-          )}
+          )} */}
+          </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
 
-        <Input
-          label="Address"
-          placeholder="City"
+          <Controller
+            name="city"
+            control={control}
+            rules={{
+              required: "City is required",
+              pattern: {
+                value: /^[a-zA-Z\s]+$/,
+                message: "Enter a valid city name",
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="City"
+                placeholder="City"
+                labelPlacement="outside"
+                variant="bordered"
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                className="mb-3"
+              />
+            )}
+          />
 
-          labelPlacement="outside"
-          variant="bordered"
-          {...register("city", { required: "City is required" })}
+
+          <Controller
+            name="state"
+            control={control}
+            rules={{
+              required: "State is required",
+              pattern: {
+                value: /^[a-zA-Z\s]+$/,
+                message: "Enter a valid State name",
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="State"
+                placeholder="State"
+                labelPlacement="outside"
+                variant="bordered"
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                className="mb-3"
+              />
+            )}
+          />
+
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
 
 
-          isInvalid={!!errors.city}
-          errorMessage={errors.city?.message}
-          className="mb-3  "
-        />
-        {errors.city && (
-          <p className="text-red-600 text-sm">{errors.city.message}</p>
+
+          <Controller
+            name="postal_code"
+            control={control}
+            rules={{
+              required: "Postal Code is required",
+              pattern: {
+                value: /^\d{5}(-\d{4})?$/,
+                message: "Enter a valid postal code (e.g. 12345 or 12345-6789)",
+              },
+            }}
+            render={({ field, fieldState }) => (
+              <Input
+                {...field}
+                label="Postal Code"
+                placeholder="Postal Code"
+                labelPlacement="outside"
+                variant="bordered"
+                isInvalid={!!fieldState.error}
+                errorMessage={fieldState.error?.message}
+                className="mb-3"
+              />
+            )}
+          />
+
+
+
+        </div>
+
+        <PaymentElement className="mb-4" />
+
+        {errorMessage && (
+          <p className="text-red-600 mb-4 text-center">{errorMessage}</p>
         )}
 
-        <Input
-          label="State"
-          placeholder="State"
+        <button
+          type="submit"
+          disabled={!stripe || !elements || loading}
+          className="w-full bg-[#4DB8AC] text-white py-3 rounded-full disabled:opacity-50">
+          {loading
+            ? "Processing..."
+            : `Pay $${(
+              (parseFloat(plan.original_price ?? "0") || 0) -
+              (parseFloat(plan.discount_price ?? "0") || 0)
+            ).toFixed(2)}`}
 
-          labelPlacement="outside"
-          variant="bordered"
-          {...register("state", { required: "State is required" })}
-
-
-
-          isInvalid={!!errors.state}
-          errorMessage={errors.state?.message}
-          className="mb-3  "
-        />
-        {errors.city && (
-          <p className="text-red-600 text-sm">{errors.city.message}</p>
-        )}
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-
-        <Input
-          label="Postal Code"
-          placeholder="Postal Code"
-
-
-          labelPlacement="outside"
-          variant="bordered"
-          {...register("postal_code", { required: "Postal Code is required" })}
-
-
-
-
-          isInvalid={!!errors.postal_code}
-          errorMessage={errors.postal_code?.message}
-          className="mb-3"
-        />
-        {errors.postal_code && (
-          <p className="text-red-600 text-sm">{errors.postal_code.message}</p>
-        )}
-
-      </div>
-
-      <PaymentElement className="mb-4" />
-
-      {errorMessage && (
-        <p className="text-red-600 mb-4 text-center">{errorMessage}</p>
-      )}
-
-      <button
-        type="submit"
-        disabled={!stripe || !elements || loading}
-        className="w-full bg-[#4DB8AC] text-white py-3 rounded-full disabled:opacity-50"
-      >
-        {loading ? "Processing..." : `Pay $${(+(plan.price ?? 0)).toFixed(2)}`}
-      </button>
-    </form>
+        </button>
+      </form>
+    </div>
   );
 };
-
+export interface BillingAddress {
+  name: string;
+  address: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
+}
 interface CheckoutFormProps {
   plan: Plan;
   className?: string;
+  billingAddress?: BillingAddress;
 }
 
-const CheckoutForm = ({ plan, className }: CheckoutFormProps) => {
+const CheckoutForm = ({ plan, className, billingAddress }: CheckoutFormProps) => {
   if (!STRIPE_PUBLISHABLE_KEY) {
     throw new Error("STRIPE_PUBLISHABLE_KEY is not defined");
   }
@@ -241,13 +336,13 @@ const CheckoutForm = ({ plan, className }: CheckoutFormProps) => {
   const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
   const options: StripeElementsOptions = {
     mode: "payment",
-    amount: +(plan.price ?? 0) * 100,
+    amount: +(plan.original_price ?? 0) * 100,
     currency: "usd",
   };
 
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentForm plan={plan} className={className} />
+      <PaymentForm plan={plan} billingAddress={billingAddress ? billingAddress : undefined} className={className} />
     </Elements>
   );
 };
