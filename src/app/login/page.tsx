@@ -208,7 +208,7 @@ export default function LoginForm() {
             <Button
               variant="bordered"
               className="w-40"
-              onClick={() => signIn("apple")}
+              onClick={() => { handleAppleSignIn()}}
             >
               <AppleICon />
             </Button>

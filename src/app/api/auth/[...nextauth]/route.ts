@@ -69,17 +69,13 @@ const authOptions = {
 
 
 async jwt({ token, user, account, trigger }: any) {
+  // ✅ Google login
   if (account?.provider === "google" && trigger === "signIn") {
     try {
-      // ✅ Read device info from cookies
       const cookieStore = await cookies();
       const device_id = cookieStore.get("device_id")?.value || "";
       const device_name = cookieStore.get("device_name")?.value || "";
- console.log("Device ID:", device_id);
-      console.log("Device Name:", device_name);
 
-      console.log("Google account:", account);
-      console.log("Google user:", user);
       const backendRes = await fetch(`${REST_API_BASE_URL}/login/google`, {
         method: "POST",
         headers: {
@@ -90,17 +86,15 @@ async jwt({ token, user, account, trigger }: any) {
           token: account.access_token,
           device_id,
           device_name,
-          
         }),
       });
 
       const backendData = await backendRes.json();
-      console.log("Backend Google login response:", backendData);
       if (!backendRes.ok || !backendData.access_token) {
         console.error("Backend Google login failed:", backendData);
         throw new Error(
           backendData.message?.[0] ||
-            backendData.message ||  
+            backendData.message ||
             "Google backend login failed"
         );
       }
@@ -114,21 +108,31 @@ async jwt({ token, user, account, trigger }: any) {
     }
   }
 
+  // ✅ Credentials login
+  if (account?.provider === "credentials" && user) {
+    token.access_token = user.access_token;
+    token.id = user.id;
+    token.name = user.name;
+    token.email = user.email;
+  }
+
   return token;
 }
+
 ,
 
 
 
-    async session({ session, token }: { session: any; token: any }) {
-      session.user = {
-        id: token.id,
-        name: token.name,
-        email: token.email,
-        access_token: token.access_token,
-      };
-      return session;
-    },
+   async session({ session, token }: { session: any; token: any }) {
+  session.user = {
+    id: token.id,
+    name: token.name,
+    email: token.email,
+    access_token: token.access_token,
+  };
+  return session;
+}
+
   },
 
   // ✅ JWT-based session
