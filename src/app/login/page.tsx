@@ -160,7 +160,7 @@ export default function LoginForm() {
         {/* Sign Up */}
         <p className="text-center text-sm text-gray-600">
           Don’t have an account?{" "}
-          <a href="#" className="text-cyan-600 hover:underline">Sign up for free</a>
+          <a href="/signup" className="text-cyan-600 hover:underline">Sign up for free</a>
         </p>
       </div>
     </div>
