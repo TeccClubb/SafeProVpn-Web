@@ -39,13 +39,13 @@ export default function BillingHistory() {
             <tbody className="text-gray-700">
               {purchases.map((invoice, index) => (
                 <tr key={index} className="border-t">
-                 <td className="py-2">
-  {new Date(invoice.start_date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })}
-</td>
+                  <td className="py-2">
+                    {new Date(invoice.start_date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </td>
 
                   <td className="py-2">{invoice.id}</td>
                   <td className="py-2">{invoice.amount_paid}</td>
