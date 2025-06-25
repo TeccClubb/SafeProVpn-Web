@@ -32,7 +32,7 @@ const AvailableDevices: FC = () => (
               key={name}
               className="bg-white duration-300 text-gray-800 hover:bg-cyan-500 hover:text-white rounded-lg flex items-center justify-start gap-2 w-full"
             >
-              <Icon />
+              <Icon className="size-6" />
               {name}
             </Button>
           ))}
