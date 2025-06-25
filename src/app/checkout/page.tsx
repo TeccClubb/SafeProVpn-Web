@@ -9,14 +9,12 @@ import { useBillingAddress } from "@/hooks/useBillingAddress";
 import { useSession } from "next-auth/react";
 
 
-export function ProductConfigurationCheckOut() {
+function ProductConfigurationCheckOut() {
   const searchParams = useSearchParams();
   const planId = searchParams.get("planId");
-  const { data: session } = useSession();
-  const token = (session?.user as any)?.access_token;
 
-  const { billingAddress, loading, error } = useBillingAddress(token);
-console.log(billingAddress);
+  const { billingAddress, loading, error } = useBillingAddress();
+
   const { isPlansLoading, plans } = usePlans();
 
   // Find the selected plan
