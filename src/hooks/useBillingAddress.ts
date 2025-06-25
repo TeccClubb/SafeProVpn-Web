@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { GET_BILLING_ADDRESS_ROUTE } from "@/lib/constants";
 import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 export interface BillingAddress {
   name: string;
@@ -15,26 +16,24 @@ export interface BillingAddress {
   phone: string;
 }
 
-export function useBillingAddress(token: string | null) {
+export function useBillingAddress(token?: string | null) {
+  const { data: session } = useSession();
   const [billingAddress, setBillingAddress] = useState<BillingAddress | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) return;
-
     const fetchBillingAddress = async () => {
       try {
         const res = await axios.get(GET_BILLING_ADDRESS_ROUTE, {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token? token : session?.user?.access_token}`,
           },
         });
 
         const data = res.data;
         if (data.status) {
-            console.log(data);
           setBillingAddress(data.user.billing_address);
         } else {
           setError("Billing address not found.");
