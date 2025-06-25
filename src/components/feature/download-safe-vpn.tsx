@@ -1,3 +1,5 @@
+
+"use client";
 import React from "react";
 import Image from "next/image";
 import Section from "../sections/Section";
@@ -8,8 +10,10 @@ import IOSIcon from "@/icons/IOSIcon";
 import AndroidIcon from "@/icons/AndroidIcon";
 import WindowIcon from "@/icons/WindowIcon";
 import MacOSIcon from "@/icons/MacOSIcon";
+import { useRouter } from "next/navigation";
 
 const DownloadSafeVpn = () => {
+    const router = useRouter();
     return (
         <Section classNames={{ section: "bg-cyan-500" }}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
@@ -23,13 +27,13 @@ const DownloadSafeVpn = () => {
                     </SectionDescription>
                     <div className="grid text-black grid-cols-2 gap-4 pt-2">
                         {[
-                            { name: "Windows", Icon: WindowIcon },
-                            { name: "MacOS", Icon: MacOSIcon },
-                            { name: "Android", Icon: AndroidIcon },
-                            { name: "iOS", Icon: IOSIcon },
-                        ].map(({ name, Icon }) => (
-                            <Button key={name} className="bg-white duration-300 text-cyan-500 hover:bg-cyan-500 hover:text-white rounded-lg flex items-center justify-start gap-2 w-full">
-                                 <Icon />
+                            { name: "Windows", Icon: WindowIcon, path: "/downloads/Windows" },
+                            { name: "MacOS", Icon: MacOSIcon, path: "/downloads/MacOS" },
+                            { name: "Android", Icon: AndroidIcon, path: "/downloads/Android" },
+                            { name: "iOS", Icon: IOSIcon, path: "/downloads/iOS" },
+                        ].map(({ name, Icon, path }) => (
+                            <Button onClick={(() => { router.push(path) })} key={name} className="bg-white duration-300 text-cyan-500 hover:bg-cyan-500 hover:text-white rounded-lg flex items-center justify-start gap-2 w-full">
+                                <Icon />
                                 {name}
                             </Button>
                         ))}
