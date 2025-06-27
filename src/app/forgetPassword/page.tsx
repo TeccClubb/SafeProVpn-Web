@@ -9,6 +9,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FORGOT_PASSWORD_ROUTE } from "@/lib/constants";
 
+import FreeTrialSection from "@/components/FreeTrialSection";
+import {   SIGNIN_PAGE_PATH } from "@/lib/pathnames";
+
+
 type FormValues = {
   email: string;
 };
@@ -50,6 +54,9 @@ export default function ForgetPassword() {
   };
 
   return (
+    <div>
+
+    
     <div className="min-h-screen py-5 flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6">
         <div className="text-center">
@@ -95,11 +102,17 @@ export default function ForgetPassword() {
 
         <button
           type="button"
+          onClick={() => router.push(
+            SIGNIN_PAGE_PATH
+          )}
           className="w-full text-black py-2 rounded-md hover:bg-cyan-100 transition"
         >
           Back to login ?
         </button>
       </div>
+    </div>
+        <FreeTrialSection />
+
     </div>
   );
 }

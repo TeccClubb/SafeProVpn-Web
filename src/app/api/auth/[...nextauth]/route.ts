@@ -65,17 +65,17 @@ const authOptions = {
 
   // ✅ Callbacks for both providers
   callbacks: {
-  //  import { cookies } from "next/headers"; // If using cookies fallback
+    //  import { cookies } from "next/headers"; // If using cookies fallback
 
 
-async jwt({ token, user, account, trigger }: any) {
+   async jwt({ token, user, account, trigger }: any) {
+  const cookieStore = await cookies(); // moved outside to avoid duplicate calls
+  const device_id = cookieStore.get("device_id")?.value || "";
+  const device_name = cookieStore.get("device_name")?.value || "";
+
   // ✅ Google login
   if (account?.provider === "google" && trigger === "signIn") {
     try {
-      const cookieStore = await cookies();
-      const device_id = cookieStore.get("device_id")?.value || "";
-      const device_name = cookieStore.get("device_name")?.value || "";
-
       const backendRes = await fetch(`${REST_API_BASE_URL}/login/google`, {
         method: "POST",
         headers: {
@@ -92,11 +92,7 @@ async jwt({ token, user, account, trigger }: any) {
       const backendData = await backendRes.json();
       if (!backendRes.ok || !backendData.access_token) {
         console.error("Backend Google login failed:", backendData);
-        throw new Error(
-          backendData.message?.[0] ||
-            backendData.message ||
-            "Google backend login failed"
-        );
+        throw new Error(backendData.message || "Google backend login failed");
       }
 
       token.access_token = backendData.access_token;
@@ -105,6 +101,37 @@ async jwt({ token, user, account, trigger }: any) {
       token.email = backendData.user.email;
     } catch (err) {
       console.error("Error in Google login jwt callback:", err);
+    }
+  }
+
+  // ✅ Apple login
+  if (account?.provider === "apple" && trigger === "signIn") {
+    try {
+      const backendRes = await fetch(`${REST_API_BASE_URL}/login/apple`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          token: account.id_token, // or `access_token` if your backend expects that
+          device_id,
+          device_name,
+        }),
+      });
+
+      const backendData = await backendRes.json();
+      if (!backendRes.ok || !backendData.access_token) {
+        console.error("Backend Apple login failed:", backendData);
+        throw new Error(backendData.message || "Apple backend login failed");
+      }
+
+      token.access_token = backendData.access_token;
+      token.id = backendData.user.id;
+      token.name = backendData.user.name;
+      token.email = backendData.user.email;
+    } catch (err) {
+      console.error("Error in Apple login jwt callback:", err);
     }
   }
 
@@ -119,19 +146,20 @@ async jwt({ token, user, account, trigger }: any) {
   return token;
 }
 
-,
+
+    ,
 
 
 
-   async session({ session, token }: { session: any; token: any }) {
-  session.user = {
-    id: token.id,
-    name: token.name,
-    email: token.email,
-    access_token: token.access_token,
-  };
-  return session;
-}
+    async session({ session, token }: { session: any; token: any }) {
+      session.user = {
+        id: token.id,
+        name: token.name,
+        email: token.email,
+        access_token: token.access_token,
+      };
+      return session;
+    }
 
   },
 
@@ -150,3 +178,5 @@ async jwt({ token, user, account, trigger }: any) {
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
+
+

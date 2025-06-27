@@ -1,13 +1,20 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import AppleICon from "@/icons/AppleIcon";
-import GoogleIcon from "@/icons/GoogleIcon";
+ 
 import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Button, Input } from "@heroui/react";
 import { useSignup } from "@/hooks/useSignup";
 import { useRouter } from "next/navigation";
+import {   Link as HeroLink } from "@heroui/react";
+
+import GoogleSignInButton from "@/components/GoogleSignIn";
+import AppleSignInButton from "@/components/AppleSignInButton";
+import { FORGOT_PASSWORD_PAGE_PATH, SIGNIN_PAGE_PATH } from "@/lib/pathnames";
+import Link from "next/link";
+import { UserIcon } from "@/icons/UserIcon";
+import FreeTrialSection from "@/components/FreeTrialSection";
 type FormValues = {
 
     username: string;
@@ -44,6 +51,8 @@ export default function SignUpForm() {
 
 
     return (
+        <div>
+
         <div className="min-h-screen py-5 flex items-center justify-center bg-gray-50 px-4">
             <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6">
                 <div className="text-center">
@@ -60,7 +69,7 @@ export default function SignUpForm() {
                             labelPlacement="outside"
                             placeholder="Username"
                             startContent={
-                                <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                                <UserIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                             }
                             variant="bordered"
                             type="text"
@@ -132,9 +141,8 @@ export default function SignUpForm() {
                             <input type="checkbox" className="mr-2" />
                             Remember me for 30 days
                         </label>
-                        <a href="#" className="text-cyan-600 hover:underline">
-                            Forgot password?
-                        </a>
+                                      <HeroLink as={Link} href={FORGOT_PASSWORD_PAGE_PATH}  className="text-small">Forgot Password</HeroLink>
+
                     </div>
 
                     {/* Submit Button */}
@@ -185,22 +193,23 @@ export default function SignUpForm() {
 
                 {/* Social Buttons */}
                 <div className="flex space-x-4 justify-center px-4 sm:px-6">
-                    <Button variant="bordered" className="w-40">
-                        <GoogleIcon />
-                    </Button>
-                    <Button variant="bordered" className="w-40">
-                        <AppleICon />
-                    </Button>
+                      <GoogleSignInButton></GoogleSignInButton>
+             <AppleSignInButton></AppleSignInButton>
                 </div>
 
                 {/* Footer */}
                 <p className="text-center text-sm text-gray-600">
-                    Don’t have an account?{" "}
-                    <a href="/login" className="text-cyan-600 hover:underline">
+                    Already have an account?{" "}
+                    {/* <a href="/login" className="text-cyan-600 hover:underline">
                         Sign up for free
-                    </a>
+                    </a> */}
+                                  <HeroLink as={Link} href={SIGNIN_PAGE_PATH}  className="text-small">Login Here</HeroLink>
+
                 </p>
             </div>
+            
+        </div>
+                  <FreeTrialSection />
         </div>
     );
 }

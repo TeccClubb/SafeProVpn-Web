@@ -10,12 +10,14 @@ import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Button, Input, Link as HeroLink } from "@heroui/react";
 import { Loader2 } from "lucide-react";
-import { FORGOT_PASSWORD_PAGE_PATH } from "@/lib/pathnames";
+import { FORGOT_PASSWORD_PAGE_PATH, SIGNUP_PAGE_PATH } from "@/lib/pathnames";
 import { toast } from "react-toastify";
 import { getOrCreateDeviceId } from "@/components/deviceId";
 import getDeviceName from "@/components/getDeviceName";
 import FreeTrialSection from "@/components/FreeTrialSection";
 import Link from "next/link";
+import GoogleSignInButton from "@/components/GoogleSignIn";
+import AppleSignInButton from "@/components/AppleSignInButton";
 
 type LoginFormData = {
   email: string;
@@ -59,52 +61,7 @@ const LoginForm: FC = () => {
       setError(res?.error || "Login failed. Please try again.");
     }
   };
-
- const handleGoogleSignIn = async () => {
-  setLoading(true);
-  setError("");
-  const deviceId = getOrCreateDeviceId();
-  const deviceName = getDeviceName();
-
-  // ✅ Set cookies
-  document.cookie = `device_id=${deviceId}; path=/`;
-  document.cookie = `device_name=${deviceName}; path=/`;
-
-  const res = await signIn("google", {
-    redirect: false,
-  });
-
-  setLoading(false);
-
-  if (res?.ok) {
-    reset();
-    toast.success("Login Successful");
-    router.replace(redirect);
-  } else {
-    setError(res?.error || "Login failed. Please try again.");
-  }
-};
-
-  const handleAppleSignIn = async () => {
-    setLoading(true);
-    setError("");
-    const deviceId = getOrCreateDeviceId();
-    const deviceName = getDeviceName();
-    const res = await signIn("apple", {
-      redirect: false,
-      device_id: deviceId, // Pass the device ID to the signIn function
-      device_name: deviceName, // Pass the device name to the signIn function
-    });
-    setLoading(false);
-
-    if (res?.ok) {
-      reset();
-      toast.success("Login Successful");
-      router.replace(redirect);
-    } else {
-      setError(res?.error || "Login failed. Please try again.");
-    }
-  };
+ 
   return (
     <div>
 
@@ -169,7 +126,7 @@ const LoginForm: FC = () => {
                 <input type="checkbox" className="mr-2" />
                 Remember me for 30 days
               </label>
-              <HeroLink as={Link} href={FORGOT_PASSWORD_PAGE_PATH} />
+              <HeroLink as={Link} href={FORGOT_PASSWORD_PAGE_PATH}  className="text-small">Forgot Password</HeroLink>
             </div>
 
             {/* Error Message */}
@@ -200,28 +157,19 @@ const LoginForm: FC = () => {
 
           {/* Social Login */}
           <div className="flex space-x-4 justify-center px-4 sm:px-6">
-            <Button
-              variant="bordered"
-              className="w-40"
-              onClick={() =>   handleGoogleSignIn()}
-            >
-              <GoogleIcon />
-            </Button>
+             
 
-            <Button
-              variant="bordered"
-              className="w-40"
-              onClick={() => { handleAppleSignIn()}}
-            >
-              <AppleICon />
-            </Button>
+                <GoogleSignInButton></GoogleSignInButton>
+             <AppleSignInButton></AppleSignInButton>
 
           </div>
 
           {/* Sign Up */}
           <p className="text-center text-sm text-gray-600">
             Don’t have an account?{" "}
-            <a href="#" className="text-cyan-600 hover:underline">Sign up for free</a>
+            {/* <a href="#" className="text-cyan-600 hover:underline"></a> */}
+              <HeroLink as={Link} href={SIGNUP_PAGE_PATH}  className="text-small">Sign up for free</HeroLink>
+
           </p>
         </div>
 
