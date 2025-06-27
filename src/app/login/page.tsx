@@ -1,20 +1,21 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FC, Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import AppleICon from "@/icons/AppleIcon";
 import GoogleIcon from "@/icons/GoogleIcon";
 import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
-import { Button, Input } from "@heroui/react";
+import { Button, Input, Link as HeroLink } from "@heroui/react";
 import { Loader2 } from "lucide-react";
-import { SIGNIN_PAGE_PATH } from "@/lib/pathnames";
+import { FORGOT_PASSWORD_PAGE_PATH } from "@/lib/pathnames";
 import { toast } from "react-toastify";
 import { getOrCreateDeviceId } from "@/components/deviceId";
 import getDeviceName from "@/components/getDeviceName";
 import FreeTrialSection from "@/components/FreeTrialSection";
+import Link from "next/link";
 
 type LoginFormData = {
   email: string;
@@ -22,7 +23,9 @@ type LoginFormData = {
 
 };
 
-export default function LoginForm() {
+const LoginForm: FC = () => {
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   const {
     register,
     handleSubmit,
@@ -50,7 +53,7 @@ export default function LoginForm() {
     if (res?.ok) {
       reset();
       toast.success("Login Successful")
-      router.push("/");
+      router.replace(redirect);
 
     } else {
       setError(res?.error || "Login failed. Please try again.");
@@ -76,7 +79,7 @@ export default function LoginForm() {
   if (res?.ok) {
     reset();
     toast.success("Login Successful");
-    router.push("/");
+    router.replace(redirect);
   } else {
     setError(res?.error || "Login failed. Please try again.");
   }
@@ -97,7 +100,7 @@ export default function LoginForm() {
     if (res?.ok) {
       reset();
       toast.success("Login Successful");
-      router.push("/");
+      router.replace(redirect);
     } else {
       setError(res?.error || "Login failed. Please try again.");
     }
@@ -166,7 +169,7 @@ export default function LoginForm() {
                 <input type="checkbox" className="mr-2" />
                 Remember me for 30 days
               </label>
-              <a href="#" className="text-cyan-600 hover:underline" onClick={() => router.push(SIGNIN_PAGE_PATH)}>Forgot password?</a>
+              <HeroLink as={Link} href={FORGOT_PASSWORD_PAGE_PATH} />
             </div>
 
             {/* Error Message */}
@@ -225,5 +228,13 @@ export default function LoginForm() {
       </div>
       <FreeTrialSection />
     </div>
+  );
+}
+
+export default function() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
