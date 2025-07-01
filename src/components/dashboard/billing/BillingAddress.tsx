@@ -1,15 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
 import { useBillingAddress } from "@/hooks/useBillingAddress";
 import BillingAddressModal from "@/components/BillingAddressModal";
 
 export default function BillingAddress() {
-  const { data: session } = useSession();
-  const token = (session?.user as any)?.access_token;
-
-  const { billingAddress, loading, error } = useBillingAddress(token);
+  const { billingAddress, isBillingAddressLoading, error } = useBillingAddress();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -24,7 +20,7 @@ export default function BillingAddress() {
         </button>
       </div>
 
-      {loading ? (
+      {isBillingAddressLoading ? (
         <div className="space-y-4 animate-pulse">
           <div className="h-5 w-32 bg-gray-200 rounded" />
           <div className="h-4 w-1/2 bg-gray-200 rounded" />

@@ -16,7 +16,7 @@ export function useBillingAddress(token?: string | null) {
   const { data: session } = useSession();
   const { billingAddress, isBillingAddressLoadedOnce } = useAppState();
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isBillingAddressLoading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const updateBillingAddress = async ({
@@ -70,7 +70,7 @@ export function useBillingAddress(token?: string | null) {
       try {
         if (isBillingAddressLoadedOnce) return;
 
-        if (!token || !session) return;
+        if (!token && !session) return;
 
         const res = await axios
           .get<{ status: boolean; user: { billing_address: BillingAddress } }>(
@@ -104,5 +104,10 @@ export function useBillingAddress(token?: string | null) {
     fetchBillingAddress();
   }, [session]);
 
-  return { billingAddress, loading, updateBillingAddress, error };
+  return {
+    billingAddress,
+    isBillingAddressLoading,
+    updateBillingAddress,
+    error,
+  };
 }

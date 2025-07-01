@@ -8,31 +8,17 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { Controller, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { FC, useState } from "react";
 import axios from "axios";
-// import { STRIPE_PUBLISHABLE_KEY } from "@/lib/utils/apiRoutes";
 import { STRIPE_PUBLISHABLE_KEY } from "@/lib/constants";
-import { Plan } from "@/types"; // adjust if needed
+import { BillingAddress } from "@/types";
 import { Input } from "@heroui/react";
-import PaymentStep from "./PaymentStep";
 
-type FormData = {
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  postal_code: string;
-  country: string;
-};
-
-
-interface PaymentFormProps {
-  plan: Plan;
-  className?: string;
-  billingAddress?: any;
-}
-
-const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
+const PaymentForm: FC<{ planId: number; amount: number; billingAddress: BillingAddress | null }> = ({
+  planId,
+  amount,
+  billingAddress
+}) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -40,38 +26,20 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
   const [loading, setLoading] = useState(false);
 
   const {
-    register,
     handleSubmit,
-    reset,
     control,
-    formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      name: "",
-      address: "",
-      city: "",
-      state: "",
-      postal_code: "",
-      country: "",
+  } = useForm<BillingAddress>({
+    values: {
+      name: billingAddress ? billingAddress.name : "",
+      address: billingAddress ? billingAddress.address : "",
+      city: billingAddress ? billingAddress.city : "",
+      country: billingAddress ? billingAddress.country : "",
+      state: billingAddress ? billingAddress.state : "",
+      postal_code: billingAddress ? billingAddress.postal_code : "",
     },
   });
 
-  useEffect(() => {
-    console.log("Resetting form with billing address:", billingAddress);
-    if (billingAddress) {
-      reset({
-        name: billingAddress.name || "",
-        address: billingAddress.address || "",
-        city: billingAddress.city || "",
-        state: billingAddress.state || "",
-        postal_code: billingAddress.postal_code || "",
-        country: billingAddress.country || "",
-      });
-    }
-  }, [billingAddress, reset]);
-
-  const onSubmit = async (values: FormData) => {
-    console.log(values)
+  const onSubmit = async (values: BillingAddress) => {
     setErrorMessage(undefined);
 
     if (!stripe || !elements) {
@@ -87,12 +55,7 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
       }
 
       setLoading(true);
-      const original = parseFloat(plan.original_price ?? "0");
-      const discount = parseFloat(plan.discount_price ?? "0");
-      const finalAmount = (original - discount) * 100;
-      const res = await axios.post("/api/create-payment-intent", {
-        amount: finalAmount,
-      });
+      const res = await axios.post("/api/create-payment-intent", { amount });
       const data = res.data;
 
       if (!data.clientSecret) {
@@ -116,7 +79,7 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
               },
             },
           },
-          return_url: `${window.location.origin}/payment-processing?planId=${plan.id}`,
+          return_url: `${window.location.origin}/payment-processing?planId=${planId}`,
         },
       });
 
@@ -125,9 +88,7 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
       }
     } catch (error) {
       setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "An unexpected error occurred"
+        error instanceof Error ? error.message : "An unexpected error occurred"
       );
     } finally {
       setLoading(false);
@@ -135,12 +96,9 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
   };
 
   return (
-    <div>
-      <PaymentStep></PaymentStep>
-      <form onSubmit={handleSubmit(onSubmit)} className={className}>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-
+      <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          
             <Controller
               name="name"
               control={control}
@@ -165,49 +123,29 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
               )}
             />
 
-            {/* {errors.name && (
-            <p className="text-red-600 text-sm">{errors.name.message}</p>
-          )} */}
-          </div>
-
-
-          <div>
-            {/* <label className="text-sm">Address</label>
-          <input
-            className="w-full p-2 border rounded mb-2"
-            placeholder="123 Main St"
-          /> */}
-          <Controller
-  name="address"
-  control={control}
-  rules={{
-    required: "Address is required",
-    minLength: {
-      value: 5,
-      message: "Address must be at least 5 characters",
-    },
-  }}
-  render={({ field, fieldState }) => (
-    <Input
-      {...field}
-      label="Address"
-      placeholder="123 Main St"
-      labelPlacement="outside"
-      variant="bordered"
-      isInvalid={!!fieldState.error}
-      errorMessage={fieldState.error?.message}
-      className="mb-3"
-    />
-  )}
-/>
-
-            {/* {errors.address && (
-            <p className="text-red-600 text-sm">{errors.address.message}</p>
-          )} */}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
+            <Controller
+              name="address"
+              control={control}
+              rules={{
+                required: "Address is required",
+                minLength: {
+                  value: 5,
+                  message: "Address must be at least 5 characters",
+                },
+              }}
+              render={({ field, fieldState }) => (
+                <Input
+                  {...field}
+                  label="Address"
+                  placeholder="123 Main St"
+                  labelPlacement="outside"
+                  variant="bordered"
+                  isInvalid={!!fieldState.error}
+                  errorMessage={fieldState.error?.message}
+                  className="mb-3"
+                />
+              )}
+            />
 
           <Controller
             name="city"
@@ -233,7 +171,6 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
             )}
           />
 
-
           <Controller
             name="state"
             control={control}
@@ -258,12 +195,6 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
             )}
           />
 
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
-
-
-
           <Controller
             name="postal_code"
             control={control}
@@ -287,9 +218,6 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
               />
             )}
           />
-
-
-
         </div>
 
         <PaymentElement className="mb-4" />
@@ -301,34 +229,17 @@ const PaymentForm = ({ plan, billingAddress, className }: PaymentFormProps) => {
         <button
           type="submit"
           disabled={!stripe || !elements || loading}
-          className="w-full bg-[#4DB8AC] text-white py-3 rounded-full disabled:opacity-50">
+          className="w-full bg-[#4DB8AC] text-white py-3 rounded-full disabled:opacity-50"
+        >
           {loading
             ? "Processing..."
-            : `Pay $${(
-              (parseFloat(plan.original_price ?? "0") || 0) -
-              (parseFloat(plan.discount_price ?? "0") || 0)
-            ).toFixed(2)}`}
-
+            : `Pay $${(amount / 100).toFixed(2)}`}
         </button>
       </form>
-    </div>
   );
 };
-export interface BillingAddress {
-  name: string;
-  address: string;
-  city: string;
-  state: string;
-  postal_code: string;
-  country: string;
-}
-interface CheckoutFormProps {
-  plan: Plan;
-  className?: string;
-  billingAddress?: BillingAddress;
-}
 
-const CheckoutForm = ({ plan, className, billingAddress }: CheckoutFormProps) => {
+const CheckoutForm: FC<{ planId: number; amount: number; billingAddress: BillingAddress | null }> = ({ planId, amount, billingAddress }) => {
   if (!STRIPE_PUBLISHABLE_KEY) {
     throw new Error("STRIPE_PUBLISHABLE_KEY is not defined");
   }
@@ -336,13 +247,13 @@ const CheckoutForm = ({ plan, className, billingAddress }: CheckoutFormProps) =>
   const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
   const options: StripeElementsOptions = {
     mode: "payment",
-    amount: +(plan.original_price ?? 0) * 100,
+    amount,
     currency: "usd",
   };
 
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentForm plan={plan} billingAddress={billingAddress ? billingAddress : undefined} className={className} />
+      <PaymentForm planId={planId} amount={amount} billingAddress={billingAddress} />
     </Elements>
   );
 };

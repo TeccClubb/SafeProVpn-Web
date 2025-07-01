@@ -19,9 +19,9 @@ const PaymentOptions = () => {
   const [selected, setSelected] = useState("Visa");
 
   return (
-    <div>
+    <>
       <h2 className="text-lg text-left font-semibold mb-4">Payment Information</h2>
-      <div className="grid max-w-2xl grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-4">
         {paymentOptions.map((option) => (
           <button
             key={option.name}
@@ -36,7 +36,7 @@ const PaymentOptions = () => {
           </button>
         ))}
       </div>
-    </div>
+    </>
   );
 };
 
