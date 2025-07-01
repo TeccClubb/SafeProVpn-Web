@@ -1,85 +1,38 @@
 "use client";
 
-import { useEffect } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useSession } from "next-auth/react";
-
-interface BillingAddressForm {
-  name: string;
-  address: string;
-  city: string;
-  country: string;
-  state: string;
-  postal_code: string;
-}
+import { BillingAddress } from "@/types";
+import { useBillingAddress } from "@/hooks/useBillingAddress";
 
 interface BillingAddressModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddressAdded: (address: BillingAddressForm) => void;
-  defaultValues?: BillingAddressForm; // for editing
 }
 
 export default function BillingAddressModal({
   isOpen,
   onClose,
-  onAddressAdded,
-  defaultValues,
 }: BillingAddressModalProps) {
-  const { data: session } = useSession();
-  const token = (session?.user as any)?.access_token;
+  const { billingAddress, updateBillingAddress } = useBillingAddress();
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
-  } = useForm<BillingAddressForm>({
-    defaultValues: {
-      name: "",
-      address: "",
-      city: "",
-      country: "",
-      state: "",
-      postal_code: "",
+  } = useForm<BillingAddress>({
+    values: {
+      name: billingAddress ? billingAddress.name : "",
+      address: billingAddress ? billingAddress.address : "",
+      city: billingAddress ? billingAddress.city : "",
+      country: billingAddress ? billingAddress.country : "",
+      state: billingAddress ? billingAddress.state : "",
+      postal_code: billingAddress ? billingAddress.postal_code : "",
     },
   });
 
-  // Reset form with default values when modal opens or defaultValues change
-  useEffect(() => {
-    if (isOpen) {
-      reset(defaultValues || {
-        name: "",
-        address: "",
-        city: "",
-        country: "",
-        state: "",
-        postal_code: "",
-      });
-    }
-  }, [isOpen, defaultValues, reset]);
-
-
-  const onSubmit = async (data: BillingAddressForm) => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_REST_API_BASE_URL}/billing-address/store`,
-        data,
-        {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      onAddressAdded(response.data.user.billing_address);
-      onClose();
-      toast.success("Billing address added successfully!");
-    } catch (err) {
-      toast.error("Failed to add billing address. Please try again.");
-    }
+  const onSubmit = async (data: BillingAddress) => {
+      updateBillingAddress({address: data, onSuccess: onClose})
   };
 
   if (!isOpen) return null;
@@ -126,11 +79,11 @@ export default function BillingAddressModal({
                   type="text"
                   placeholder={field.replace("_", " ").toUpperCase()}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                  {...register(field as keyof BillingAddressForm, rules)}
+                  {...register(field as keyof BillingAddress, rules)}
                 />
-                {errors[field as keyof BillingAddressForm] && (
+                {errors[field as keyof BillingAddress] && (
                   <p className="text-red-600 text-sm">
-                    {errors[field as keyof BillingAddressForm]?.message}
+                    {errors[field as keyof BillingAddress]?.message}
                   </p>
                 )}
               </div>

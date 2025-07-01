@@ -25,7 +25,12 @@ export default function BillingAddress() {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+        <div className="space-y-4 animate-pulse">
+          <div className="h-5 w-32 bg-gray-200 rounded" />
+          <div className="h-4 w-1/2 bg-gray-200 rounded" />
+          <div className="h-4 w-1/3 bg-gray-200 rounded" />
+          <div className="h-4 w-1/4 bg-gray-200 rounded" />
+        </div>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : billingAddress ? (
@@ -44,8 +49,6 @@ export default function BillingAddress() {
       <BillingAddressModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        onAddressAdded={() => window.location.reload()}
-        defaultValues={billingAddress ?? undefined} // 👈 Safely convert null to undefined
       />
 
     </div>

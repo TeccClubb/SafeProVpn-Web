@@ -1,18 +1,3 @@
-export const USER_COOKIE_KEY = "safe_pro_user";
-
-export const REVERB_APP_ID = +process.env.REVERB_APP_ID!;
-export const REVERB_APP_KEY = process.env.REVERB_APP_KEY!;
-export const REVERB_APP_SECRET = process.env.REVERB_APP_SECRET!;
-export const REVERB_HOST = process.env.REVERB_HOST!;
-// export const REVERB_HOST =
-//   process.env.NODE_ENV === "production"
-//     ? process.env.REVERB_HOST!
-//     : "localhost";
-export const REVERB_PORT = +process.env.REVERB_PORT!;
-export const REVERB_SCHEME = process.env.REVERB_SCHEME!;
-// export const REVERB_SCHEME =
-//   process.env.NODE_ENV === "production" ? "https" : "http";
-
 export const STRIPE_PUBLISHABLE_KEY =
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY!;

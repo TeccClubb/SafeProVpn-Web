@@ -2,8 +2,10 @@ export type BillingAddress = {
   name: string;
   address: string;
   city: string;
+  country: string;
   state: string;
   postal_code: string;
+  // phone: string;
 };
 
 export type Attachment = {
