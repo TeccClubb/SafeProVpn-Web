@@ -4,20 +4,20 @@ import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import AppleICon from "@/icons/AppleIcon";
-import GoogleIcon from "@/icons/GoogleIcon";
 import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
-import { Button, Input, Link as HeroLink } from "@heroui/react";
+import { Input, Link as HeroLink } from "@heroui/react";
 import { Loader2 } from "lucide-react";
-import { FORGOT_PASSWORD_PAGE_PATH, SIGNUP_PAGE_PATH } from "@/lib/pathnames";
+import { DASHBOARD_PAGE_PATH, FORGOT_PASSWORD_PAGE_PATH, SIGNUP_PAGE_PATH } from "@/lib/pathnames";
 import { toast } from "react-toastify";
-import { getOrCreateDeviceId } from "@/components/deviceId";
-import getDeviceName from "@/components/getDeviceName";
 import FreeTrialSection from "@/components/FreeTrialSection";
 import Link from "next/link";
 import GoogleSignInButton from "@/components/GoogleSignIn";
 import AppleSignInButton from "@/components/AppleSignInButton";
+import { deviceInfo } from "@/lib/utils";
+import axios, { AxiosError } from "axios";
+import { SIGNIN_ROUTE } from "@/lib/constants";
+import { User } from "next-auth";
 
 type LoginFormData = {
   email: string;
@@ -27,7 +27,7 @@ type LoginFormData = {
 
 const LoginForm: FC = () => {
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") || "/";
+  const redirect = searchParams.get("redirect") || DASHBOARD_PAGE_PATH;
   const {
     register,
     handleSubmit,
@@ -38,27 +38,56 @@ const LoginForm: FC = () => {
   const [error, setError] = useState("");
 
   const onSubmit = async (data: LoginFormData) => {
-    setLoading(true);
-    setError("");
-    const deviceId = getOrCreateDeviceId();
-    const deviceName = getDeviceName();
-    const res = await signIn("credentials", {
-      redirect: false,
-      email: data.email,
-      password: data.password,
-      device_id: deviceId, // Pass the device ID to the signIn function
-      device_name: deviceName, // Pass the device name to the signIn function
-    });
+    try {
+      setLoading(true);
+      setError("");
+      const res = await axios
+        .post<{
+          status: boolean;
+          message: string;
+          access_token: string;
+          user: User;
+        }>(
+          SIGNIN_ROUTE,
+          {
+            ...data,
+            ...deviceInfo,
+          },
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((res) => res.data);
 
-    setLoading(false);
-
-    if (res?.ok) {
-      reset();
-      toast.success("Login Successful")
-      router.replace(redirect);
-
-    } else {
-      setError(res?.error || "Login failed. Please try again.");
+      if (res.status) {
+        await signIn("credentials", {
+          redirect: false,
+          id: res.user.id,
+          name: res.user.name,
+          email: res.user.email,
+          avatar: res.user.avatar,
+          access_token: res.access_token,
+        });
+        router.replace(redirect);
+        reset();
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+        setError(res.message);
+      }
+    } catch (error) {
+      const errorMessage =
+        error instanceof AxiosError
+          ? error.response?.data.errors[0]
+          : error instanceof Error
+          ? error.message
+          : "Login Failed, Please try again later";
+      toast.error(errorMessage);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
  

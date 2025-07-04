@@ -1,26 +1,26 @@
 import { NextConfig } from "next";
-import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-// import { AUTH_SECRET } from "./lib/utils/apiRoutes";
-import { AUTH_SECRET } from "@/lib/constants";
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import {
+  DASHBOARD_PAGE_PATH,
+  HOME_PAGE_PATH,
+  SIGNIN_PAGE_PATH,
+  SIGNUP_PAGE_PATH,
+} from "./lib/pathnames";
 
 export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: AUTH_SECRET });
- 
-  if (
-    req.nextUrl.pathname === "/login" ||
-    req.nextUrl.pathname === "/signup" ||
-    req.nextUrl.pathname === "/forgot-password" ||
-    // req.nextUrl.pathname === "/reset-password" ||
-    req.nextUrl.pathname === "/email-verify"
-  ) {
-    if (token) {
-      return NextResponse.redirect(new URL("/", req.url));
+  const session = await auth();
+
+  if (req.nextUrl.pathname.startsWith(DASHBOARD_PAGE_PATH)) {
+    if (!session) {
+      return NextResponse.redirect(new URL(SIGNIN_PAGE_PATH, req.url));
     }
-  } else {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
+  } else if (
+    req.nextUrl.pathname === SIGNIN_PAGE_PATH ||
+    req.nextUrl.pathname === SIGNUP_PAGE_PATH
+  ) {
+    if (session) {
+      return NextResponse.redirect(new URL(HOME_PAGE_PATH, req.url));
     }
   }
 
@@ -28,24 +28,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config: NextConfig = {
-  matcher: [
-    "/",
-    "/login",
-    "/signup",
-    "/forgot-password",
-    "/reset-password",
-    "/Dashboard/:path*",
-    "/email-verify",
-    "/createTicket",
-    "/devices",
-    "/payment-processing",
-    "/plans",
-    "/feature",
-    "/productCheckOut",
-    "/referFriend",
-    "/subscription",
-    "/support",
-    "/ticketView",
-    "/viewTicketList",
-  ],
+  matcher: ["/dashboard/:path*", "/login", "/signup"],
 };

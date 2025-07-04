@@ -4,7 +4,7 @@ import React, { FC, ReactNode } from "react";
 import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import { ThemeProvider, type ThemeProviderProps } from "next-themes";
 import { useRouter } from "next/navigation";
-import { CookiesProvider } from "react-cookie";
+import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 
@@ -24,12 +24,12 @@ export const Providers: FC<{
   const router = useRouter();
   return (
     <HeroUIProvider navigate={router.push} className={className}>
-      <CookiesProvider>
-        <ThemeProvider {...themeProps}>
+      <ThemeProvider {...themeProps}>
+        <SessionProvider>
           <Provider store={store}>{children}</Provider>
-        </ThemeProvider>
-        <ToastProvider />
-      </CookiesProvider>
+        </SessionProvider>
+      </ThemeProvider>
+      <ToastProvider />
     </HeroUIProvider>
   );
 };

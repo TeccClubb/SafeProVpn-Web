@@ -13,6 +13,8 @@ export const SIGNUP_ROUTE = REST_API_BASE_URL + "/signup";
 export const LOGOUT_ROUTE = REST_API_BASE_URL + "/logout";
 export const FORGOT_PASSWORD_ROUTE = REST_API_BASE_URL + "/forgot-password";
 export const RESET_PASSWORD_ROUTE = REST_API_BASE_URL + "/reset-password";
+export const LOGIN_WITH_GOOGLE_ROUTE = REST_API_BASE_URL + "/login/google";
+export const LOGIN_WITH_APPLE_ROUTE = REST_API_BASE_URL + "/login/apple";
 
 export const getEmailVerificationRoute = (id: string, hash: string, expires: string, signature: string): string =>
   `${REST_API_BASE_URL}/email/verify/${id}/${hash}?expires=${expires}&signature=${signature}`;

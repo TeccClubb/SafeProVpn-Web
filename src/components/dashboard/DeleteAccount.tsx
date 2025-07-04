@@ -10,7 +10,6 @@ import { DELETE_USER_ACCOUNT_ROUTE } from "@/lib/constants";
 
 export default function DeleteAccount() {
   const { data: session } = useSession();
-  const token = (session?.user as any)?.access_token;
 
   const handleDelete = async () => {
     const confirmed = confirm("Are you sure you want to delete your account permanently?");
@@ -19,13 +18,13 @@ export default function DeleteAccount() {
     try {
       await axios.delete(DELETE_USER_ACCOUNT_ROUTE, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${session?.user.access_token}`,
           Accept: "application/json",
         },
       });
 
       toast.success("Account deleted successfully.");
-      await signOut({ callbackUrl: "/" }); // optional: redirect after deletion
+      await signOut({ redirect: true });
     } catch (error) {
       toast.error("Failed to delete account. Please try again.");
     }
