@@ -43,6 +43,8 @@ useEffect(() => {
   if (fetchedDevices) {
     setDevices(fetchedDevices);
   }
+
+  console.log(fetchedDevices);
 }, [fetchedDevices]);
 
   const handleRemoveDevice = (deviceId: string) => {
@@ -91,7 +93,7 @@ useEffect(() => {
                       <div className="text-gray-400 text-xs">{device.ip_address}</div>
                     </div>
                   </td>
-                  <td className="px-4 py-3">-
+                  <td className="px-4 py-3">
                     {/* <span
                       className={`px-2 py-1 rounded-full text-xs font-semibold ${device.status === 'Online'
                         ? 'bg-green-100 text-green-700'
@@ -100,6 +102,7 @@ useEffect(() => {
                     >
                       {device.status}
                     </span> */}
+                    {device.is_current ? <span className="ml-2 text-xs bg-cyan-100 text-cyan-700 px-2 py-0.5 rounded-full">Active</span> : "-"}
                   </td>
                   <td className="px-4 py-3">
                     {/* {device.dataUsed} */}

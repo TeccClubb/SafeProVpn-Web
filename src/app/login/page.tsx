@@ -14,7 +14,7 @@ import FreeTrialSection from "@/components/FreeTrialSection";
 import Link from "next/link";
 import GoogleSignInButton from "@/components/GoogleSignIn";
 import AppleSignInButton from "@/components/AppleSignInButton";
-import { deviceInfo } from "@/lib/utils";
+import { deviceInfo, getIPAddress } from "@/lib/utils";
 import axios, { AxiosError } from "axios";
 import { SIGNIN_ROUTE } from "@/lib/constants";
 import { User } from "next-auth";
@@ -51,6 +51,7 @@ const LoginForm: FC = () => {
           SIGNIN_ROUTE,
           {
             ...data,
+            ip_address: await getIPAddress(),
             ...deviceInfo,
           },
           {

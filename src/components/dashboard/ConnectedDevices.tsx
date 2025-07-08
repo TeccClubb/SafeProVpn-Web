@@ -30,7 +30,7 @@ export default function ConnectedDevices() {
                 <Image width={25} height={25} src={device.image} alt={device.name} className="  rounded-md" />
                 <div>
                   <p className="font-medium">{device.name}</p>
-                  <p className="text-sm text-gray-500">Last active: {device.lastActive}</p>
+                  <p className="text-sm text-default-500">Last active: {device.lastActive}</p>
 
                 </div>
               </div>
@@ -38,7 +38,7 @@ export default function ConnectedDevices() {
                 {device.current && (
                   <span className="text-xs px-2 py-1 rounded-full bg-cyan-100 text-cyan-500">Current</span>
                 )}
-                <Trash2 className="w-4 h-4 text-gray-400 hover:text-red-500 cursor-pointer" />
+                <Trash2 className="w-4 h-4 text-default-500 hover:text-red-500 cursor-pointer" />
               </div>
             </div>
           ))}
