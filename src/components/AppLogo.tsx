@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-const AppLogo: FC<{ className?: string; }> = ({ className }) => {
+const AppLogo: FC<{ className?: string }> = ({ className }) => {
   return (
     <div className={cn("flex justify-start items-center gap-1", className)}>
       <Image
@@ -13,7 +13,7 @@ const AppLogo: FC<{ className?: string; }> = ({ className }) => {
         sizes="100vw"
         className="w-10 h-auto"
       />
-      <h2 className="text-[#1ABDCC] text-2xl font-semibold">SafePro VPN</h2>
+      <h2 className="text-primary text-2xl font-semibold">SafePro VPN</h2>
     </div>
   );
 };

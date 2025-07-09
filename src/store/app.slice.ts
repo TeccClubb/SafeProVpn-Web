@@ -2,6 +2,7 @@ import { AppState, BillingAddress, SupportTicket } from "@/types";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialState: AppState = {
+  isLogoutModalOpen: false,
   isLegalNoticeLoadedOnce: false,
   termsAndConditions: "",
   privacyPolicy: "",
@@ -17,6 +18,10 @@ const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
+    setIsLogoutModalOpen: (state, action: PayloadAction<boolean>) => {
+      state.isLogoutModalOpen = action.payload;
+    },
+
     setLegalNotes: (
       state,
       action: PayloadAction<{
@@ -73,6 +78,7 @@ const appSlice = createSlice({
 });
 
 export const {
+  setIsLogoutModalOpen,
   setLegalNotes,
   setBillingAddress,
   setSupportTickets,

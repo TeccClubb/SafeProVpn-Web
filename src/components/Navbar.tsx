@@ -62,7 +62,14 @@ const Navbar: FC = () => {
   ];
 
   return (
-    <HeroUINavbar id="navbar" maxWidth="xl" className="bg-transparent">
+    <HeroUINavbar
+      id="navbar"
+      maxWidth="xl"
+      className="bg-transparent"
+      classNames={{
+        wrapper: pathname.startsWith(DASHBOARD_PAGE_PATH) ? "pl-1 lg:pl-6" : "",
+      }}
+    >
       <NavbarContent>
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <Link href={HOME_PAGE_PATH}>
@@ -117,7 +124,7 @@ const Navbar: FC = () => {
               color="danger"
               radius="full"
               className="hidden sm:inline-flex"
-              onPress={handleLogout}
+              onPress={() => handleLogout()}
             >
               Logout
             </Button>
@@ -176,7 +183,7 @@ const Navbar: FC = () => {
                       color="danger"
                       radius="full"
                       className="hidden sm:inline-flex"
-                      onPress={handleLogout}
+                      onPress={() => handleLogout()}
                     >
                       Logout
                     </Button>

@@ -1,16 +1,25 @@
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { AxiosError } from "axios";
 import { LOGOUT_ROUTE } from "@/lib/constants";
 import { addToast } from "@heroui/react";
-import { SIGNIN_PAGE_PATH } from "@/lib/pathnames";
 import { signOut, useSession } from "next-auth/react";
+import { useDispatch } from "react-redux";
+import { setIsLogoutModalOpen } from "@/store/app.slice";
 
 export const useLogout = () => {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { data: session } = useSession();
 
+  const [isLoggingOut, setIsLoggingOut] = useState<boolean>(false);
+
+  const openLogoutModal = (open: boolean) =>
+    dispatch(setIsLogoutModalOpen(open));
+
   const handleLogout = async () => {
     try {
+      setIsLoggingOut(true);
       const res = await axios
         .post<{ status: boolean; message: string }>(
           LOGOUT_ROUTE,
@@ -26,6 +35,7 @@ export const useLogout = () => {
 
       await signOut({ redirect: false });
       router.refresh();
+      openLogoutModal(false);
 
       if (res.status) {
         addToast({ color: "success", description: res.message });
@@ -38,8 +48,14 @@ export const useLogout = () => {
             : error.message
           : "Failed to logout";
       addToast({ color: "danger", description: errorMessage });
+    } finally {
+      setIsLoggingOut(false);
     }
   };
 
-  return { handleLogout } as const;
+  return {
+    isLoggingOut,
+    handleLogout,
+    openLogoutModal,
+  } as const;
 };
