@@ -10,7 +10,10 @@ import {
   ScrollShadow,
   useDisclosure,
 } from "@heroui/react";
-import { SidebarCollapsed, SidebarExpanded } from "@/components/dashboard/SideBar";
+import {
+  SidebarCollapsed,
+  SidebarExpanded,
+} from "@/components/dashboard/SideBar";
 import AppLogo from "@/components/AppLogo";
 
 const DashboardLayout: FC<{
@@ -36,12 +39,12 @@ const DashboardLayout: FC<{
           </DrawerContent>
         </Drawer>
 
-        <SidebarCollapsed className="lg:hidden mt-4" onOpen={onOpen} />
-        <SidebarExpanded className="hidden lg:flex mt-8" />
+        <SidebarCollapsed className="lg:hidden pt-4" onOpen={onOpen} />
+        <SidebarExpanded className="hidden lg:flex pt-8" />
 
         <Divider orientation="vertical" className="mt-4 lg:mt-0" />
 
-        <ScrollShadow className="flex-1 relative pt-20 lg:pt-14">
+        <ScrollShadow className="flex-1 relative px-6 py-12 lg:pt-14">
           {children}
         </ScrollShadow>
       </div>

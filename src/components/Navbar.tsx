@@ -29,6 +29,7 @@ import { usePathname } from "next/navigation";
 import AppLogo from "./AppLogo";
 import { useLogout } from "@/hooks/useLogout";
 import { useSession } from "next-auth/react";
+import { Avatar } from "./Avatar";
 
 const Navbar: FC = () => {
   const { status: sessionStatus } = useSession();
@@ -118,18 +119,6 @@ const Navbar: FC = () => {
             </Button>
           )}
 
-          {sessionStatus === "authenticated" && (
-            <Button
-              variant="bordered"
-              color="danger"
-              radius="full"
-              className="hidden sm:inline-flex"
-              onPress={() => handleLogout()}
-            >
-              Logout
-            </Button>
-          )}
-
           <Button
             as={Link}
             href={DASHBOARD_PAGE_PATH}
@@ -140,6 +129,8 @@ const Navbar: FC = () => {
           >
             Get Free Trial
           </Button>
+
+          <Avatar />
         </NavbarItem>
         <NavbarMenuToggle className="lg:hidden" />
       </NavbarContent>
@@ -174,18 +165,6 @@ const Navbar: FC = () => {
                       className="w-full sm:hidden"
                     >
                       {pathname !== SIGNIN_PAGE_PATH ? "Sign In" : "Sign Up"}
-                    </Button>
-                  )}
-
-                  {sessionStatus === "authenticated" && (
-                    <Button
-                      variant="bordered"
-                      color="danger"
-                      radius="full"
-                      className="hidden sm:inline-flex"
-                      onPress={() => handleLogout()}
-                    >
-                      Logout
                     </Button>
                   )}
                 </>

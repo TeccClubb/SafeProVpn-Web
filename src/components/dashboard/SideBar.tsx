@@ -6,7 +6,6 @@ import {
   CreditCard,
   Monitor,
   Settings,
-  LogOut,
   Menu,
 } from "lucide-react";
 import {
@@ -18,8 +17,8 @@ import {
 } from "@heroui/react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useLogout } from "@/hooks/useLogout";
 import { usePathname } from "next/navigation";
+import { Avatar, AvatarUser } from "../Avatar";
 
 const listItems = [
   {
@@ -46,7 +45,6 @@ const listItems = [
 
 const SidebarExpanded: FC<{ className?: string }> = ({ className }) => {
   const pathname = usePathname();
-  const { openLogoutModal } = useLogout();
 
   return (
     <aside className={cn("w-64 px-2 pb-8 h-[calc(100vh-4rem)]", className)}>
@@ -75,15 +73,8 @@ const SidebarExpanded: FC<{ className?: string }> = ({ className }) => {
           ))}
         </ListboxSection>
 
-        <ListboxItem
-          key="logout"
-          startContent={<LogOut />}
-          className="mt-auto h-auto p-2 transition-colors bg-danger/20 text-danger"
-          variant="flat"
-          color="danger"
-          onPress={() => openLogoutModal(true)}
-        >
-          Sign Out
+        <ListboxItem key="user" variant="faded" className="mt-auto h-auto p-2">
+          <AvatarUser />
         </ListboxItem>
       </Listbox>
     </aside>
@@ -95,11 +86,10 @@ const SidebarCollapsed: FC<{ className?: string; onOpen: () => void }> = ({
   onOpen,
 }) => {
   const pathname = usePathname();
-  const { openLogoutModal } = useLogout();
 
   return (
     <aside className={cn("px-1 pb-8 h-[calc(100vh-4rem)]", className)}>
-      <div className="h-full flex flex-col gap-1">
+      <div className="h-full flex flex-col items-center gap-1.5">
         <Tooltip content="Menu" placement="right">
           <Button isIconOnly size="lg" variant="light" onPress={onOpen}>
             <Menu />
@@ -121,17 +111,8 @@ const SidebarCollapsed: FC<{ className?: string; onOpen: () => void }> = ({
           </Tooltip>
         ))}
 
-        <Tooltip content="Sign Out" placement="right">
-          <Button
-            isIconOnly
-            size="lg"
-            variant="flat"
-            color="danger"
-            className="mt-auto"
-            onPress={() => openLogoutModal(true)}
-          >
-            <LogOut />
-          </Button>
+        <Tooltip content="User Menu" placement="right">
+          <Avatar className="mt-auto" />
         </Tooltip>
       </div>
     </aside>
