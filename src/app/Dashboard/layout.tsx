@@ -10,7 +10,7 @@ import {
   ScrollShadow,
   useDisclosure,
 } from "@heroui/react";
-import { SidebarCollapsed, SidebarExpanded } from "@/components/SideBar";
+import { SidebarCollapsed, SidebarExpanded } from "@/components/dashboard/SideBar";
 import AppLogo from "@/components/AppLogo";
 
 const DashboardLayout: FC<{
