@@ -1,7 +1,6 @@
 import Section from "@/components/sections/Section";
 import DownloadIcon from "@/icons/DownloadIcon";
 import { Button } from "@heroui/react";
-import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 

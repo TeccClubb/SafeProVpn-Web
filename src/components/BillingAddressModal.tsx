@@ -43,6 +43,7 @@ export default function BillingAddressModal({
         <h2 className="text-xl font-semibold mb-4">Add Billing Address</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
           {["name", "address", "city", "country", "state", "postal_code"].map((field) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const rules: any = {
               required: `${field.replace("_", " ").toUpperCase()} is required`,
             };

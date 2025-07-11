@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { Button, Input } from "@heroui/react";
 import { CheckCircle, Circle } from "lucide-react";
 import axios from "axios";
@@ -10,12 +9,18 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 
 export default function PasswordChangeForm() {
+  type Data = {
+    old_password: string;
+    new_password: string;
+    confirmPassword: string;
+  }
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isValid }
-  } = useForm({
+  } = useForm<Data>({
     mode: "onChange",
   });
 
@@ -44,24 +49,19 @@ export default function PasswordChangeForm() {
   ];
 
   const allRulesPassed = rules.every(rule => rule.valid);
-  const confirmPassword = watch("confirmPassword");
 
-  const onSubmit = async (data: any) => {
-    // alert("Password changed successfully!");
-    const token = (session?.user as any)?.access_token;
-    console.log(data)
+  const onSubmit: SubmitHandler<Data> = async (data) => {
     const response = await axios.post(`${REST_API_BASE_URL}/user/update-password`, data, {
       headers: {
         'Accept': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${session?.user.access_token}`,
       }
     })
 
-    console.log(response.data)
     if(response.status){
       toast.success("Password Update Successfully")
     }else{
-      toast.error("Update Failed Some Error Occer")
+      toast.error("Update Failed Some Error Occur")
     }
 
 

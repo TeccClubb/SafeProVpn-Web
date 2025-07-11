@@ -11,7 +11,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Link as HeroLink,
 } from "@heroui/react";
 import DownloadIcon from "@/icons/DownloadIcon";
@@ -23,17 +22,8 @@ import StopIcon from "@/icons/StopIcon";
 import WiFiIcon from "@/icons/WiFiIcon";
 import BatteryFullIcon from "@/icons/BatteryFullIcon";
 import AddUserIcon from "@/icons/AddUserIcon";
-import WindowIcon from "@/icons/WindowIcon";
 import MacOSIcon from "@/icons/MacOSIcon";
-import AndroidIcon from "@/icons/AndroidIcon";
-import IOSIcon from "@/icons/IOSIcon";
 import Link from "next/link";
-import ExclamationMarkIcon from "@/icons/ExclamationMarkIcon";
-import FileEditIcon from "@/icons/FileEditIcon";
-import BookIcon from "@/icons/BookIcon";
-import NotesIcon from "@/icons/NotesIcon";
-import LockIcon from "@/icons/LockIcon";
-import WireGardeIcon from "@/icons/WireGardeIcon";
 import TickIcon from "@/icons/TickIcon";
 import AvailableDevicesSection from "@/components/sections/AvailableDevicesSection";
 import KeyIcon from "@/icons/KeyIcon";
@@ -112,9 +102,9 @@ const DownloadForMACOS: FC = () => (
 
           <div className="flex flex-col gap-2 p-4 bg-default-100 border-2 border-default-600 rounded-2xl">
             <p>
-              If you've purchased a subscription but haven't received your
-              activation code, please check your email or contact our support
-              team.
+              If you&apos;ve purchased a subscription but haven&apos;t received
+              your activation code, please check your email or contact our
+              support team.
             </p>
             <HeroLink
               as={Link}

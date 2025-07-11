@@ -3,7 +3,7 @@
 import { Button } from "@heroui/react";
 import { useSession, signOut } from "next-auth/react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { DELETE_USER_ACCOUNT_ROUTE } from "@/lib/constants";
 
 
@@ -26,7 +26,7 @@ export default function DeleteAccount() {
       toast.success("Account deleted successfully.");
       await signOut({ redirect: true });
     } catch (error) {
-      toast.error("Failed to delete account. Please try again.");
+      toast.error(error instanceof AxiosError? error.response?.data.message : "Failed to delete account. Please try again.");
     }
   };
 

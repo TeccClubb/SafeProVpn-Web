@@ -36,7 +36,7 @@ const UsersRemarksSection: FC = () => (
           className="w-full bg-[#F5F9FC] flex flex-col items-start gap-2 p-6 rounded-2xl"
         >
           <div className="text-[#FFD700] text-2xl">★★★★★</div>
-          <p className="text-default-500 text-justify mb-5">"{remarks}"</p>
+          <p className="text-default-500 text-justify mb-5">&quot;{remarks}&quot;</p>
           <User
             avatarProps={{
               src: avatar,

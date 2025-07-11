@@ -1,8 +1,9 @@
 // hooks/usePurchaseHistory.ts
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { GET_PURCHASE_HISTORY_ROUTE } from '@/lib/constants';
+import { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { GET_PURCHASE_HISTORY_ROUTE } from "@/lib/constants";
+import { useSession } from "next-auth/react";
 
 export type Purchase = {
   id: string;
@@ -11,13 +12,14 @@ export type Purchase = {
   status: string;
 };
 
-export function usePurchaseHistory(token: string | null, page = 1) {
+export function usePurchaseHistory(page: number = 1) {
+  const { data: session, status: authStatus } = useSession();
   const [purchases, setPurchases] = useState<Purchase[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!token) return;
+    if (authStatus !== "authenticated") return;
 
     const fetchHistory = async () => {
       setLoading(true);
@@ -25,15 +27,18 @@ export function usePurchaseHistory(token: string | null, page = 1) {
       try {
         const res = await axios.get(GET_PURCHASE_HISTORY_ROUTE(page), {
           headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
+            Authorization: `Bearer ${session.user.access_token}`,
+            Accept: "application/json",
           },
         });
         console.log(res.data);
 
         setPurchases(res.data?.purchases || []);
-      } catch (err: any) {
-        const message = err.response?.data?.message || 'Failed to fetch purchase history';
+      } catch (error) {
+        const message =
+          error instanceof AxiosError
+            ? error.response?.data?.message
+            : "Failed to fetch purchase history";
         setError(message);
         toast.error(message);
       } finally {
@@ -42,7 +47,7 @@ export function usePurchaseHistory(token: string | null, page = 1) {
     };
 
     fetchHistory();
-  }, [token, page]);
+  }, [page, authStatus, session]);
 
   return { purchases, loading, error };
 }

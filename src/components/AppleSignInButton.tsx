@@ -2,13 +2,11 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Button } from "@heroui/react";
 import AppleIcon from "@/icons/AppleIcon";
 
 export default function AppleSignInButton() {
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleAppleSignIn = async () => {
     setLoading(true); // ✅ Start loading

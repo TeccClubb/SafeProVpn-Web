@@ -21,7 +21,7 @@ import {
   CardHeader,
   Link as HeroLink,
 } from "@heroui/react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -196,7 +196,7 @@ const DownloadPage = () => (
     <Section
       heading="Ready to Secure Your Online Privacy"
       description="Join millions of users worldwide who trust SafePro VPN for their online security and privacy needs."
-      classNames={{section: "bg-cyan-500/10"}}
+      classNames={{ section: "bg-cyan-500/10" }}
     >
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <Button

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { notFound, useSearchParams } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   AlertCircle as ErrorIcon,
   CircleAlert as CircleExclamation,
@@ -48,9 +48,13 @@ const EmailVerificationPage: React.FC = () => {
           toast.error("Email verification failed.");
           setErrorMessage(res.data.message);
         }
-      } catch (error: any) {
+      } catch (error) {
         const message =
-          error?.response?.data?.message || error?.message || "An unknown error occurred";
+          error instanceof AxiosError
+            ? error?.response?.data?.message
+            : error instanceof Error
+            ? error.message
+            : "An unknown error occurred";
         toast.error(message);
         setErrorMessage(message);
       } finally {

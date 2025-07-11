@@ -91,9 +91,13 @@ export function useBillingAddress(token?: string | null) {
         } else {
           setError("Billing address not found.");
         }
-      } catch (err: any) {
+      } catch (error) {
         const msg =
-          err.response?.data?.message || "Error fetching billing address";
+        error instanceof AxiosError
+          ? error.response?.data.message
+          : error instanceof Error
+          ? error.message
+          : "Error fetching billing address";
         setError(msg);
         toast.error(msg);
       } finally {
@@ -102,6 +106,7 @@ export function useBillingAddress(token?: string | null) {
     };
 
     fetchBillingAddress();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   return {

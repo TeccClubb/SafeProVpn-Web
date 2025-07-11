@@ -3,7 +3,7 @@
 import { Input, Button } from "@heroui/react";
 import ProfileUploader from "./ProfileUploader";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { REST_API_BASE_URL } from "@/lib/constants";
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
@@ -27,21 +27,20 @@ export default function SettingsForm() {
     },
   });
 
-  const { data: session } = useSession();
+  const { data: session, status: authStatus } = useSession();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null); // ✅ for showing error
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = (session?.user as any)?.access_token;
-      if (!token) return;
+      if (authStatus !== "authenticated") return;
 
       try {
         const response = await axios.get(`${REST_API_BASE_URL}/user`, {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${session.user.access_token}`,
           },
         });
 
@@ -60,11 +59,10 @@ export default function SettingsForm() {
     };
 
     fetchUserData();
-  }, [session, reset]);
+  }, [session, reset, authStatus]);
 
   const onSubmit = async (data: FormData) => {
-    const token = (session?.user as any)?.access_token;
-    if (!token) return;
+    if (authStatus !== "authenticated") return;
 
     setSaving(true);
     setUpdateError(null); // clear any previous errors
@@ -76,17 +74,20 @@ export default function SettingsForm() {
         {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${session.user.access_token}`,
           },
         }
       );
 
       console.log("Response:", response.data);
       toast.success("Profile updated successfully!");
-    } catch (error: any) {
-      console.error("Update error:", error);
-      toast.error("Failed to update profile.");
-      setUpdateError("Failed to update profile. Please try again."); // ✅ set error
+    } catch (error) {
+      const errorMessage =
+        error instanceof AxiosError
+          ? error.response?.data.message
+          : "Failed to update profile. Please try again.";
+      toast.error(errorMessage);
+      setUpdateError(errorMessage);
     } finally {
       setSaving(false);
     }

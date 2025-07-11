@@ -47,6 +47,7 @@ export default function BillingSection() {
                 {/* Alert box */}
                 <div className="bg-blue-50 text-gray-700 text-sm p-4 rounded-md flex justify-between items-center">
                     <div className="flex items-center gap-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src="/save-logo.svg" alt="Icon" className="w-5 h-5" />
                         <span>
                             Save 40% by <a href="#" className="font-semibold text-cyan-500">switching to an Annual Plan</a>!

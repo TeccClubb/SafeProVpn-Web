@@ -2,10 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { MailIcon } from "@/icons/mailIcon";
-import { Button, Input } from "@heroui/react";
+import { Input } from "@heroui/react";
 import { toast } from "react-toastify";
-import axios from "axios";
-import { useState } from "react";
+import axios, { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { FORGOT_PASSWORD_ROUTE } from "@/lib/constants";
 
@@ -45,8 +44,8 @@ export default function ForgetPassword() {
         toast.error(res.data.message);
         // setError(res.data.message);
       }
-    } catch (error: any) {
-      const message = error?.response?.data?.message || "Something went wrong.";
+    } catch (error) {
+      const message = error instanceof AxiosError ?  error?.response?.data?.message : "Something went wrong.";
       
       toast.error(message);
       toast.error("Failed to send reset link.");

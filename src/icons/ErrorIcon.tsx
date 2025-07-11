@@ -1,13 +1,12 @@
-import React from "react";
+import React, { FC } from "react";
+import { IconSvgProps } from "@/types";
 
-type ErrorIconProps = {
-  size?: number;
-  width?: number;
-  height?: number;
-  [key: string]: any;
-};
-
-const ErrorIcon = ({ size = 24, width, height, ...props }: ErrorIconProps) => (
+const ErrorIcon: FC<IconSvgProps> = ({
+  size = 24,
+  width,
+  height,
+  ...props
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size || width}

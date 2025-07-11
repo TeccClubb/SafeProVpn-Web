@@ -34,7 +34,7 @@ const Plans: FC<{
   const filterPlans = useMemo(() => {
     if (filterKey === "all") return plans;
     return plans.filter((plan) => plan.duration_unit === filterKey);
-  }, [filterKey, plans, isPlansLoading]);
+  }, [filterKey, plans]);
 
   const handleSelectPlan = (planId: number) =>
     router.push(

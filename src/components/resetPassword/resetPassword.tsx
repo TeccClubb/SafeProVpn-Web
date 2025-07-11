@@ -2,9 +2,9 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { Button, Input } from "@heroui/react";
+import { Input } from "@heroui/react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { RESET_PASSWORD_ROUTE } from "@/lib/constants";
@@ -58,8 +58,8 @@ export default function ResetPasswordPage() {
       } else {
         toast.error("Password reset failed.");
       }
-    } catch (error: any) {
-      const message = error?.response?.data?.message || "Something went wrong.";
+    } catch (error) {
+      const message = error instanceof AxiosError ? error?.response?.data?.message : "Something went wrong.";
       toast.error(message);
     }
   };

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
  
 import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
-import { Button, Input } from "@heroui/react";
+import { Input } from "@heroui/react";
 import { useSignup } from "@/hooks/useSignup";
 import { useRouter } from "next/navigation";
 import {   Link as HeroLink } from "@heroui/react";
@@ -44,8 +44,8 @@ export default function SignUpForm() {
             router.push('/login'); // Redirect to login after successful signup
             console.log('Signup success:', response);
             // Optionally: Redirect or show a toast
-        } catch (err) {
-            console.error('Signup failed');
+        } catch (error) {
+            console.error(error instanceof Error ? error.message :'Signup failed');
         }
     };
 

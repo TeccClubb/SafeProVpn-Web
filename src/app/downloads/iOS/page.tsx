@@ -21,11 +21,7 @@ import StopIcon from "@/icons/StopIcon";
 import WiFiIcon from "@/icons/WiFiIcon";
 import BatteryFullIcon from "@/icons/BatteryFullIcon";
 import AddUserIcon from "@/icons/AddUserIcon";
-import WindowIcon from "@/icons/WindowIcon";
-import MacOSIcon from "@/icons/MacOSIcon";
-import AndroidIcon from "@/icons/AndroidIcon";
 import IOSIcon from "@/icons/IOSIcon";
-import Link from "next/link";
 import AvailableDevicesSection from "@/components/sections/AvailableDevicesSection";
 
 const DownloadForIOS: FC = () => (

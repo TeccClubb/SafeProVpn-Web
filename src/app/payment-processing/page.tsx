@@ -83,6 +83,7 @@ const PaymentProcessingPage: FC = () => {
     };
 
     verifyPayment(+planId, paymentIntent);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionStatus, session]);
 
   return (

@@ -4,7 +4,6 @@ import { REST_API_BASE_URL } from "@/lib/constants";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { FaLaptop, FaMobileAlt, FaTabletAlt, FaTv } from "react-icons/fa";
 // const devices = [
 //   { name: "MacBook Pro", ip: "192.168.1.101", status: "Online", dataUsed: 84.2, lastActive: "Now", icon: <FaLaptop /> },
 //   { name: "iPhone 13", ip: "192.168.1.102", status: "Online", dataUsed: 56.8, lastActive: "Now", icon: <FaMobileAlt /> },
@@ -32,12 +31,11 @@ export interface DeviceResponse {
 
 export default function DeviceTable() {
   const { data: session } = useSession();
-  const token = (session?.user as any)?.access_token;
 
 
   // const {devices,loading,error}=useDevices(token);
 
-const { devices: fetchedDevices, loading, error } = useDevices(token);
+const { devices: fetchedDevices } = useDevices();
 const [devices, setDevices] = useState<Device[]>([]); // <- local state
 useEffect(() => {
   if (fetchedDevices) {
@@ -53,7 +51,7 @@ useEffect(() => {
     axios.delete(`${REST_API_BASE_URL}/devices/${deviceId}`, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${(session?.user as any)?.access_token}`,
+        Authorization: `Bearer ${session?.user.access_token}`,
       },
     }).then((response) => {
       console.log("Device removed successfully:", response.data);

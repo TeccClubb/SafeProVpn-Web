@@ -2,13 +2,9 @@
 
 import { usePurchaseHistory } from "@/hooks/usePurchaseHistory";
 import { Eye, Download } from "lucide-react";
-import { useSession } from "next-auth/react";
 
 export default function BillingHistory() {
-  const { data: session } = useSession();
-  const token = (session?.user as any)?.access_token;
-
-  const { purchases, loading, error } = usePurchaseHistory(token);
+  const { purchases, loading, error } = usePurchaseHistory();
 
   return (
     <div className="bg-white shadow rounded-lg p-6">

@@ -1,4 +1,4 @@
-import Section, { SectionDescription } from "@/components/sections/Section";
+import Section from "@/components/sections/Section";
 import IPAddressCard from "@/components/whatisMyIp/IPAddressCard";
 import { Button } from "@heroui/react";
 import Link from "next/link";

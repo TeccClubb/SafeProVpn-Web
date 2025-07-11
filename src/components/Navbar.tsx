@@ -27,14 +27,12 @@ import {
 } from "@/lib/pathnames";
 import { usePathname } from "next/navigation";
 import AppLogo from "./AppLogo";
-import { useLogout } from "@/hooks/useLogout";
 import { useSession } from "next-auth/react";
 import { Avatar } from "./Avatar";
 
 const Navbar: FC = () => {
   const { status: sessionStatus } = useSession();
   const pathname = usePathname();
-  const { handleLogout } = useLogout();
 
   const navItems = [
     { label: "Home", href: HOME_PAGE_PATH },
@@ -54,12 +52,6 @@ const Navbar: FC = () => {
       label: "Downloads",
       href: DOWNLOADS_PAGE_PATH,
     },
-  ];
-
-  const items = [
-    { value: "apple", label: "Apple" },
-    { value: "banana", label: "Banana" },
-    { value: "cherry", label: "Cherry" },
   ];
 
   return (

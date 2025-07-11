@@ -209,10 +209,10 @@ const LoginForm: FC = () => {
   );
 }
 
-export default function() {
-  return (
-    <Suspense>
-      <LoginForm />
-    </Suspense>
-  );
-}
+const LoginPage: FC = () => (
+  <Suspense>
+    <LoginForm />
+  </Suspense>
+);
+
+export default LoginPage;

@@ -1,5 +1,5 @@
 "use client";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const pieData = [
   { name: 'Streaming', value: 45, color: '#3b82f6' },

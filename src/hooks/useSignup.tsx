@@ -1,6 +1,6 @@
 // hooks/useSignup.ts
 import { useState } from 'react';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { SIGNUP_ROUTE } from '@/lib/constants';
 
@@ -34,11 +34,14 @@ export function useSignup() {
       toast.success(message);
 
       return response.data;
-    } catch (err: any) {
-      const message = err.response?.data?.message || 'Something went wrong';
+    } catch (error) {
+      const message =
+        error instanceof AxiosError
+          ? error.response?.data?.message
+          : "Something went wrong";
       setError(message);
       toast.error(message); // ✅ Optional: show toast on error too
-      throw err;
+      throw error;
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,6 @@
 
 import React from 'react'
-import Section, { SectionDescription, SectionHeading } from '../sections/Section';
+import Section from '../sections/Section';
 import FAQAccordion from '../FAQAccordion';
 
 const FrequentQuestionPtwo: React.FC = () => {
