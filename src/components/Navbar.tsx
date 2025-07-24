@@ -7,9 +7,9 @@ import {
   NavbarBrand,
   NavbarItem,
   NavbarMenuItem,
-} from "@heroui/navbar";
-import { Button } from "@heroui/button";
-import { link as linkStyles } from "@heroui/theme";
+  Button,
+  link as linkStyles
+} from "@heroui/react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
