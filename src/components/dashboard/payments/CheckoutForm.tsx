@@ -8,15 +8,18 @@ import {
 } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { Controller, useForm } from "react-hook-form";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import axios from "axios";
-import { STRIPE_PUBLISHABLE_KEY } from "@/lib/constants";
+import { PADDLE_CLIENT_TOKEN, PADDLE_ENVIRONMENT, STRIPE_PUBLISHABLE_KEY } from "@/lib/constants";
 import { BillingAddress } from "@/types";
 import { Input } from "@heroui/react";
+import { CheckoutEventsData, Environments, initializePaddle, type Paddle } from "@paddle/paddle-js";
 
-const PaymentForm: FC<{ planId: number; amount: number; billingAddress: BillingAddress | null }> = ({
+const PaymentForm: FC<{ planId: number; priceId: string; amount: number; email: string; billingAddress: BillingAddress | null }> = ({
   planId,
+  priceId,
   amount,
+  email,
   billingAddress
 }) => {
   const stripe = useStripe();
@@ -24,6 +27,8 @@ const PaymentForm: FC<{ planId: number; amount: number; billingAddress: BillingA
 
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
+
+  const [paddle, setPaddle] = useState<Paddle | null>(null);
 
   const {
     handleSubmit,
@@ -38,6 +43,45 @@ const PaymentForm: FC<{ planId: number; amount: number; billingAddress: BillingA
       postal_code: billingAddress ? billingAddress.postal_code : "",
     },
   });
+
+  const handleCheckoutEvents = (event: CheckoutEventsData) => {
+    console.log(event);
+  };
+
+  useEffect(() => {
+    if (!paddle?.Initialized && PADDLE_CLIENT_TOKEN && PADDLE_ENVIRONMENT) {
+      initializePaddle({
+        token: PADDLE_CLIENT_TOKEN,
+        environment: PADDLE_ENVIRONMENT as Environments,
+        eventCallback: (event) => {
+          if (event.data && event.name) {
+            handleCheckoutEvents(event.data);
+          }
+        },
+        checkout: {
+          settings: {
+            variant: "one-page",
+            displayMode: "inline",
+            theme: "dark",
+            allowLogout: !email,
+            frameTarget: "paddle-checkout-frame",
+            frameInitialHeight: 450,
+            frameStyle:
+              "width: 100%; background-color: transparent; border: none",
+            successUrl: "/checkout/success",
+          },
+        },
+      }).then(async (paddle) => {
+        if (paddle && priceId) {
+          setPaddle(paddle);
+          paddle.Checkout.open({
+            ...(email && { customer: { email } }),
+            items: [{ priceId: priceId, quantity: 1 }],
+          });
+        }
+      });
+    }
+  }, [paddle?.Initialized, priceId, email]);
 
   const onSubmit = async (values: BillingAddress) => {
     setErrorMessage(undefined);
@@ -221,6 +265,8 @@ const PaymentForm: FC<{ planId: number; amount: number; billingAddress: BillingA
         </div>
 
         <PaymentElement className="mb-4" />
+        
+        <div className="paddle-checkout-frame" />
 
         {errorMessage && (
           <p className="text-red-600 mb-4 text-center">{errorMessage}</p>
@@ -239,7 +285,13 @@ const PaymentForm: FC<{ planId: number; amount: number; billingAddress: BillingA
   );
 };
 
-const CheckoutForm: FC<{ planId: number; amount: number; billingAddress: BillingAddress | null }> = ({ planId, amount, billingAddress }) => {
+const CheckoutForm: FC<{
+  planId: number;
+  priceId: string;
+  amount: number;
+  email: string;
+  billingAddress: BillingAddress | null;
+}> = ({ planId, priceId, amount, email, billingAddress }) => {
   if (!STRIPE_PUBLISHABLE_KEY) {
     throw new Error("STRIPE_PUBLISHABLE_KEY is not defined");
   }
@@ -253,7 +305,13 @@ const CheckoutForm: FC<{ planId: number; amount: number; billingAddress: Billing
 
   return (
     <Elements stripe={stripePromise} options={options}>
-      <PaymentForm planId={planId} amount={amount} billingAddress={billingAddress} />
+      <PaymentForm
+        planId={planId}
+        priceId={priceId}
+        amount={amount}
+        email={email}
+        billingAddress={billingAddress}
+      />
     </Elements>
   );
 };

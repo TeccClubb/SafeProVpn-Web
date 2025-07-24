@@ -8,10 +8,12 @@ import OrderSummary from "@/components/dashboard/payments/orderSummary";
 import { useBillingAddress } from "@/hooks/useBillingAddress";
 import PaymentStep from "@/components/dashboard/payments/PaymentStep";
 import { Alert, Skeleton } from "@heroui/react";
+import { useSession } from "next-auth/react";
 
 function ProductConfigurationCheckOut() {
   const searchParams = useSearchParams();
   const planId = searchParams.get("planId");
+  const { data: session } = useSession();
 
   if (!planId) {
     notFound();
@@ -49,11 +51,14 @@ function ProductConfigurationCheckOut() {
             <CheckoutForm
               planId={selectedPlan.id}
               amount={
-                (parseFloat(selectedPlan.original_price) -
-                  parseFloat(selectedPlan.discount_price)) *
-                100
+                Math.round(
+                  parseFloat(selectedPlan.original_price) -
+                    parseFloat(selectedPlan.discount_price)
+                ) * 100
               }
+              email={session ? session.user.email : ""}
               billingAddress={billingAddress}
+              priceId={selectedPlan?.priceId ?? "pri_01k0vedc7a3dqp6ecqvsdhs46c"}
             />
           )}
         </div>

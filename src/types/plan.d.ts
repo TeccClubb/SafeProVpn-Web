@@ -3,9 +3,10 @@ export type Plan = {
   name: string;
   slug: string;
   description: string;
-  original_price:string,
-  discount_price: string ,
+  original_price: string;
+  discount_price: string;
   price: number | string;
+  priceId: string;
   duration: number;
   duration_unit: string;
   is_best_deal: boolean;

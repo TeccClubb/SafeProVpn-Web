@@ -1,9 +1,13 @@
+export const PADDLE_API_KEY = process.env.PADDLE_API_KEY!;
+export const PADDLE_CLIENT_TOKEN = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!;
+export const PADDLE_ENVIRONMENT = process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT!;
+
 export const STRIPE_PUBLISHABLE_KEY =
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY!;
 
 export const REST_API_BASE_URL = process.env.NEXT_PUBLIC_REST_API_BASE_URL!;
-export const AUTH_SECRET=process.env.AUTH_SECRET;
+export const AUTH_SECRET = process.env.AUTH_SECRET!;
 
 export const GET_SERVERS_ROUTE = (page: number) =>
   `${REST_API_BASE_URL}/web/servers?page=${page}`;
@@ -16,7 +20,12 @@ export const RESET_PASSWORD_ROUTE = REST_API_BASE_URL + "/reset-password";
 export const LOGIN_WITH_GOOGLE_ROUTE = REST_API_BASE_URL + "/login/google";
 export const LOGIN_WITH_APPLE_ROUTE = REST_API_BASE_URL + "/login/apple";
 
-export const getEmailVerificationRoute = (id: string, hash: string, expires: string, signature: string): string =>
+export const getEmailVerificationRoute = (
+  id: string,
+  hash: string,
+  expires: string,
+  signature: string
+): string =>
   `${REST_API_BASE_URL}/email/verify/${id}/${hash}?expires=${expires}&signature=${signature}`;
 
 export const RESENT_EMAIL_VERIFICATION_ROUTE =

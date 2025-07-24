@@ -102,8 +102,11 @@ const OrderSummary: FC<{ plan: Plan | undefined; isPlansLoading: boolean }> = ({
           <div className="flex justify-between items-center text-lg font-semibold mb-1">
             <span>Total</span>
             <span>
-              ${parseFloat(plan.original_price ?? "0") -
-                parseFloat(plan.discount_price ?? "0")}
+              $
+              {(
+                parseFloat(plan.original_price ?? "0") -
+                parseFloat(plan.discount_price ?? "0")
+              ).toFixed(2)}
             </span>
           </div>
           <p className="text-xs text-gray-500 mb-4">
