@@ -33,13 +33,13 @@ function ProductConfigurationCheckOut() {
         <div className="w-full max-w-3xl space-y-6">
           <PaymentStep />
           {isBillingAddressLoading && (
-            <div className="grid grid-cols-2 gap-4 mb-4">
-              {Array.from({ length: 5 }).map((_, index) => (
-                <div key={index} className="flex flex-col gap-2">
-                  <Skeleton className="h-4 w-20 rounded" />
-                  <Skeleton className="h-10 rounded" />
-                </div>
-              ))}
+            <div className="w-full flex flex-col gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {[...Array(6)].map((_, i) => (
+                  <Skeleton key={i} className="h-12 rounded-2xl" />
+                ))}
+              </div>
+              <Skeleton className="h-12 rounded-2xl" />
             </div>
           )}
 
@@ -49,16 +49,11 @@ function ProductConfigurationCheckOut() {
 
           {!isPlansLoading && !isBillingAddressLoading && selectedPlan && (
             <CheckoutForm
-              planId={selectedPlan.id}
-              amount={
-                Math.round(
-                  parseFloat(selectedPlan.original_price) -
-                    parseFloat(selectedPlan.discount_price)
-                ) * 100
-              }
               email={session ? session.user.email : ""}
               billingAddress={billingAddress}
-              priceId={selectedPlan?.priceId ?? "pri_01k0vedc7a3dqp6ecqvsdhs46c"}
+              priceId={
+                selectedPlan?.price_id ?? "pri_01k0vedc7a3dqp6ecqvsdhs46c"
+              }
             />
           )}
         </div>

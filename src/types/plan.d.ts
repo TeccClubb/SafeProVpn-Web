@@ -6,7 +6,7 @@ export type Plan = {
   original_price: string;
   discount_price: string;
   price: number | string;
-  priceId: string;
+  price_id: string;
   duration: number;
   duration_unit: string;
   is_best_deal: boolean;

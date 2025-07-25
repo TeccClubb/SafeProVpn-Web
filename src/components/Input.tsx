@@ -5,6 +5,8 @@ import { Input as HeroInput, InputProps } from "@heroui/react";
 import { Eye, EyeOff } from "lucide-react";
 
 const Input: FC<InputProps> = ({
+  isRequired,
+  label,
   labelPlacement = "outside",
   type,
   endContent,
@@ -19,6 +21,15 @@ const Input: FC<InputProps> = ({
 
   return (
     <HeroInput
+      label={
+        isRequired ? (
+          <>
+            {label} <span className="text-danger-500">*</span>
+          </>
+        ) : (
+          label
+        )
+      }
       labelPlacement={labelPlacement}
       variant="bordered"
       type={type === "password" ? (isPasswordShow ? "text" : "password") : type}
@@ -27,7 +38,7 @@ const Input: FC<InputProps> = ({
       errorMessage={errorMessage}
       classNames={{
         inputWrapper: "bg-transparent border",
-        errorMessage: "mt-2 whitespace-pre-line",
+        errorMessage: "mt-0.5 whitespace-pre-line text-start",
       }}
       endContent={
         type === "password" ? (
