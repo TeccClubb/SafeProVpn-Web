@@ -1,12 +1,23 @@
 "use client";
+
+import React, { FC, useMemo } from "react";
 import { Plan } from "@/types";
 import { CheckCircle, Shield, Globe, Zap } from "lucide-react";
-import { FC } from "react";
+import { usePlans } from "@/hooks/usePlans";
+import { notFound } from "next/navigation";
 
-const OrderSummary: FC<{ plan: Plan | undefined; isPlansLoading: boolean }> = ({
-  plan,
-  isPlansLoading,
-}) => {
+const OrderSummary: FC<{ planId: number }> = ({ planId }) => {
+  const { plans, isPlansLoading } = usePlans();
+
+  const plan = useMemo(
+    () => plans.find((plan) => plan.id === planId),
+    [planId, plans]
+  );
+
+  if (!isPlansLoading && !plan) {
+    notFound();
+  }
+
   const handleDiscount = (plan: Plan) => {
     const originalPrice = parseFloat(plan.original_price ?? "0");
     const discountPrice = parseFloat(plan.discount_price ?? "0");

@@ -2,14 +2,13 @@
 
 import React, { FC, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { BillingAddress } from "@/types";
 import PaddleCheckoutForm, {
   type PaddleFormHandle,
 } from "@/components/PaddleCheckoutForm";
 import Input from "@/components/Input";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Card, CardBody } from "@heroui/react";
+import { Button, Card, CardBody, Skeleton } from "@heroui/react";
 import {
   citySchema,
   emailSchema,
@@ -20,12 +19,11 @@ import {
   streetAddressSchema,
 } from "@/lib/zod-schemas";
 import { cn } from "@/lib/utils";
+import { useBillingAddress } from "@/hooks/useBillingAddress";
+import { useSession } from "next-auth/react";
+import { notFound } from "next/navigation";
 
-const CheckoutForm: FC<{
-  priceId: string;
-  email: string;
-  billingAddress: BillingAddress | null;
-}> = ({ priceId, email, billingAddress }) => {
+const CheckoutForm: FC<{ priceId: string }> = ({ priceId }) => {
   const schema = z.object({
     name: nameSchema,
     email: emailSchema,
@@ -36,14 +34,20 @@ const CheckoutForm: FC<{
     phone: phoneSchema,
   });
 
+  const { data: session, status: authStatus } = useSession();
+  const { billingAddress, isBillingAddressLoading } = useBillingAddress();
   const paddleRef = useRef<PaddleFormHandle>(null);
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
+
+  if (authStatus === "unauthenticated") {
+    notFound();
+  }
 
   const { handleSubmit, control, watch } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     values: {
       name: billingAddress ? billingAddress.name : "",
-      email,
+      email: session ? session.user.email : "",
       address: billingAddress ? billingAddress.address : "",
       city: billingAddress ? billingAddress.city : "",
       state: billingAddress ? billingAddress.state : "",
@@ -71,131 +75,142 @@ const CheckoutForm: FC<{
 
   return (
     <div className="flex flex-col gap-4">
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className={cn(
-          "w-full flex flex-col gap-4",
-          isSubmitted ? "hidden" : ""
-        )}
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Controller
-            name="name"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                isRequired
-                label="Name"
-                placeholder="Enter your full name"
-                type="text"
-                errorMessage={fieldState.error?.message}
-                {...field}
-              />
-            )}
-          />
-
-          <Controller
-            name="email"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                isRequired
-                label="Email Address"
-                placeholder="Enter your email address"
-                type="email"
-                errorMessage={fieldState.error?.message}
-                {...field}
-              />
-            )}
-          />
-
-          <Controller
-            name="city"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                isRequired
-                label="City"
-                placeholder="Enter City"
-                type="text"
-                errorMessage={fieldState.error?.message}
-                {...field}
-              />
-            )}
-          />
-
-          <Controller
-            name="state"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                isRequired
-                label="State"
-                placeholder="Enter State"
-                type="text"
-                errorMessage={fieldState.error?.message}
-                {...field}
-              />
-            )}
-          />
-
-          <Controller
-            name="postal_code"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                isRequired
-                label="Postal Code"
-                placeholder="Enter Postal Code"
-                type="text"
-                errorMessage={fieldState.error?.message}
-                {...field}
-              />
-            )}
-          />
-
-          <Controller
-            name="phone"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                isRequired
-                label="Phone"
-                placeholder="Enter your phone"
-                type="tel"
-                errorMessage={fieldState.error?.message}
-                {...field}
-              />
-            )}
-          />
+      {isBillingAddressLoading && authStatus === "loading" ? (
+        <div className="w-full flex flex-col gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[...Array(6)].map((_, i) => (
+              <Skeleton key={i} className="h-12 rounded-2xl" />
+            ))}
+          </div>
+          <Skeleton className="h-12 rounded-2xl" />
         </div>
-
-        <Controller
-          name="address"
-          control={control}
-          render={({ field, fieldState }) => (
-            <Input
-              isRequired
-              label="Address"
-              placeholder="Enter your Street Address"
-              type="text"
-              errorMessage={fieldState.error?.message}
-              {...field}
-            />
+      ) : (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={cn(
+            "w-full flex flex-col gap-4",
+            isSubmitted ? "hidden" : ""
           )}
-        />
-
-        <Button
-          type="submit"
-          color="primary"
-          variant="shadow"
-          fullWidth
-          radius="full"
-          size="lg"
         >
-          Next
-        </Button>
-      </form>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Controller
+              name="name"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isRequired
+                  label="Name"
+                  placeholder="Enter your full name"
+                  type="text"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              name="email"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isRequired
+                  label="Email Address"
+                  placeholder="Enter your email address"
+                  type="email"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              name="city"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isRequired
+                  label="City"
+                  placeholder="Enter City"
+                  type="text"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              name="state"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isRequired
+                  label="State"
+                  placeholder="Enter State"
+                  type="text"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              name="postal_code"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isRequired
+                  label="Postal Code"
+                  placeholder="Enter Postal Code"
+                  type="text"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isRequired
+                  label="Phone"
+                  placeholder="Enter your phone"
+                  type="tel"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
+            />
+          </div>
+
+          <Controller
+            name="address"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                isRequired
+                label="Address"
+                placeholder="Enter your Street Address"
+                type="text"
+                errorMessage={fieldState.error?.message}
+                {...field}
+              />
+            )}
+          />
+
+          <Button
+            type="submit"
+            color="primary"
+            variant="shadow"
+            fullWidth
+            radius="full"
+            size="lg"
+          >
+            Next
+          </Button>
+        </form>
+      )}
 
       <Card className={cn("p-4", isSubmitted ? "" : "hidden")}>
         <CardBody className="grid grid-cols-2 gap-4">

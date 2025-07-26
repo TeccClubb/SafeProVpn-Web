@@ -13,7 +13,7 @@ export const nameSchema = z
     "Name must start with a letter (a-z, A-Z) or an underscore (_)"
   )
   .regex(
-    /^[a-zA-Z._-]+$/,
+    /^[a-zA-Z. _-]+$/,
     "Name can only include letters, dots (.), hyphens (-), and underscores (_)"
   )
   .refine((val) => !/[.-]$/.test(val), {

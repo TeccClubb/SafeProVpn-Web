@@ -35,7 +35,7 @@ export const BILLING_DETAILS_PAGE_PATH =
 
 // export const SUPPORT_TICKETS_PAGE_PATH = DASHBOARD_PAGE_PATH + "/support-tickets";
 
-export const CHECKOUT_PAGE_PATH = (planId: number) =>
-  `/checkout?planId=${planId}`;
+export const CHECKOUT_PAGE_PATH = (planId: number, priceId: string) =>
+  `/checkout?planId=${planId}&priceId=${priceId}`;
 
 export const INVOICE_PAGE_PATH = "/invoice";

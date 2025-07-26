@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Plan } from "@/types";
+import { CHECKOUT_PAGE_PATH } from "@/lib/pathnames";
 
 type FilterKey = "all" | "week" | "month" | "year";
 
@@ -36,11 +37,11 @@ const Plans: FC<{
     return plans.filter((plan) => plan.duration_unit === filterKey);
   }, [filterKey, plans]);
 
-  const handleSelectPlan = (planId: number) =>
+  const handleSelectPlan = (planId: number, priceId: string) =>
     router.push(
       authStatus === "authenticated"
-        ? `/checkout?planId=${planId}`
-        : `/login?redirect=/checkout?planId=${planId}`
+        ? CHECKOUT_PAGE_PATH(planId, priceId)
+        : `/login?redirect=${CHECKOUT_PAGE_PATH(planId, priceId)}`
     );
   return (
     <>
@@ -108,7 +109,7 @@ const Plans: FC<{
             </CardBody>
             <CardFooter>
               <Button
-                onPress={() => handleSelectPlan(plan.id)}
+                onPress={() => handleSelectPlan(plan.id, plan.price_id)}
                 variant={plan.is_best_deal ? "solid" : "bordered"}
                 color="primary"
                 fullWidth
@@ -151,7 +152,7 @@ const PricingSection: FC<SectionProps> = ({ ...props }) => {
           </Tab>
         ))}
       </Tabs>
-      
+
       {isPlansLoading && (
         <div className="w-full mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 3 }).map((_, idx) => (
