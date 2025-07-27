@@ -1,3 +1,4 @@
+"use client";
 // app/billing/page.tsx or pages/billing.tsx (Next.js)
 import BillingAddress from "@/components/dashboard/billing/BillingAddress";
 import BillingHistory from "@/components/dashboard/billing/BillingHistory";
