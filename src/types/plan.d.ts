@@ -5,13 +5,13 @@ export type Plan = {
   description: string;
   original_price: string;
   discount_price: string;
-  price: number | string;
-  price_id: string;
-  duration: number;
-  duration_unit: string;
+  invoice_period: number;
+  invoice_interval: string;
+  trial_period: number;
+  trial_interval: string;
+  paddle_price_id: string;
   is_best_deal: boolean;
   created_at: string;
-  updated_at: string;
 };
 
 export type PurchasedPlan = {

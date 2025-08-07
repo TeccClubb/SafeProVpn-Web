@@ -34,7 +34,7 @@ const Plans: FC<{
 
   const filterPlans = useMemo(() => {
     if (filterKey === "all") return plans;
-    return plans.filter((plan) => plan.duration_unit === filterKey);
+    return plans.filter((plan) => plan.invoice_interval === filterKey);
   }, [filterKey, plans]);
 
   const handleSelectPlan = (planId: number, priceId: string) =>
@@ -93,7 +93,8 @@ const Plans: FC<{
                   ).toFixed(2)}
                 </h2>
                 <p className="text-base text-default-500">
-                  /{plan.duration > 1 ? plan.duration : ""} {plan.duration_unit}
+                  /{plan.invoice_period > 1 ? plan.invoice_period : ""}{" "}
+                  {plan.invoice_interval}
                 </p>
               </div>
             </CardHeader>
@@ -109,7 +110,7 @@ const Plans: FC<{
             </CardBody>
             <CardFooter>
               <Button
-                onPress={() => handleSelectPlan(plan.id, plan.price_id)}
+                onPress={() => handleSelectPlan(plan.id, plan.paddle_price_id)}
                 variant={plan.is_best_deal ? "solid" : "bordered"}
                 color="primary"
                 fullWidth
