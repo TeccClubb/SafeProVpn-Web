@@ -76,7 +76,7 @@ const OrderSummary: FC<{ planId: number }> = ({ planId }) => {
                 SafePro VPN <br></br> {plan.name}
               </p>
               <span className="text-sm font-semibold text-cyan-600">
-                {plan.duration} {plan.duration_unit}
+                {plan.invoice_period} {plan.invoice_interval}
                 <br />
                 Plan
               </span>
