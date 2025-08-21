@@ -4,7 +4,7 @@ import {
   LOGIN_WITH_APPLE_ROUTE,
   LOGIN_WITH_GOOGLE_ROUTE,
 } from "./lib/constants";
-import { deviceInfo, getIPAddress } from "./lib/utils";
+import { getIPAddress } from "./lib/utils";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -43,12 +43,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     ? JSON.stringify({
                         token: account.access_token,
                         ip_address: await getIPAddress(),
-                        ...deviceInfo,
                       })
                     : JSON.stringify({
                         id_token: account.id_token,
                         ip_address: await getIPAddress(),
-                        ...deviceInfo,
                       }),
               }
             ).then((res) => res.json());

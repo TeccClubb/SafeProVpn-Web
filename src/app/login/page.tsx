@@ -8,13 +8,17 @@ import { MailIcon } from "@/icons/mailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Input, Link as HeroLink } from "@heroui/react";
 import { Loader2 } from "lucide-react";
-import { DASHBOARD_PAGE_PATH, FORGOT_PASSWORD_PAGE_PATH, SIGNUP_PAGE_PATH } from "@/lib/pathnames";
+import {
+  DASHBOARD_PAGE_PATH,
+  FORGOT_PASSWORD_PAGE_PATH,
+  SIGNUP_PAGE_PATH,
+} from "@/lib/pathnames";
 import { toast } from "react-toastify";
 import FreeTrialSection from "@/components/FreeTrialSection";
 import Link from "next/link";
 import GoogleSignInButton from "@/components/GoogleSignIn";
 import AppleSignInButton from "@/components/AppleSignInButton";
-import { deviceInfo, getIPAddress } from "@/lib/utils";
+import { getIPAddress } from "@/lib/utils";
 import axios, { AxiosError } from "axios";
 import { SIGNIN_ROUTE } from "@/lib/constants";
 import { User } from "next-auth";
@@ -22,7 +26,6 @@ import { User } from "next-auth";
 type LoginFormData = {
   email: string;
   password: string;
-
 };
 
 const LoginForm: FC = () => {
@@ -31,7 +34,8 @@ const LoginForm: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }, reset
+    formState: { errors },
+    reset,
   } = useForm<LoginFormData>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -49,16 +53,8 @@ const LoginForm: FC = () => {
           user: User;
         }>(
           SIGNIN_ROUTE,
-          {
-            ...data,
-            ip_address: await getIPAddress(),
-            ...deviceInfo,
-          },
-          {
-            headers: {
-              Accept: "application/json",
-            },
-          }
+          { ...data, ip_address: await getIPAddress() },
+          { headers: { Accept: "application/json" } }
         )
         .then((res) => res.data);
 
@@ -81,7 +77,7 @@ const LoginForm: FC = () => {
     } catch (error) {
       const errorMessage =
         error instanceof AxiosError
-          ? error.response?.data.errors[0]
+          ? error.response?.data.message
           : error instanceof Error
           ? error.message
           : "Login Failed, Please try again later";
@@ -91,22 +87,26 @@ const LoginForm: FC = () => {
       setLoading(false);
     }
   };
- 
+
   return (
     <div>
-
-
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 mb-3">Welcome Back!</h2>
-            <p className="text-sm text-gray-500">Login to your SafePro VPN account</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">
+              Welcome Back!
+            </h2>
+            <p className="text-sm text-gray-500">
+              Login to your SafePro VPN account
+            </p>
           </div>
 
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             {/* Email Field */}
             <div className="relative mb-2">
-              <label className="mb-1 block text-sm font-medium text-gray-700">Email</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Email
+              </label>
               <Input
                 {...register("email", {
                   required: "Email is required",
@@ -130,7 +130,9 @@ const LoginForm: FC = () => {
 
             {/* Password Field */}
             <div className="relative mb-2">
-              <label className="mb-1 block text-sm font-medium text-gray-700">Password</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">
+                Password
+              </label>
               <Input
                 {...register("password", {
                   required: "Password is required",
@@ -156,7 +158,13 @@ const LoginForm: FC = () => {
                 <input type="checkbox" className="mr-2" />
                 Remember me for 30 days
               </label>
-              <HeroLink as={Link} href={FORGOT_PASSWORD_PAGE_PATH}  className="text-small">Forgot Password</HeroLink>
+              <HeroLink
+                as={Link}
+                href={FORGOT_PASSWORD_PAGE_PATH}
+                className="text-small"
+              >
+                Forgot Password
+              </HeroLink>
             </div>
 
             {/* Error Message */}
@@ -170,8 +178,9 @@ const LoginForm: FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`w-full flex justify-center items-center gap-2 bg-cyan-500 text-white py-2 rounded-md hover:bg-cyan-600 transition ${loading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
+              className={`w-full flex justify-center items-center gap-2 bg-cyan-500 text-white py-2 rounded-md hover:bg-cyan-600 transition ${
+                loading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {loading ? "Logging in..." : "Login →"}
@@ -187,27 +196,24 @@ const LoginForm: FC = () => {
 
           {/* Social Login */}
           <div className="flex space-x-4 justify-center px-4 sm:px-6">
-             
-
-                <GoogleSignInButton></GoogleSignInButton>
-             <AppleSignInButton></AppleSignInButton>
-
+            <GoogleSignInButton></GoogleSignInButton>
+            <AppleSignInButton></AppleSignInButton>
           </div>
 
           {/* Sign Up */}
           <p className="text-center text-sm text-gray-600">
             Don’t have an account?{" "}
             {/* <a href="#" className="text-cyan-600 hover:underline"></a> */}
-              <HeroLink as={Link} href={SIGNUP_PAGE_PATH}  className="text-small">Sign up for free</HeroLink>
-
+            <HeroLink as={Link} href={SIGNUP_PAGE_PATH} className="text-small">
+              Sign up for free
+            </HeroLink>
           </p>
         </div>
-
       </div>
       <FreeTrialSection />
     </div>
   );
-}
+};
 
 const LoginPage: FC = () => (
   <Suspense>
