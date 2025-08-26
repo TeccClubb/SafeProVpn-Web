@@ -41,13 +41,18 @@ export const useLogout = () => {
         addToast({ color: "success", description: res.message });
       } else addToast({ color: "danger", description: res.message });
     } catch (error) {
-      const errorMessage =
-        error instanceof AxiosError
-          ? error.response
-            ? error.response.data.message
-            : error.message
-          : "Failed to logout";
-      addToast({ color: "danger", description: errorMessage });
+      if (error instanceof AxiosError) {
+        await signOut({ redirect: false });
+        router.refresh();
+        openLogoutModal(false);
+        addToast({ color: "success", description: "Logout successfully" });
+      } else {
+        addToast({
+          color: "danger",
+          description:
+            error instanceof Error ? error.message : "Failed to logout",
+        });
+      }
     } finally {
       setIsLoggingOut(false);
     }

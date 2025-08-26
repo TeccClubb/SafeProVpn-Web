@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { FC, Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
 import { MailIcon } from "@/icons/mailIcon";
@@ -37,7 +37,6 @@ const LoginForm: FC = () => {
     formState: { errors },
     reset,
   } = useForm<LoginFormData>();
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -60,14 +59,13 @@ const LoginForm: FC = () => {
 
       if (res.status) {
         await signIn("credentials", {
-          redirect: false,
+          redirectTo: redirect,
           id: res.user.id,
           name: res.user.name,
           email: res.user.email,
           avatar: res.user.avatar,
           access_token: res.access_token,
         });
-        router.replace(redirect);
         reset();
         toast.success(res.message);
       } else {

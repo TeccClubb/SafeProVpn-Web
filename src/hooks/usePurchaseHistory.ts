@@ -31,7 +31,6 @@ export function usePurchaseHistory(page: number = 1) {
             Accept: "application/json",
           },
         });
-        console.log(res.data);
 
         setPurchases(res.data?.purchases || []);
       } catch (error) {

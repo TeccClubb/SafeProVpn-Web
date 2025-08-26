@@ -1,3 +1,4 @@
+export const PADDLE_API_BASE_URL = process.env.PADDLE_API_BASE_URL!;
 export const PADDLE_API_KEY = process.env.PADDLE_API_KEY!;
 export const PADDLE_CLIENT_TOKEN = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN!;
 export const PADDLE_ENVIRONMENT = process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT!;
@@ -32,11 +33,11 @@ export const GET_LEGAL_NOTES_ROUTE = REST_API_BASE_URL + "/options";
 
 export const ADD_PURCHASE_PLAN_ROUTE = REST_API_BASE_URL + "/purchase/add";
 export const GET_PURCHASE_ACTIVE_PLAN_ROUTE =
-  REST_API_BASE_URL + "/purchase/active";
+  REST_API_BASE_URL + "/subscription/active";
 export const GET_PURCHASE_PLAN_ROUTE = (purchaseId: number | string) =>
   `${REST_API_BASE_URL}/purchase/${purchaseId}`;
 export const GET_PURCHASE_HISTORY_ROUTE = (page: number) =>
-  `${REST_API_BASE_URL}/purchase/history?page=${page}`;
+  `${REST_API_BASE_URL}/subscription/history?page=${page}`;
 
 export const UPDATE_USER_INFO_ROUTE = REST_API_BASE_URL + "/user/update";
 export const UPDATE_USER_PASSWORD_ROUTE =

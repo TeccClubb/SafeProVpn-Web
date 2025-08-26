@@ -8,7 +8,7 @@ import {
   NavbarItem,
   NavbarMenuItem,
   Button,
-  link as linkStyles
+  link as linkStyles,
 } from "@heroui/react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -57,7 +57,7 @@ const Navbar: FC = () => {
   return (
     <HeroUINavbar
       id="navbar"
-      maxWidth="xl"
+      maxWidth={pathname.startsWith(DASHBOARD_PAGE_PATH) ? "full" : "xl"}
       className="bg-transparent"
       classNames={{
         wrapper: pathname.startsWith(DASHBOARD_PAGE_PATH) ? "pl-1 lg:pl-6" : "",

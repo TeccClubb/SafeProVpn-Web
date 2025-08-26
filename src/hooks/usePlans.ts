@@ -55,7 +55,7 @@ export const usePlans = () => {
 
 export const useActivePlan = () => {
   const dispatch = useDispatch();
-  const { data: session } = useSession();
+  const { data: session, status: authStatus } = useSession();
   const { activePlan, isActivePlanLoadedOnce } = useSelector(
     (state: RootState) => state.plans
   );
@@ -63,6 +63,7 @@ export const useActivePlan = () => {
   const [isActivePlanLoading, setLoading] = useState<boolean>(true);
 
   const fetchActivePlan = useCallback(async () => {
+    if (authStatus !== "authenticated") return;
     try {
       if (isActivePlanLoadedOnce) return;
       const response = await axios
@@ -71,7 +72,7 @@ export const useActivePlan = () => {
           {
             headers: {
               Accept: "application/json",
-              Authorization: `Bearer ${session?.user.access_token}`,
+              Authorization: `Bearer ${session.user.access_token}`,
             },
           }
         )
@@ -91,7 +92,7 @@ export const useActivePlan = () => {
       setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     fetchActivePlan();

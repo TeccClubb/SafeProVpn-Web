@@ -1,6 +1,7 @@
 "use client";
 
 import { usePurchaseHistory } from "@/hooks/usePurchaseHistory";
+import { Skeleton } from "@heroui/skeleton";
 import { Eye, Download } from "lucide-react";
 
 export default function BillingHistory() {
@@ -17,7 +18,25 @@ export default function BillingHistory() {
       </div>
 
       {loading ? (
-        <p>Loading...</p>
+      <div className="space-y-3">
+        {[1, 2].map((i) => (
+          <div
+            key={i}
+            className="flex justify-between items-center rounded-lg px-4 py-3 animate-pulse bg-default-50"
+          >
+            <div className="flex-1 flex items-center gap-4">
+              <Skeleton className="h-4 w-24 rounded" />
+              <Skeleton className="h-4 w-20 rounded" />
+              <Skeleton className="h-4 w-16 rounded" />
+              <Skeleton className="h-4 w-16 rounded" />
+            </div>
+            <div className="flex gap-2">
+              <Skeleton className="h-6 w-6 rounded-full" />
+              <Skeleton className="h-6 w-6 rounded-full" />
+            </div>
+          </div>
+        ))}
+      </div>
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (

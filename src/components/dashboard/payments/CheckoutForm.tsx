@@ -113,6 +113,7 @@ const CheckoutForm: FC<{ priceId: string }> = ({ priceId }) => {
               control={control}
               render={({ field, fieldState }) => (
                 <Input
+                  isReadOnly
                   isRequired
                   label="Email Address"
                   placeholder="Enter your email address"
