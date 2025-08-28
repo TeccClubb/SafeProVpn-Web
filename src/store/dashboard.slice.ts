@@ -1,11 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PaymentMethod, Subscription } from "@paddle/paddle-node-sdk";
+import { Device } from "@/types/device";
 
-type DashboardState = {
+export type DashboardState = {
   paymentMethods: PaymentMethod[];
   isPaymentMethodsLoadedOnce: boolean;
   subscriptions: Subscription[];
   isSubscriptionsLoadedOnce: boolean;
+  devices: Device[];
+  isDevicesLoadedOnce: boolean;
 };
 
 const initialState: DashboardState = {
@@ -13,6 +16,8 @@ const initialState: DashboardState = {
   isPaymentMethodsLoadedOnce: false,
   subscriptions: [],
   isSubscriptionsLoadedOnce: false,
+  devices: [],
+  isDevicesLoadedOnce: false,
 };
 
 const dashboardSlice = createSlice({
@@ -40,6 +45,17 @@ const dashboardSlice = createSlice({
         (subscription) => subscription.id !== action.payload
       );
     },
+
+    setDevices: (state, action: PayloadAction<Device[]>) => {
+      state.isDevicesLoadedOnce = true;
+      state.devices = action.payload;
+    },
+
+    removeDevice: (state, action: PayloadAction<number>) => {
+      state.devices = state.devices.filter(
+        (device) => device.id !== action.payload
+      );
+    },
   },
 });
 
@@ -48,6 +64,8 @@ export const {
   removePaymentMethod,
   setSubscriptions,
   removeSubscription,
+  setDevices,
+  removeDevice,
 } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

@@ -63,7 +63,7 @@ const AvatarDropdown: FC<{ user: UserTypes; children: ReactNode }> = ({
             <User
               avatarProps={{
                 size: "sm",
-                src: user.avatar,
+                // src: "",
                 showFallback: true,
               }}
               classNames={{
@@ -124,7 +124,7 @@ const Avatar: FC<AvatarProps> = ({ className, ...props }) => {
       <HeroAvatar
         as="button"
         showFallback
-        src={session.user.avatar}
+        src=""
         className={cn("transition-transform", className)}
         {...props}
       />
@@ -143,7 +143,7 @@ const AvatarUser: FC<
       <User
         as="button"
         avatarProps={{
-          src: session.user.avatar,
+          // src: "",
           showFallback: true,
         }}
         className={cn("transition-transform", className)}

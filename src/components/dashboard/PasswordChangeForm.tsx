@@ -1,152 +1,182 @@
 "use client";
 
-import { SubmitHandler, useForm } from "react-hook-form";
-import { Button, Input } from "@heroui/react";
+import React, { FC } from "react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { addToast, Alert, Button } from "@heroui/react";
 import { CheckCircle, Circle } from "lucide-react";
-import axios from "axios";
-import { REST_API_BASE_URL } from "@/lib/constants";
+import axios, { AxiosError } from "axios";
+import { UPDATE_USER_PASSWORD_ROUTE } from "@/lib/constants";
 import { useSession } from "next-auth/react";
-import { toast } from "react-toastify";
+import z from "zod";
+import { choosePasswordSchema, passwordSchema } from "@/lib/zod-schemas";
+import Input from "../Input";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-export default function PasswordChangeForm() {
-  type Data = {
-    old_password: string;
-    new_password: string;
-    confirmPassword: string;
-  }
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors, isValid }
-  } = useForm<Data>({
-    mode: "onChange",
-  });
-
-  const new_password = watch("new_password") || "";
+const PasswordChangeForm: FC = () => {
+  const schema = z
+    .object({
+      old_password: passwordSchema,
+      new_password: choosePasswordSchema,
+      confirm_password: passwordSchema,
+    })
+    .refine(
+      ({ new_password, confirm_password }) => new_password === confirm_password,
+      { error: "Passwords do not match", path: ["confirm_password"] }
+    );
 
   const { data: session } = useSession();
 
-  // Password validation rules
-  const rules = [
-    {
-      label: "At least 8 characters long",
-      valid: new_password.length >= 8,
-    },
-    {
-      label: "Contains at least one uppercase letter",
-      valid: /[A-Z]/.test(new_password),
-    },
-    {
-      label: "Contains at least one number",
-      valid: /\d/.test(new_password),
-    },
-    {
-      label: "Contains at least one special character",
-      valid: /[!@#$%^&*(),.?":{}|<>]/.test(new_password),
-    },
-  ];
+  const {
+    control,
+    handleSubmit,
+    watch,
+    reset,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    defaultValues: { old_password: "", new_password: "", confirm_password: "" },
+  });
 
-  const allRulesPassed = rules.every(rule => rule.valid);
+  const choosePasswordRules = choosePasswordSchema.safeParse("").error!.format()
+    ._errors!;
+  choosePasswordRules?.shift();
 
-  const onSubmit: SubmitHandler<Data> = async (data) => {
-    const response = await axios.post(`${REST_API_BASE_URL}/user/update-password`, data, {
-      headers: {
-        'Accept': 'application/json',
-        Authorization: `Bearer ${session?.user.access_token}`,
-      }
-    })
+  const new_password = watch("new_password");
+  const unfollowRules =
+    choosePasswordSchema.safeParse(new_password).error?.format()._errors ?? [];
 
-    if(response.status){
-      toast.success("Password Update Successfully")
-    }else{
-      toast.error("Update Failed Some Error Occur")
+  const changePassword: SubmitHandler<z.infer<typeof schema>> = async ({
+    old_password,
+    new_password,
+  }) => {
+    try {
+      const res = await axios
+        .post<{ status: boolean; message: string }>(
+          UPDATE_USER_PASSWORD_ROUTE,
+          { old_password, new_password },
+          {
+            headers: {
+              Accept: "application/json",
+              Authorization: `Bearer ${session?.user.access_token}`,
+            },
+          }
+        )
+        .then((res) => res.data);
+
+      reset();
+
+      addToast({
+        color: res.status ? "success" : "danger",
+        description: res.message,
+      });
+      setError("root", {
+        type: res.status ? "success" : "error",
+        message: res.message,
+      });
+    } catch (error) {
+      reset();
+      const message =
+        error instanceof AxiosError
+          ? error.response
+            ? error.response.data.message
+            : error.message
+          : error instanceof Error
+          ? error.message
+          : "Failed to change password";
+
+      addToast({ color: "danger", description: message });
+      setError("root", { type: "error", message });
     }
-
-
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="w-full flex justify-start items-start py-6">
-      <div className="w-full max-w-3xl space-y-8">
-        <h2 className="text-xl font-semibold pb-4">Change Password</h2>
+    <form
+      onSubmit={handleSubmit(changePassword)}
+      className="w-full flex flex-col gap-y-6 max-w-3xl py-6"
+    >
+      <h2 className="text-xl font-semibold pb-4">Change Password</h2>
 
-        <div className="space-y-10 text-gray-600">
-          
+      <Controller
+        name="old_password"
+        control={control}
+        render={({ field, fieldState }) => (
           <Input
+            isRequired
             label="Current Password"
             placeholder="Enter your current password"
-            labelPlacement="outside"
             type="password"
-            variant="bordered"
-            {...register("old_password", { required: "Current password is required" })}
+            size="md"
+            errorMessage={fieldState.error?.message}
+            {...field}
           />
-          {errors.old_password?.message && (
-            <p className="text-sm text-red-500">{String(errors.old_password.message)}</p>
-          )}
+        )}
+      />
 
+      <Controller
+        name="new_password"
+        control={control}
+        render={({ field, fieldState }) => (
           <Input
+            isRequired
             label="New Password"
             placeholder="Enter new password"
-            labelPlacement="outside"
             type="password"
-            variant="bordered"
-            {...register("new_password", {
-              required: "New password is required",
-              validate: {
-                minLength: value => value.length >= 8 || "Must be at least 8 characters",
-                hasUpper: value => /[A-Z]/.test(value) || "Must contain an uppercase letter",
-                hasNumber: value => /\d/.test(value) || "Must contain a number",
-                hasSpecial: value =>
-                  /[!@#$%^&*(),.?":{}|<>]/.test(value) || "Must contain a special character",
-              }
-            })}
+            size="md"
+            errorMessage={fieldState.error?.message}
+            {...field}
           />
-          {errors.new_password && (
-            <span className="text-sm text-red-500">{String(errors.new_password.message)}</span>
-          )}
+        )}
+      />
 
+      <Controller
+        name="confirm_password"
+        control={control}
+        render={({ field, fieldState }) => (
           <Input
+            isRequired
             label="Confirm New Password"
             placeholder="Confirm new password"
-            labelPlacement="outside"
             type="password"
-            variant="bordered"
-            {...register("confirmPassword", {
-              required: "Please confirm your password",
-              validate: value =>
-                value === new_password || "Passwords do not match",
-            })}
+            size="md"
+            errorMessage={fieldState.error?.message}
+            {...field}
           />
-          {errors.confirmPassword && (
-            <span className="text-sm text-red-500">{String(errors.confirmPassword.message)}</span>
-          )}
-        </div>
+        )}
+      />
 
-        {/* Password rules indicators */}
-        <ul className="text-sm text-gray-700 pl-1 mt-2">
-          {rules.map((rule, idx) => (
-            <li key={idx} className="flex items-center gap-2">
-              {rule.valid ? (
-                <CheckCircle className="w-4 h-4 text-green-500" />
+      <ul className="text-sm text-default-700 pl-1 mt-2">
+        {choosePasswordRules.map((rule, idx) => {
+          const isUnfollowRule = unfollowRules.includes(rule);
+          return (
+            <li
+              key={idx}
+              className={`flex items-center gap-2 ${
+                isUnfollowRule ? "text-danger-500" : "text-success-500"
+              }`}
+            >
+              {isUnfollowRule ? (
+                <Circle className="w-4 h-4" />
               ) : (
-                <Circle className="w-4 h-4 text-gray-400" />
+                <CheckCircle className="w-4 h-4" />
               )}
-              {rule.label}
+              {rule}
             </li>
-          ))}
-        </ul>
+          );
+        })}
+      </ul>
 
-        <div className="flex items-center justify-between pt-4">
-          <Button type="submit" variant="solid" className="bg-cyan-400 text-white" disabled={!isValid || !allRulesPassed}>
-            Update Password
-          </Button>
-          <a href="#" className="text-sm text-blue-500 hover:underline">
-            Forgot your password?
-          </a>
-        </div>
-      </div>
+      {errors.root && (
+        <Alert color={errors.root.type === "success" ? "success" : "danger"}>
+          {errors.root.message}
+        </Alert>
+      )}
+
+      <Button type="submit" color="primary" isLoading={isSubmitting}>
+        Update Password
+      </Button>
     </form>
   );
-}
+};
+
+export default PasswordChangeForm;

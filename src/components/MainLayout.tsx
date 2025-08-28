@@ -4,7 +4,7 @@ import React, { FC, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { DASHBOARD_PAGE_PATH, INVOICE_PAGE_PATH } from "@/lib/pathnames";
 import Navbar from "./Navbar";
-import Footer from "./footer/footer";
+import Footer from "./footer";
 import { ToastContainer } from "react-toastify";
 import LogoutModal from "./LogoutModal";
 

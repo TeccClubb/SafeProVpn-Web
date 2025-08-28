@@ -39,10 +39,22 @@ export const GET_PURCHASE_PLAN_ROUTE = (purchaseId: number | string) =>
 export const GET_PURCHASE_HISTORY_ROUTE = (page: number) =>
   `${REST_API_BASE_URL}/subscription/history?page=${page}`;
 
+export const GET_CONNECTED_DEVICES_ROUTE = REST_API_BASE_URL + "/devices";
+export const REVOKE_CONNECTED_DEVICE_ROUTE = (deviceId: number) =>
+  `${REST_API_BASE_URL}/devices/${deviceId}`;
+export const REVOKE_ALL_CONNECTED_DEVICES_ROUTE =
+  REST_API_BASE_URL + "/devices";
+
 export const UPDATE_USER_INFO_ROUTE = REST_API_BASE_URL + "/user/update";
 export const UPDATE_USER_PASSWORD_ROUTE =
   REST_API_BASE_URL + "/user/update-password";
-export const DELETE_USER_ACCOUNT_ROUTE = REST_API_BASE_URL + "/user/delete";
+
+export const DEACTIVATE_ACCOUNT_ROUTE = REST_API_BASE_URL + "/user/deactivate";
+export const DELETE_ACCOUNT_ROUTE = REST_API_BASE_URL + "/account/delete/request";
+export const REACTIVATE_ACCOUNT_ROUTE =
+  REST_API_BASE_URL + "/recover/deactivate";
+export const CANCEL_DELETION_ACCOUNT_ROUTE =
+  REST_API_BASE_URL + "/recover/delete";
 
 export const GET_BILLING_ADDRESS_ROUTE = REST_API_BASE_URL + "/billing-address";
 export const UPDATE_BILLING_ADDRESS_ROUTE =

@@ -55,7 +55,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               user.id = res.user.id;
               user.email = res.user.email;
               user.name = res.user.name;
-              user.avatar = res.user.avatar;
               user.access_token = res.access_token;
               return true;
             } else return `/auth/error?error=${res.message}`;
@@ -70,12 +69,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return false;
     },
 
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user, trigger, session }) => {
+      if (trigger === "update") {
+        token.id = session.user.id;
+        token.email = session.user.email;
+        token.name = session.user.name;
+        token.access_token = session.user.access_token;
+      }
+
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
-        token.avatar = user.avatar;
         token.access_token = user.access_token;
       }
 
@@ -88,7 +93,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = jwt.id as string;
         session.user.email = jwt.email;
         session.user.name = jwt.name;
-        session.user.avatar = jwt.avatar;
         session.user.access_token = jwt.access_token;
       }
 

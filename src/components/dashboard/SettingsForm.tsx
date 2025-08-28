@@ -1,105 +1,73 @@
 "use client";
 
-import { Input, Button } from "@heroui/react";
-import ProfileUploader from "./ProfileUploader";
-import { useForm } from "react-hook-form";
+import React, { FC } from "react";
+import { Alert, Button } from "@heroui/react";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import axios, { AxiosError } from "axios";
-import { REST_API_BASE_URL } from "@/lib/constants";
-import { toast } from "react-toastify";
+import { UPDATE_USER_INFO_ROUTE } from "@/lib/constants";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import Input from "../Input";
+import z from "zod";
+import { emailSchema, nameSchema } from "@/lib/zod-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "next-auth";
 
-type FormData = {
-  name: string;
-  email: string;
-};
+const SettingsForm: FC = () => {
+  const schema = z.object({
+    name: nameSchema,
+    email: emailSchema,
+  });
 
-export default function SettingsForm() {
+  const { data: session, update: updateSession } = useSession();
+
   const {
-    register,
+    control,
     handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FormData>({
-    defaultValues: {
-      name: "",
-      email: "",
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
+    values: {
+      name: session ? session.user.name : "",
+      email: session ? session.user.email : "",
     },
   });
 
-  const { data: session, status: authStatus } = useSession();
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [updateError, setUpdateError] = useState<string | null>(null); // ✅ for showing error
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (authStatus !== "authenticated") return;
-
-      try {
-        const response = await axios.get(`${REST_API_BASE_URL}/user`, {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${session.user.access_token}`,
-          },
-        });
-
-        const user = response.data.user;
-
-        reset({
-          name: user.name || "",
-          email: user.email || "",
-        });
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Fetch error:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchUserData();
-  }, [session, reset, authStatus]);
-
-  const onSubmit = async (data: FormData) => {
-    if (authStatus !== "authenticated") return;
-
-    setSaving(true);
-    setUpdateError(null); // clear any previous errors
-
+  const update: SubmitHandler<z.infer<typeof schema>> = async (values) => {
     try {
-      const response = await axios.post(
-        `${REST_API_BASE_URL}/user/update`,
-        data,
-        {
+      clearErrors("root");
+      const res = await axios
+        .post<{
+          status: boolean;
+          message: string;
+          user: User;
+        }>(UPDATE_USER_INFO_ROUTE, values, {
           headers: {
             Accept: "application/json",
-            Authorization: `Bearer ${session.user.access_token}`,
+            Authorization: `Bearer ${session?.user.access_token}`,
           },
-        }
-      );
+        })
+        .then((res) => res.data);
 
-      console.log("Response:", response.data);
-      toast.success("Profile updated successfully!");
+      if (res.status) {
+        setError("root", { type: "success", message: res.message });
+        updateSession({ user: { ...session?.user, name: res.user.name } });
+      } else {
+        setError("root", { type: "error", message: res.message });
+      }
     } catch (error) {
-      const errorMessage =
+      const message =
         error instanceof AxiosError
-          ? error.response?.data.message
+          ? error.response
+            ? error.response.data.message
+            : error.message
+          : error instanceof Error
+          ? error.message
           : "Failed to update profile. Please try again.";
-      toast.error(errorMessage);
-      setUpdateError(errorMessage);
-    } finally {
-      setSaving(false);
+      setError("root", { type: "error", message });
     }
   };
-
-  if (loading) {
-    return (
-      <div className="w-full flex justify-center items-center py-6">
-        <p className="text-gray-500">Loading user data...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full flex justify-start items-start py-6">
@@ -107,52 +75,64 @@ export default function SettingsForm() {
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Profile Information</h2>
 
-          <ProfileUploader />
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <Input
-              label="Name"
-              placeholder="Azil"
-              labelPlacement="outside"
-              variant="bordered"
-              {...register("name", { required: "Name is required" })}
-              isInvalid={!!errors.name}
-              errorMessage={errors.name?.message}
-              className="mb-10 pt-4"
+          <form
+            onSubmit={handleSubmit(update)}
+            className="flex flex-col gap-y-6"
+          >
+            <Controller
+              name="name"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isRequired
+                  label="Name"
+                  placeholder="Enter your name"
+                  type="text"
+                  size="md"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
             />
 
-            <Input
-              label="Email"
-              placeholder="azil@gmail.com"
-              labelPlacement="outside"
-              type="email"
-              variant="bordered"
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
-                },
-              })}
-              isInvalid={!!errors.email}
-              errorMessage={errors.email?.message}
+            <Controller
+              name="email"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Input
+                  isReadOnly
+                  isRequired
+                  label="Email"
+                  placeholder="Enter your email"
+                  type="email"
+                  size="md"
+                  errorMessage={fieldState.error?.message}
+                  {...field}
+                />
+              )}
             />
+
+            {errors.root && (
+              <Alert
+                color={errors.root.type === "success" ? "success" : "danger"}
+              >
+                {errors.root.message}
+              </Alert>
+            )}
 
             <Button
               type="submit"
-              className="mt-2 bg-cyan-400 hover:bg-cyan-500 text-white"
+              color="primary"
               variant="solid"
-              isDisabled={saving}
+              isLoading={isSubmitting}
             >
-              {saving ? "Saving..." : "Save Changes"}
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
-
-            {updateError && (
-              <p className="text-red-500 text-sm mt-2">{updateError}</p>
-            )}
           </form>
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default SettingsForm;

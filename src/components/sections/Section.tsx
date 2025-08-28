@@ -127,7 +127,7 @@ const Section: FC<SectionProps> = ({
         className={cn(
           "container w-full max-w-7xl flex flex-col items-center justify-center text-center",
           isHeroSection
-            ? "p-4 min-h-[calc(100vh-5rem)]"
+            ? "p-4 min-h-[calc(100vh-4rem)]"
             : "px-4 py-12 lg:py-14",
           classNames?.container,
           className
@@ -160,5 +160,3 @@ const Section: FC<SectionProps> = ({
 export { SectionTitle, SectionHeading, SectionSubTitle, SectionDescription };
 
 export default Section;
-
-

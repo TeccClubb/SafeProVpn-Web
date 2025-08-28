@@ -1,15 +1,21 @@
 "use client";
 
 import { Button } from "@heroui/react";
-import { Database, MonitorSmartphone, CreditCard, Headphones, Zap } from "lucide-react";
+import {
+  Database,
+  MonitorSmartphone,
+  CreditCard,
+  Headphones,
+  Zap,
+} from "lucide-react";
 import React from "react";
-
+import DashboardCard from "./DashboardCard";
 
 const cards = [
   {
     label: "Data Usage",
     value: "256 GB",
-    icon: <Database className="text-blue-500 w-6 h-6" />, 
+    icon: <Database className="text-blue-500 w-6 h-6" />,
     subtitle: "65% of 500 GB monthly limit",
     progressColor: "bg-blue-500",
     progress: 65,
@@ -45,7 +51,8 @@ const OverviewCards = () => {
         <div className="flex items-center gap-2">
           <Zap className="w-5 h-5 text-cyan-500" />
           <p className="text-sm">
-            Your Premium trial ends in 14 days. <br className="md:hidden" /> Upgrade now to keep all premium features.
+            Your Premium trial ends in 14 days. <br className="md:hidden" />{" "}
+            Upgrade now to keep all premium features.
           </p>
         </div>
         <Button className="bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-medium py-2 px-4 rounded-md">
@@ -54,38 +61,14 @@ const OverviewCards = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {cards.map((card) => (
-          <div
-            key={card.label}
-            className="bg-white border border-gray-200 p-6 rounded-xl shadow-sm"
-          >
-            <div className="flex items-center justify-between">
-              <h4 className="font-medium text-gray-700 text-sm">{card.label}</h4>
-              <div className="p-2 bg-gray-100 rounded-full">
-                {card.icon}
-              </div>
-            </div>
-            <h2 className="text-2xl font-semibold mt-2">{card.value}</h2>
-            <p className="text-sm text-gray-500 mt-1">{card.subtitle}</p>
-
-            {card.progress !== undefined && (
-              <div className="w-full h-2 bg-gray-100 rounded-full mt-2">
-                <div
-                  className={`h-full rounded-full ${card.progressColor}`}
-                  style={{ width: `${card.progress}%` }}
-                />
-              </div>
-            )}
-
-            {card.link && (
-              <a
-                href="#"
-                className="text-sm text-cyan-600 mt-2 inline-block hover:underline"
-              >
-                {card.link}
-              </a>
-            )}
-          </div>
+        {cards.map((card, index) => (
+          <DashboardCard
+            key={index}
+            label={card.label}
+            icon={card.icon}
+            value={card.value}
+            subtitle={card.subtitle}
+          />
         ))}
       </div>
     </div>

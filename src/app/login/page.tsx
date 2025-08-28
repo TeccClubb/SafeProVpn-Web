@@ -63,7 +63,6 @@ const LoginForm: FC = () => {
           id: res.user.id,
           name: res.user.name,
           email: res.user.email,
-          avatar: res.user.avatar,
           access_token: res.access_token,
         });
         reset();

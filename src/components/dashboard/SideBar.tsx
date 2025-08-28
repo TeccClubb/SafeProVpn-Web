@@ -19,27 +19,40 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Avatar, AvatarUser } from "../Avatar";
+import {
+  DASHBOARD_PAGE_PATH,
+  BILLING_PAGE_PATH,
+  MY_DEVICES_PAGE_PATH,
+  SETTINGS_PAGE_PATH,
+  SUPPORT_TICKETS_PAGE_PATH,
+} from "@/lib/pathnames";
+import TicketIcon from "@/icons/TicketIcon";
 
 const listItems = [
   {
     name: "Dashboard",
-    href: "/Dashboard",
+    href: DASHBOARD_PAGE_PATH,
     Icon: LayoutDashboard,
   },
   {
     name: "Billing",
-    href: "/Dashboard/billing",
+    href: BILLING_PAGE_PATH,
     Icon: CreditCard,
   },
   {
     name: "My Devices",
-    href: "/Dashboard/my-devices",
+    href: MY_DEVICES_PAGE_PATH,
     Icon: Monitor,
   },
   {
     name: "Setting",
-    href: "/Dashboard/settings",
+    href: SETTINGS_PAGE_PATH,
     Icon: Settings,
+  },
+  {
+    name: "Support Tickets",
+    href: SUPPORT_TICKETS_PAGE_PATH,
+    Icon: TicketIcon,
   },
 ];
 
