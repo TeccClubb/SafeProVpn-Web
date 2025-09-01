@@ -1,15 +1,13 @@
-import React, { FC } from "react";
-import { IconSvgProps } from "@/types";
+import React, { FC, SVGProps } from "react";
 
-const AndroidIcon: FC<IconSvgProps> = ({
-  size = 20,
-  width,
-  height,
+const AndroidIcon: FC<SVGProps<SVGSVGElement>> = ({
+  width = 20,
+  height = 20,
   ...props
 }) => (
   <svg
-    width={size || width}
-    height={size || height}
+    width={width}
+    height={height}
     viewBox="0 0 19 17"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

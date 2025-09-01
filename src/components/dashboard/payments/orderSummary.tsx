@@ -1,7 +1,6 @@
 "use client";
 
 import React, { FC, useMemo } from "react";
-import { Plan } from "@/types";
 import { CheckCircle, Shield, Globe, Zap } from "lucide-react";
 import { usePlans } from "@/hooks/usePlans";
 import { notFound } from "next/navigation";

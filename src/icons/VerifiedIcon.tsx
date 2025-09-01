@@ -1,16 +1,14 @@
-import React from "react";
+import React, { FC, SVGProps } from "react";
 
-type VerifiedIconProps = {
-  size?: number;
-  width?: number;
-  height?: number;
-} & React.SVGProps<SVGSVGElement>;
-
-const VerifiedIcon: React.FC<VerifiedIconProps> = ({ size = 24, width, height, ...props }) => (
+const VerifiedIcon: FC<SVGProps<SVGSVGElement>> = ({
+  width = 24,
+  height = 24,
+  ...props
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={size || width}
-    height={size || height}
+    width={width}
+    height={height}
     viewBox="0 0 24 24"
     {...props}
   >

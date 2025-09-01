@@ -1,18 +1,16 @@
-import React, { FC } from "react";
-import { IconSvgProps } from "@/types";
+import React, { FC, SVGProps } from "react";
 import { cn } from "@/lib/utils";
 
-const TickIcon: FC<IconSvgProps> = ({
-  size = 20,
-  width,
-  height,
+const TickIcon: FC<SVGProps<SVGSVGElement>> = ({
+  width = 20,
+  height = 20,
   className,
   ...props
 }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={size || width}
-    height={size || height}
+    width={width}
+    height={height}
     viewBox="0 0 14 16"
     fill="none"
     className={cn("text-primary", className)}

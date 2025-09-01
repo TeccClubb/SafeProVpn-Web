@@ -1,10 +1,13 @@
-import { IconSvgProps } from "@/types";
-import React, { FC } from "react";
+import React, { FC, SVGProps } from "react";
 
-const IOSIcon: FC<IconSvgProps> = ({ size = 20, width, height, ...props }) => (
+const IOSIcon: FC<SVGProps<SVGSVGElement>> = ({
+  width = 20,
+  height = 20,
+  ...props
+}) => (
   <svg
-    width={size || width}
-    height={size || height}
+    width={width}
+    height={height}
     viewBox="0 0 15 17"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

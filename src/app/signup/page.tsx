@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
  
-import { MailIcon } from "@/icons/mailIcon";
+import MailIcon from "@/icons/MailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Input } from "@heroui/react";
 import { useSignup } from "@/hooks/useSignup";
@@ -13,7 +13,7 @@ import GoogleSignInButton from "@/components/GoogleSignIn";
 import AppleSignInButton from "@/components/AppleSignInButton";
 import { FORGOT_PASSWORD_PAGE_PATH, SIGNIN_PAGE_PATH } from "@/lib/pathnames";
 import Link from "next/link";
-import { UserIcon } from "@/icons/UserIcon";
+import UserIcon from "@/icons/UserIcon";
 import FreeTrialSection from "@/components/FreeTrialSection";
 type FormValues = {
 

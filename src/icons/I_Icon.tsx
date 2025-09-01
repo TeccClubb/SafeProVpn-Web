@@ -1,11 +1,14 @@
-import React, { FC } from "react";
-import { IconSvgProps } from "@/types";
+import React, { FC, SVGProps } from "react";
 
-const I_Icon: FC<IconSvgProps> = ({ size = 48, width, height, ...props }) => (
+const I_Icon: FC<SVGProps<SVGSVGElement>> = ({
+  width = 48,
+  height = 48,
+  ...props
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={size || width}
-    height={size || height}
+    width={width}
+    height={height}
     viewBox="0 0 48 48"
     fill="none"
     {...props}

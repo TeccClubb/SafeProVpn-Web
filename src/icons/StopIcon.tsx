@@ -1,11 +1,14 @@
-import React, { FC } from "react";
-import { IconSvgProps } from "@/types";
+import React, { FC, SVGProps } from "react";
 
-const StopIcon: FC<IconSvgProps> = ({ size = 24, width, height, ...props }) => (
+const StopIcon: FC<SVGProps<SVGSVGElement>> = ({
+  width = 24,
+  height = 24,
+  ...props
+}) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width={size || width}
-    height={size || height}
+    width={width}
+    height={height}
     viewBox="0 0 24 24"
     fill="none"
     {...props}

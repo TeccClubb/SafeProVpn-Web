@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { FC, Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import { MailIcon } from "@/icons/mailIcon";
+import MailIcon from "@/icons/MailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Input, Link as HeroLink } from "@heroui/react";
 import { Loader2 } from "lucide-react";

@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 import { useAppState } from "./use-app-state";
 import { useDispatch } from "react-redux";
 import { setBillingAddress } from "@/store/app.slice";
-import { BillingAddress } from "@/types";
 
 export function useBillingAddress(token?: string | null) {
   const dispatch = useDispatch();

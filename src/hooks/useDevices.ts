@@ -5,7 +5,6 @@ import {
   REVOKE_CONNECTED_DEVICE_ROUTE,
 } from "@/lib/constants";
 import { useSession } from "next-auth/react";
-import { Device } from "@/types/device";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import {

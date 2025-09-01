@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { PaymentMethod, Subscription } from "@paddle/paddle-node-sdk";
-import { Device } from "@/types/device";
 
 export type DashboardState = {
   paymentMethods: PaymentMethod[];

@@ -15,7 +15,6 @@ import {
 } from "@heroui/react";
 import { GET_SERVERS_ROUTE } from "@/lib/constants";
 import useSWR from "swr";
-import { VPN_SERVER } from "@/types";
 import { CircleCheck } from "lucide-react";
 
 const fetcher = (...args: [RequestInfo | URL, RequestInit?]) =>

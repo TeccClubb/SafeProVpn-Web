@@ -19,7 +19,6 @@ import TickIcon from "@/icons/TickIcon";
 import { cn } from "@/lib/utils";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Plan } from "@/types";
 import { CHECKOUT_PAGE_PATH } from "@/lib/pathnames";
 
 type FilterKey = "all" | "week" | "month" | "year";

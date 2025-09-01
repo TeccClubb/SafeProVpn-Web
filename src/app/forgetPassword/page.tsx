@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { MailIcon } from "@/icons/mailIcon";
+import MailIcon from "@/icons/MailIcon";
 import { Input } from "@heroui/react";
 import { toast } from "react-toastify";
 import axios, { AxiosError } from "axios";

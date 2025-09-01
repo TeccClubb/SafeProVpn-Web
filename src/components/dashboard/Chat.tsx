@@ -41,7 +41,6 @@ import Input from "../Input";
 import RadioElement from "@/components/RadioElement";
 import { useViewTicket } from "@/hooks/use-view-ticket";
 import { useAppState } from "@/hooks/use-app-state";
-import { SupportTicket } from "@/types";
 import { useDispatch } from "react-redux";
 import {
   addNewSupportTicket,

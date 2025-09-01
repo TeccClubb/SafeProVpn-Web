@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Plan, PlansState, PurchasedPlan } from "@/types";
 
 const initialState: PlansState = {
   isPlansLoadedOnce: false,

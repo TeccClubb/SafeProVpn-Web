@@ -1,4 +1,4 @@
-export type Plan = {
+declare type Plan = {
   id: number;
   name: string;
   slug: string;
@@ -14,7 +14,7 @@ export type Plan = {
   created_at: string;
 };
 
-export type PurchasedPlan = {
+declare type PurchasedPlan = {
   id: number;
   plan: Plan;
   plan_id: number;
@@ -24,7 +24,7 @@ export type PurchasedPlan = {
   status: "active" | "cancelled" | "expired";
 };
 
-export type PlansState = {
+declare type PlansState = {
   isPlansLoadedOnce: boolean;
   plans: Plan[];
   isActivePlanLoadedOnce: boolean;

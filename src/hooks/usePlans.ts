@@ -7,7 +7,6 @@ import {
   GET_PURCHASE_ACTIVE_PLAN_ROUTE,
   GET_PURCHASE_PLAN_ROUTE,
 } from "@/lib/constants";
-import { Plan, PurchasedPlan } from "@/types";
 import { setActivePlan, setPlans } from "@/store/plans.slice";
 import { addToast } from "@heroui/react";
 import { useSession } from "next-auth/react";

@@ -1,7 +1,6 @@
 import { GET_SUPPORT_TICKETS_ROUTE } from "@/lib/constants";
 import { setSupportTickets } from "@/store/app.slice";
 import { RootState } from "@/store/store";
-import { SupportTicket } from "@/types";
 import { addToast } from "@heroui/react";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";

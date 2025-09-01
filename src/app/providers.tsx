@@ -8,14 +8,6 @@ import { SessionProvider } from "next-auth/react";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 
-declare module "@react-types/shared" {
-  interface RouterConfig {
-    routerOptions: NonNullable<
-      Parameters<ReturnType<typeof useRouter>["push"]>[1]
-    >;
-  }
-}
-
 export const Providers: FC<{
   className?: string;
   children: ReactNode;

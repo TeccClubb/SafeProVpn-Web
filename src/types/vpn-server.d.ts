@@ -1,4 +1,4 @@
-export type VPN_SERVER = {
+declare type VPN_SERVER = {
   image_url: string;
   name: string;
   status: string;

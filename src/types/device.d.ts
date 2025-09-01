@@ -1,4 +1,4 @@
-export type Device = {
+declare type Device = {
   id: number;
   device_name: string;
   device_type: string;
