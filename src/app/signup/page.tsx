@@ -1,9 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
- 
-import MailIcon from "@/icons/MailIcon";
-import PasswordICon from "@/icons/passwordIcon";
+ import PasswordICon from "@/icons/passwordIcon";
 import { Input } from "@heroui/react";
 import { useSignup } from "@/hooks/useSignup";
 import { useRouter } from "next/navigation";
@@ -15,6 +13,7 @@ import { FORGOT_PASSWORD_PAGE_PATH, SIGNIN_PAGE_PATH } from "@/lib/pathnames";
 import Link from "next/link";
 import UserIcon from "@/icons/UserIcon";
 import FreeTrialSection from "@/components/FreeTrialSection";
+import { MailIcon } from "lucide-react";
 type FormValues = {
 
     username: string;

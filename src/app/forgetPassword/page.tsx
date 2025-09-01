@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import MailIcon from "@/icons/MailIcon";
 import { Input } from "@heroui/react";
 import { toast } from "react-toastify";
 import axios, { AxiosError } from "axios";
@@ -10,6 +9,7 @@ import { FORGOT_PASSWORD_ROUTE } from "@/lib/constants";
 
 import FreeTrialSection from "@/components/FreeTrialSection";
 import {   SIGNIN_PAGE_PATH } from "@/lib/pathnames";
+import { MailIcon } from "lucide-react";
 
 
 type FormValues = {

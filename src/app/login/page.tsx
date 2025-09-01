@@ -4,10 +4,9 @@ import { useForm } from "react-hook-form";
 import { useSearchParams } from "next/navigation";
 import { FC, Suspense, useState } from "react";
 import { signIn } from "next-auth/react";
-import MailIcon from "@/icons/MailIcon";
 import PasswordICon from "@/icons/passwordIcon";
 import { Input, Link as HeroLink } from "@heroui/react";
-import { Loader2 } from "lucide-react";
+import { Loader2, MailIcon } from "lucide-react";
 import {
   DASHBOARD_PAGE_PATH,
   FORGOT_PASSWORD_PAGE_PATH,
