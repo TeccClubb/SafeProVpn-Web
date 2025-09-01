@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { SupportTicket } from "@/types";
 import axios, { AxiosError } from "axios";
 import { addToast } from "@heroui/react";
 import { VIEW_SUPPORT_TICKET_ROUTE } from "@/lib/constants";

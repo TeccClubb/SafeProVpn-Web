@@ -1,4 +1,4 @@
-export type BillingAddress = {
+declare type BillingAddress = {
   name: string;
   address: string;
   city: string;
@@ -7,7 +7,7 @@ export type BillingAddress = {
   phone: string;
 };
 
-export type Attachment = {
+declare type Attachment = {
   id: number;
   uuid: string;
   name: string;
@@ -16,7 +16,7 @@ export type Attachment = {
   mime_type: string;
 };
 
-export type ChatMessage = {
+declare type ChatMessage = {
   id: number;
   user_id: number;
   message: string;
@@ -25,7 +25,7 @@ export type ChatMessage = {
   created_at: string;
 };
 
-export type SupportTicket = {
+declare type SupportTicket = {
   id: number;
   subject: string;
   status: string;
@@ -34,16 +34,13 @@ export type SupportTicket = {
   messages: ChatMessage[];
 };
 
-export type AppState = {
+declare type AppState = {
   isLogoutModalOpen: boolean;
-  
-  isLegalNoticeLoadedOnce: boolean;
-  termsAndConditions: string;
-  privacyPolicy: string;
   isBillingAddressLoadedOnce: boolean;
   billingAddress: BillingAddress | null;
   currentSupportTicketId: number;
   isSupportTicketsLoadedOnce: boolean;
   supportTickets: SupportTicket[];
+  currentSupportTicketStatus: string,
   isChatDialogOpen: boolean;
 };

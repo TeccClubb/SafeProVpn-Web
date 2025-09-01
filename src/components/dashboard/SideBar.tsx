@@ -45,7 +45,7 @@ const listItems = [
     Icon: Monitor,
   },
   {
-    name: "Setting",
+    name: "Settings",
     href: SETTINGS_PAGE_PATH,
     Icon: Settings,
   },
