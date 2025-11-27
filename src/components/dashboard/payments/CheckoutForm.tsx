@@ -20,10 +20,11 @@ import {
 } from "@/lib/zod-schemas";
 import { cn } from "@/lib/utils";
 import { useBillingAddress } from "@/hooks/useBillingAddress";
-import { useSession } from "next-auth/react";
-import { notFound } from "next/navigation";
 
-const CheckoutForm: FC<{ priceId: string }> = ({ priceId }) => {
+const CheckoutForm: FC<{ priceId: string; email: string }> = ({
+  priceId,
+  email,
+}) => {
   const schema = z.object({
     name: nameSchema,
     email: emailSchema,
@@ -34,20 +35,15 @@ const CheckoutForm: FC<{ priceId: string }> = ({ priceId }) => {
     phone: phoneSchema,
   });
 
-  const { data: session, status: authStatus } = useSession();
   const { billingAddress, isBillingAddressLoading } = useBillingAddress();
   const paddleRef = useRef<PaddleFormHandle>(null);
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
-
-  if (authStatus === "unauthenticated") {
-    notFound();
-  }
 
   const { handleSubmit, control, watch } = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     values: {
       name: billingAddress ? billingAddress.name : "",
-      email: session ? session.user.email : "",
+      email,
       address: billingAddress ? billingAddress.address : "",
       city: billingAddress ? billingAddress.city : "",
       state: billingAddress ? billingAddress.state : "",
@@ -60,7 +56,7 @@ const CheckoutForm: FC<{ priceId: string }> = ({ priceId }) => {
     setSubmitted(true);
     paddleRef.current?.openCheckout({
       customer: {
-        email: values.email,
+        email,
         address: {
           city: values.city,
           postalCode: values.postal_code,
@@ -75,7 +71,7 @@ const CheckoutForm: FC<{ priceId: string }> = ({ priceId }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {isBillingAddressLoading && authStatus === "loading" ? (
+      {isBillingAddressLoading ? (
         <div className="w-full flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[...Array(6)].map((_, i) => (

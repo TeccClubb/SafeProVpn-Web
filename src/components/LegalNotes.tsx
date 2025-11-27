@@ -24,7 +24,7 @@ const LegalNotes: FC<{
 
     {htmlContent && (
       <article
-        className="w-full max-w-7xl prose prose-neutral dark:prose-invert"
+        className="w-full max-w-7xl prose prose-neutral dark:prose-invert text-start"
         dangerouslySetInnerHTML={{
           __html: htmlContent,
         }}

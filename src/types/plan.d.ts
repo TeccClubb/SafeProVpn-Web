@@ -23,10 +23,3 @@ declare type PurchasedPlan = {
   end_date: string;
   status: "active" | "cancelled" | "expired";
 };
-
-declare type PlansState = {
-  isPlansLoadedOnce: boolean;
-  plans: Plan[];
-  isActivePlanLoadedOnce: boolean;
-  activePlan: PurchasedPlan | null;
-};

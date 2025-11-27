@@ -23,6 +23,7 @@
 
 # package-lock.json
 package-lock.json
+bun.lock
 
 # misc
 .DS_Store

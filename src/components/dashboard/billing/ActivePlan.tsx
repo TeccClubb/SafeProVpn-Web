@@ -4,31 +4,57 @@ import { Link as HeroLink } from "@heroui/link";
 import Link from "next/link";
 import { PRICING_PAGE_PATH } from "@/lib/pathnames";
 import { CheckCircleIcon, TagIcon } from "@heroicons/react/24/solid";
-import { useActivePlan } from "@/hooks/usePlans";
 import { Chip } from "@heroui/chip";
-import { Skeleton } from "@heroui/skeleton";
+import axios, { AxiosError } from "axios";
+import { GET_PURCHASE_ACTIVE_PLAN_ROUTE } from "@/lib/constants";
+import { auth } from "@/auth";
+import { Alert } from "@heroui/alert";
 
-const ActivePlan: FC = () => {
-  const { isActivePlanLoading, activePlan } = useActivePlan();
+const ActivePlan: FC = async () => {
+  const session = await auth();
+
+  if (!session) {
+    return <Alert>You are not logged in</Alert>;
+  }
+
+  const {
+    status,
+    message,
+    plan: activePlan,
+  } = await axios
+    .get<{ status: boolean; message?: string; plan?: PurchasedPlan }>(
+      GET_PURCHASE_ACTIVE_PLAN_ROUTE,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${session.user.access_token}`,
+        },
+      }
+    )
+    .then((res) => res.data)
+    .catch((error) => ({
+      status: false,
+      message:
+        error instanceof AxiosError
+          ? error.response
+            ? error.response.data.message
+            : error.message
+          : "Failed to Load Active Plan",
+      plan: undefined,
+    }));
+
   return (
     <div className="border border-divider rounded-xl p-6 space-y-4">
-      {isActivePlanLoading && (
-        <div className="space-y-4">
-          <div className="flex justify-between items-start flex-wrap gap-4">
-            <div>
-              <Skeleton className="h-5 w-40 rounded mb-2" />
-              <Skeleton className="h-4 w-32 rounded" />
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-7 w-36 rounded-full" />
-            ))}
-          </div>
+      {!status && (
+        <div className="text-center text-danger-500 py-8">
+          {message}{" "}
+          <HeroLink as={Link} href={PRICING_PAGE_PATH}>
+            Upgrade Now
+          </HeroLink>
         </div>
       )}
 
-      {!isActivePlanLoading && !activePlan && (
+      {status && !activePlan && (
         <div className="text-center text-default-500 py-8">
           No Active Plan founded.{" "}
           <HeroLink as={Link} href={PRICING_PAGE_PATH}>
@@ -37,7 +63,7 @@ const ActivePlan: FC = () => {
         </div>
       )}
 
-      {!isActivePlanLoading && activePlan && (
+      {activePlan && (
         <>
           <div className="flex justify-between items-start flex-wrap gap-4">
             <div>

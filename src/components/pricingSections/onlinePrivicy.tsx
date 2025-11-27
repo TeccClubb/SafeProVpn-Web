@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Section, { SectionDescription, SectionHeading } from '../sections/Section';
 import DownloadIcon from '@/icons/DownloadIcon';

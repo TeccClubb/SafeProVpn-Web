@@ -1,5 +1,3 @@
-"use client";
-
 import React, { FC } from "react";
 import VPNPromo from "@/components/SafeProVpn-home/securePrivacy";
 import WhyChooseSection from "@/components/SafeProVpn-home/WhyChooseSection";

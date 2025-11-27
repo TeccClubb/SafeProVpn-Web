@@ -38,7 +38,6 @@ export const MY_DEVICES_PAGE_PATH = `${DASHBOARD_PAGE_PATH}/my-devices`;
 export const SETTINGS_PAGE_PATH = `${DASHBOARD_PAGE_PATH}/settings`;
 export const SUPPORT_TICKETS_PAGE_PATH = `${DASHBOARD_PAGE_PATH}/support-tickets`;
 
-export const CHECKOUT_PAGE_PATH = (planId: number, priceId: string) =>
-  `/checkout?planId=${planId}&priceId=${priceId}`;
+export const CHECKOUT_PAGE_PATH = "/checkout";
 
 export const INVOICE_PAGE_PATH = "/invoice";

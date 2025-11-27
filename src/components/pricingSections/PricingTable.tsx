@@ -79,7 +79,7 @@ export default function PricingTable() {
                  
 
                 <div className="overflow-x-auto rounded-lg shadow-lg">
-                    <table className="min-w-full border-collapse border-t border-gray-200">
+                    <table className="min-w-full border-collapse border-t border-divider">
                         <thead>
                             <tr className="bg-white">
                                 <th className="text-left py-3 px-4"></th>
@@ -99,7 +99,7 @@ export default function PricingTable() {
                         </thead>
                         <tbody>
                             {headers.map((header, rowIndex) => (
-                                <tr key={rowIndex} className="border-t">
+                                <tr key={rowIndex} className="border-t border-divider">
                                     <td className="py-3 px-4 text-left font-medium text-gray-600 bg-white">
                                         {header}
                                     </td>
@@ -124,7 +124,7 @@ export default function PricingTable() {
                                     ))}
                                 </tr>
                             ))}
-                            <tr className="border-t">
+                            <tr className="border-t border-divider">
                                 <td className="bg-white"></td>
                                 {plans.map((plan, i) => (
                                     <td

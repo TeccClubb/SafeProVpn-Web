@@ -33,15 +33,14 @@ const LoginForm: FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isLoading },
     reset,
   } = useForm<LoginFormData>();
-  const [loading, setLoading] = useState(false);
+
   const [error, setError] = useState("");
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      setLoading(true);
       setError("");
       const res = await axios
         .post<{
@@ -79,8 +78,6 @@ const LoginForm: FC = () => {
           : "Login Failed, Please try again later";
       toast.error(errorMessage);
       setError(errorMessage);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -114,7 +111,7 @@ const LoginForm: FC = () => {
                 labelPlacement="outside"
                 placeholder="you@example.com"
                 startContent={
-                  <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                  <MailIcon className="text-2xl text-default-400 pointer-events-none shrink-0" />
                 }
                 variant="bordered"
                 type="email"
@@ -173,21 +170,26 @@ const LoginForm: FC = () => {
             {/* Login Button */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={isLoading || isSubmitting}
               className={`w-full flex justify-center items-center gap-2 bg-cyan-500 text-white py-2 rounded-md hover:bg-cyan-600 transition ${
-                loading ? "opacity-50 cursor-not-allowed" : ""
+                isSubmitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
-              {loading && <Loader2 className="w-4 h-4 animate-spin" />}
-              {loading ? "Logging in..." : "Login →"}
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" /> Logging in...
+                </>
+              ) : (
+                "Login →"
+              )}
             </button>
           </form>
 
           {/* Divider */}
           <div className="flex items-center my-2">
-            <hr className="flex-grow border-gray-300" />
+            <hr className="grow border-gray-300" />
             <span className="px-2 text-gray-400 text-sm">or continue with</span>
-            <hr className="flex-grow border-gray-300" />
+            <hr className="grow border-gray-300" />
           </div>
 
           {/* Social Login */}

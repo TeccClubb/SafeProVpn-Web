@@ -14,17 +14,19 @@ import {
   UserProps,
 } from "@heroui/react";
 import { useSession } from "next-auth/react";
-import { HelpCircle, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { HelpCircle, Home, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
-import { DASHBOARD_PAGE_PATH } from "@/lib/pathnames";
+import { DASHBOARD_PAGE_PATH, HOME_PAGE_PATH } from "@/lib/pathnames";
 import { useLogout } from "@/hooks/useLogout";
 import { User as UserTypes } from "next-auth";
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 const AvatarDropdown: FC<{ user: UserTypes; children: ReactNode }> = ({
   user,
   children,
 }) => {
+  const pathname = usePathname();
   const { openLogoutModal } = useLogout();
   return (
     <Dropdown
@@ -77,14 +79,25 @@ const AvatarDropdown: FC<{ user: UserTypes; children: ReactNode }> = ({
         </DropdownSection>
 
         <DropdownSection showDivider aria-label="Actions">
-          <DropdownItem
-            key="dashboard"
-            as={Link}
-            href={DASHBOARD_PAGE_PATH}
-            startContent={<LayoutDashboard />}
-          >
-            Dashboard
-          </DropdownItem>
+          {pathname.startsWith(DASHBOARD_PAGE_PATH) ? (
+            <DropdownItem
+              key="home"
+              as={Link}
+              href={HOME_PAGE_PATH}
+              startContent={<Home />}
+            >
+              Home
+            </DropdownItem>
+          ) : (
+            <DropdownItem
+              key="dashboard"
+              as={Link}
+              href={DASHBOARD_PAGE_PATH}
+              startContent={<LayoutDashboard />}
+            >
+              Dashboard
+            </DropdownItem>
+          )}{" "}
           <DropdownItem
             key="settings"
             as={Link}

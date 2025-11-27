@@ -1,9 +1,8 @@
-"use client";
-
 import React, { FC } from "react";
 import VerifiedIcon from "@/icons/VerifiedIcon";
 import Link from "next/link";
-import { Alert, Button } from "@heroui/react";
+import { Alert } from "@heroui/alert";
+import { Button } from "@heroui/button";
 import Section from "@/components/sections/Section";
 import { DASHBOARD_PAGE_PATH } from "@/lib/pathnames";
 
@@ -14,7 +13,7 @@ const PaymentSuccessPage: FC = () => (
     <Alert
       color="success"
       title="Success! Your payment is complete, and you’re all set."
-      className="w-fit flex-grow-0"
+      className="w-fit grow-0"
     />
 
     <Button
