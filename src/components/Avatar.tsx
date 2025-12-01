@@ -97,7 +97,7 @@ const AvatarDropdown: FC<{ user: UserTypes; children: ReactNode }> = ({
             >
               Dashboard
             </DropdownItem>
-          )}{" "}
+          )}
           <DropdownItem
             key="settings"
             as={Link}
