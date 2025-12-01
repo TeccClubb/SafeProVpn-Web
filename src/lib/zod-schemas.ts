@@ -152,3 +152,12 @@ export const phoneSchema = z
   .refine((val) => val.replace(/\D/g, "").length >= 10, {
     message: "Phone number must have at least 10 digits",
   });
+
+export const billingAddressSchema = z.object({
+  name: nameSchema,
+  address: streetAddressSchema,
+  city: citySchema,
+  state: stateSchema,
+  postal_code: postalCodeSchema,
+  phone: phoneSchema,
+});

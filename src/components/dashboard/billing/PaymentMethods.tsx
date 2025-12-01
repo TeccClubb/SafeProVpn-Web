@@ -1,8 +1,9 @@
 "use client";
 
 import React, { FC } from "react";
-import { usePaymentMethods } from "@/hooks/use-payment-methods";
 import {
+  addToast,
+  Alert,
   Button,
   Modal,
   ModalBody,
@@ -13,18 +14,53 @@ import {
   useDisclosure,
 } from "@heroui/react";
 import { TrashIcon } from "@heroicons/react/24/solid";
+import useSWR from "swr";
+import { fetcher } from "@/lib/fetcher";
+import { getErrorMessage } from "@/lib/getErrorMessage";
+import axios from "axios";
 
 const PaymentMethods: FC = () => {
-  const { isPaymentMethodsLoading, paymentMethods, deletePaymentMethod } =
-    usePaymentMethods();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const { data, error, isLoading, mutate } = useSWR<{
+    success: boolean;
+    message: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    paymentMethods: any[];
+  }>("/api/payment-methods", fetcher);
+
+  const deletePaymentMethod = async (data: {
+    customerId: string;
+    paymentMethodId: string;
+  }) => {
+    try {
+      const res = await axios
+        .delete<{ success: boolean; message: string }>(
+          "/api/delete-payment-method",
+          { data }
+        )
+        .then((res) => res.data);
+
+      if (res.success) {
+        mutate();
+        addToast({ color: "success", description: res.message });
+        onClose();
+      } else throw new Error(res.message);
+    } catch (error) {
+      addToast({
+        color: "danger",
+        description: getErrorMessage(error, "Failed to delete payment method"),
+      });
+    }
+  };
+
   return (
     <div className="border border-divider rounded-xl p-6 space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="font-semibold text-gray-800">Payment Method</h3>
       </div>
 
-      {isPaymentMethodsLoading && (
+      {isLoading && (
         <div className="space-y-3">
           {[1, 2].map((i) => (
             <div
@@ -44,16 +80,20 @@ const PaymentMethods: FC = () => {
         </div>
       )}
 
-      {!isPaymentMethodsLoading &&
-        (!paymentMethods || paymentMethods.length === 0) && (
-          <div className="text-center text-default-500 py-8">
-            No payment methods found.
-          </div>
-        )}
+      {!isLoading && (!data || !data.paymentMethods.length) && (
+        <div className="text-center text-default-500 py-8">
+          No payment methods found.
+        </div>
+      )}
 
-      {!isPaymentMethodsLoading &&
-        paymentMethods &&
-        paymentMethods.map(({ id, card, paypal, customerId }) => (
+      {!isLoading && error && (
+        <Alert color="danger">
+          {getErrorMessage(error, "Failed to load payment methods")}
+        </Alert>
+      )}
+
+      {!isLoading &&
+        data?.paymentMethods.map(({ id, card, paypal, customerId }) => (
           <div
             key={id}
             className="flex justify-between items-center bg-gray-50 rounded-lg px-4 py-3"
@@ -110,7 +150,6 @@ const PaymentMethods: FC = () => {
                     color="danger"
                     onPress={() => {
                       deletePaymentMethod({ customerId, paymentMethodId: id });
-                      onClose();
                     }}
                     fullWidth
                   >

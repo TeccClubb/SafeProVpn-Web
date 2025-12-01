@@ -1,4 +1,4 @@
-export const OXAPAY_MERCHANT_KEY = process.env.OXAPAY_MERCHANT_KEY;
+export const OXAPAY_MERCHANT_KEY = process.env.OXAPAY_MERCHANT_KEY!;
 
 export const PADDLE_API_BASE_URL = process.env.PADDLE_API_BASE_URL!;
 export const PADDLE_API_KEY = process.env.PADDLE_API_KEY!;

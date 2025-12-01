@@ -3,11 +3,11 @@ import CheckoutForm from "@/components/dashboard/payments/CheckoutForm";
 import { notFound } from "next/navigation";
 import Section from "@/components/sections/Section";
 import OrderSummary from "@/components/dashboard/payments/orderSummary";
-import PaymentStep from "@/components/dashboard/payments/PaymentStep";
 import { auth } from "@/auth";
 import { Alert } from "@heroui/alert";
 import axios, { AxiosError } from "axios";
-import { GET_PLANS_ROUTE } from "@/lib/constants";
+import { GET_BILLING_ADDRESS_ROUTE, GET_PLANS_ROUTE } from "@/lib/constants";
+import StepIndicator from "@/components/dashboard/payments/StepIndicator";
 
 const CheckoutPageSection: FC<{ children: ReactNode }> = ({ children }) => (
   <Section heading="Complete Your Purchase">{children}</Section>
@@ -72,15 +72,44 @@ const CheckoutPage: FC<{
     );
   }
 
+  const { user } = await axios
+    .get<{ status: boolean; user: { billing_address: BillingAddress } }>(
+      GET_BILLING_ADDRESS_ROUTE,
+      {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${session.user.access_token}`,
+        },
+      }
+    )
+    .then((res) => res.data)
+    .catch((error) => ({
+      status: false,
+      message:
+        error instanceof AxiosError
+          ? error.response
+            ? error.response.data.message
+            : error.message
+          : "Failed to Load Billing Address",
+      user: undefined,
+    }));
+
   return (
     <CheckoutPageSection>
       <div className="w-full flex lg:flex-row flex-col-reverse lg:items-start items-center lg:justify-between gap-x-4 gap-y-6">
         <div className="w-full max-w-3xl space-y-6">
-          <PaymentStep />
+          <StepIndicator
+            steps={["Plan", "Payment", "Confirmation"]}
+            currentStep={1}
+          />
+          <h2 className="text-lg text-left font-semibold mb-4">
+            Payment Information
+          </h2>
 
           <CheckoutForm
-            priceId={plan.paddle_price_id}
+            plan={plan}
             email={session.user.email}
+            billingAddress={user?.billing_address}
           />
         </div>
         <OrderSummary plan={plan} />

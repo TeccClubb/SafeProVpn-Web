@@ -20,11 +20,12 @@ export const POST = async (req: Request) => {
         })
         .trim()
         .min(1, "slug is required"),
+      description: z.string().optional(),
     });
 
     const body = await req.json();
 
-    const { amount, slug } = schema.parse(body);
+    const { amount, slug, description } = schema.parse(body);
 
     const session = await auth();
 
@@ -40,6 +41,7 @@ export const POST = async (req: Request) => {
     const { message, data } = await oxapayClient
       .post("/payment/invoice", {
         amount,
+        description,
         currency: "USD",
         to_currency: "USDT",
         auto_withdrawal: false,
@@ -47,7 +49,7 @@ export const POST = async (req: Request) => {
         return_url: `${origin}/checkout/success`,
         email: session.user.email,
         order_id: slug,
-        thanks_message: "Thank you for your payment.",
+        thanks_message: `Thank you for purchase ${slug}.`,
         sandbox: true,
       })
       .then((res) => res.data);
